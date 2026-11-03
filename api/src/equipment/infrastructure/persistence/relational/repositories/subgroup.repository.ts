@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { SubgroupEntity } from '../entities/subgroup.entity';
 import { NullableType } from '../../../../../utils/types/nullable.type';
@@ -11,137 +10,67 @@ import { SubgroupMapper } from '../mappers/subgroup.mapper';
 import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 
 @Injectable()
-export class RegenciesRelationalRepository implements SubgroupRepository {
-  constructor(
-    @InjectRepository(SubgroupEntity)
-    private readonly subgroupRepository: Repository<SubgroupEntity>,
-  ) {}
+export class SubgroupsRelationalRepository implements SubgroupRepository {
+  constructor(@InjectRepository(SubgroupEntity) private readonly repository: Repository<SubgroupEntity>) {}
 
   async create(data: Subgroup): Promise<Subgroup> {
-    const persistenceModel = SubgroupMapper.toPersistence(data);
-    const newEntity = await this.subgroupRepository.save(
-      this.subgroupRepository.create(persistenceModel),
-    );
-    return SubgroupMapper.toDomain(newEntity);
+    return SubgroupMapper.toDomain(await this.repository.save(this.repository.create(SubgroupMapper.toPersistence(data))));
   }
 
-  async findManyWithPagination({
-    filterOptions,
-    sortOptions,
-    paginationOptions,
-  }: {
-    filterOptions?: FilterSubgroupDto | null;
-    sortOptions?: SortSubgroupDto[] | null;
-    paginationOptions: IPaginationOptions;
-  }): Promise<Subgroup[]> {
-    const where: FindOptionsWhere<SubgroupEntity> = this.buildWhere(filterOptions);
+  private buildWhere(filters?: FilterSubgroupDto | null): FindOptionsWhere<SubgroupEntity> {
+    const where: FindOptionsWhere<SubgroupEntity> = {};
+    if (filters?.groupId != null) where.groupId = Number(filters.groupId);
+    return where;
+  }
 
-    const entities = await this.subgroupRepository.find({
+  async findManyWithPagination({ filterOptions, sortOptions, paginationOptions }: { filterOptions?: FilterSubgroupDto | null; sortOptions?: SortSubgroupDto[] | null; paginationOptions: IPaginationOptions }): Promise<Subgroup[]> {
+    const where = this.buildWhere(filterOptions);
+    const search = filterOptions?.search?.trim();
+    const rows = await this.repository.find({
       skip: (paginationOptions.page - 1) * paginationOptions.limit,
       take: paginationOptions.limit,
-      where,
-      order: sortOptions?.reduce(
-        (accumulator, sort) => ({
-          ...accumulator,
-          [sort.orderBy]: sort.order,
-        }),
-        { name: 'ASC' },
-      ),
+      where: search ? [{ ...where, name: ILike(`%${search}%`) }, { ...where, description: ILike(`%${search}%`) }] : where,
+      order: sortOptions?.reduce((acc, sort) => ({ ...acc, [sort.orderBy]: sort.order }), { name: 'ASC' }),
     });
-
-    return entities.map((subgroup) => SubgroupMapper.toDomain(subgroup));
+    return rows.map(SubgroupMapper.toDomain);
   }
 
   async findAll(): Promise<Subgroup[]> {
-    const entities = await this.subgroupRepository.find({ order: { name: 'ASC' } });
-    return entities.map((subgroup) => SubgroupMapper.toDomain(subgroup));
+    return (await this.repository.find({ order: { name: 'ASC' } })).map(SubgroupMapper.toDomain);
   }
 
   async findById(id: Subgroup['id']): Promise<NullableType<Subgroup>> {
-    const entity = await this.subgroupRepository.findOne({
-      where: { id: Number(id) },
-    });
-    return entity ? SubgroupMapper.toDomain(entity) : null;
+    const row = await this.repository.findOne({ where: { id: Number(id) } });
+    return row ? SubgroupMapper.toDomain(row) : null;
   }
 
   async findByGroupId(groupId: Subgroup['groupId']): Promise<Subgroup[]> {
-    const entities = await this.subgroupRepository.find({
-      where: { groupId: Number(groupId) },
-      order: { name: 'ASC' },
-    });
-    return entities.map((subgroup) => SubgroupMapper.toDomain(subgroup));
+    return (await this.repository.find({ where: { groupId: Number(groupId) }, order: { name: 'ASC' } })).map(SubgroupMapper.toDomain);
   }
 
-  async findByGroupIdAndName(
-    groupId: Subgroup['groupId'],
-    name: Subgroup['name'],
-  ): Promise<NullableType<Subgroup>> {
-    const entity = await this.subgroupRepository.findOne({
-      where: { groupId: Number(groupId), name },
-    });
-    return entity ? SubgroupMapper.toDomain(entity) : null;
+  async findByGroupIdAndName(groupId: Subgroup['groupId'], name: Subgroup['name']): Promise<NullableType<Subgroup>> {
+    const row = await this.repository.findOne({ where: { groupId: Number(groupId), name } });
+    return row ? SubgroupMapper.toDomain(row) : null;
   }
 
   async countByGroupId(groupId: Subgroup['groupId']): Promise<number> {
-    return this.subgroupRepository.count({
-      where: { groupId: Number(groupId) },
-    });
+    return this.repository.count({ where: { groupId: Number(groupId) } });
   }
 
-  async countAll(): Promise<number> {
-    return this.subgroupRepository.count();
+  async countAll(): Promise<number> { return this.repository.count(); }
+
+  async countWithFilter(filters?: FilterSubgroupDto | null): Promise<number> {
+    const where = this.buildWhere(filters);
+    const search = filters?.search?.trim();
+    return this.repository.count({ where: search ? [{ ...where, name: ILike(`%${search}%`) }, { ...where, description: ILike(`%${search}%`) }] : where });
   }
 
-  async countWithFilter(
-    filterOptions?: FilterSubgroupDto | null,
-  ): Promise<number> {
-    const where: any = {};
-    if (filterOptions?.groupId !== undefined && filterOptions.groupId !== null) {
-      where.groupId = Number(filterOptions.groupId);
-    }
-    if (filterOptions?.type) {
-      where.type = filterOptions.type;
-    }
-    return this.subgroupRepository.count({ where });
+  async update(id: Subgroup['id'], payload: Partial<Subgroup>): Promise<Subgroup | null> {
+    const row = await this.repository.findOne({ where: { id: Number(id) } });
+    if (!row) return null;
+    return SubgroupMapper.toDomain(await this.repository.save(this.repository.create(SubgroupMapper.toPersistence({ ...SubgroupMapper.toDomain(row), ...payload }))));
   }
 
-  async update(id: Subgroup['id'], payload: Partial<Subgroup>): Promise<Subgroup> {
-    const entity = await this.subgroupRepository.findOne({
-      where: { id: Number(id) },
-    });
-
-    if (!entity) {
-      throw new Error('Subgroup not found');
-    }
-
-    const updatedEntity = await this.subgroupRepository.save(
-      this.subgroupRepository.create(
-        SubgroupMapper.toPersistence({
-          ...SubgroupMapper.toDomain(entity),
-          ...payload,
-        }),
-      ),
-    );
-
-    return SubgroupMapper.toDomain(updatedEntity);
-  }
-
-  async remove(id: Subgroup['id']): Promise<void> {
-    await this.subgroupRepository.delete(Number(id));
-  }
-
-  async removeByGroupId(groupId: Subgroup['groupId']): Promise<void> {
-    await this.subgroupRepository.delete({ groupId: Number(groupId) });
-  }
-
-  private buildWhere(filterOptions?: FilterSubgroupDto | null): FindOptionsWhere<SubgroupEntity> {
-    const where: FindOptionsWhere<SubgroupEntity> = {};
-    if (filterOptions?.groupId !== undefined && filterOptions.groupId !== null) {
-      where.groupId = Number(filterOptions.groupId);
-    }
-    if (filterOptions?.type) {
-      where.type = filterOptions.type;
-    }
-    return where;
-  }
+  async remove(id: Subgroup['id']): Promise<void> { await this.repository.delete(Number(id)); }
+  async removeByGroupId(groupId: Subgroup['groupId']): Promise<void> { await this.repository.delete({ groupId: Number(groupId) }); }
 }
