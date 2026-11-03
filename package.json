@@ -8,47 +8,47 @@
   "files": [
     "api/package.json",
     "api/dist",
-    "web/src/modules/region",
+    "web/src/modules/equipment",
     "web/src/services/i18n/locales"
   ],
   "exports": {
-    ".": "./web/src/modules/region/index.ts",
-    "./web": "./web/src/modules/region/index.ts",
-    "./manifest": "./web/src/modules/region/module.manifest.ts",
+    ".": "./web/src/modules/equipment/index.ts",
+    "./web": "./web/src/modules/equipment/index.ts",
+    "./manifest": "./web/src/modules/equipment/module.manifest.ts",
     "./api": {
       "types": "./api/dist/index.d.ts",
       "require": "./api/dist/index.js",
       "default": "./api/dist/index.js"
     },
     "./api/manifest": {
-      "types": "./api/dist/equipment/region.manifest.d.ts",
-      "require": "./api/dist/equipment/region.manifest.js",
-      "default": "./api/dist/equipment/region.manifest.js"
+      "types": "./api/dist/equipment/equipment.manifest.d.ts",
+      "require": "./api/dist/equipment/equipment.manifest.js",
+      "default": "./api/dist/equipment/equipment.manifest.js"
     },
     "./api/migrations": {
       "types": "./api/dist/equipment/database/migrations/index.d.ts",
       "require": "./api/dist/equipment/database/migrations/index.js",
       "default": "./api/dist/equipment/database/migrations/index.js"
     },
-    "./locales/en": "./web/src/services/i18n/locales/en/module-region.json",
-    "./locales/id": "./web/src/services/i18n/locales/id/module-region.json",
-    "./locales/ja": "./web/src/services/i18n/locales/ja/module-region.json",
-    "./locales/ko": "./web/src/services/i18n/locales/ko/module-region.json",
-    "./locales/zh": "./web/src/services/i18n/locales/zh/module-region.json",
+    "./locales/en": "./web/src/services/i18n/locales/en/module-equipment.json",
+    "./locales/id": "./web/src/services/i18n/locales/id/module-equipment.json",
+    "./locales/ja": "./web/src/services/i18n/locales/ja/module-equipment.json",
+    "./locales/ko": "./web/src/services/i18n/locales/ko/module-equipment.json",
+    "./locales/zh": "./web/src/services/i18n/locales/zh/module-equipment.json",
     "./api/entities": {
-      "types": "./api/dist/equipment/region.entities.d.ts",
-      "require": "./api/dist/equipment/region.entities.js",
-      "default": "./api/dist/equipment/region.entities.js"
+      "types": "./api/dist/equipment/equipment.entities.d.ts",
+      "require": "./api/dist/equipment/equipment.entities.js",
+      "default": "./api/dist/equipment/equipment.entities.js"
     },
     "./api/definition": {
-      "types": "./api/dist/equipment/region.definition.d.ts",
-      "require": "./api/dist/equipment/region.definition.js",
-      "default": "./api/dist/equipment/region.definition.js"
+      "types": "./api/dist/equipment/equipment.definition.d.ts",
+      "require": "./api/dist/equipment/equipment.definition.js",
+      "default": "./api/dist/equipment/equipment.definition.js"
     },
     "./api/seeds": {
-      "types": "./api/dist/equipment/region.seeds.d.ts",
-      "require": "./api/dist/equipment/region.seeds.js",
-      "default": "./api/dist/equipment/region.seeds.js"
+      "types": "./api/dist/equipment/equipment.seeds.d.ts",
+      "require": "./api/dist/equipment/equipment.seeds.js",
+      "default": "./api/dist/equipment/equipment.seeds.js"
     }
   },
   "scripts": {
@@ -169,25 +169,25 @@
         "api/dist/index.d.ts"
       ],
       "api/manifest": [
-        "api/dist/equipment/region.manifest.d.ts"
+        "api/dist/equipment/equipment.manifest.d.ts"
       ],
       "api/migrations": [
         "api/dist/equipment/database/migrations/index.d.ts"
       ],
       "web": [
-        "web/src/modules/region/index.ts"
+        "web/src/modules/equipment/index.ts"
       ],
       "manifest": [
-        "web/src/modules/region/module.manifest.ts"
+        "web/src/modules/equipment/module.manifest.ts"
       ],
       "api/entities": [
-        "api/dist/equipment/region.entities.d.ts"
+        "api/dist/equipment/equipment.entities.d.ts"
       ],
       "api/definition": [
-        "api/dist/equipment/region.definition.d.ts"
+        "api/dist/equipment/equipment.definition.d.ts"
       ],
       "api/seeds": [
-        "api/dist/equipment/region.seeds.d.ts"
+        "api/dist/equipment/equipment.seeds.d.ts"
       ]
     }
   }
