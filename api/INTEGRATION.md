@@ -7,7 +7,7 @@ entry point remains TypeScript source consumed by Next.js `transpilePackages`.
 ## Install
 
 ```bash
-npm install github:wasnaker/bc-region#<immutable-commit-sha>
+npm install github:wasnaker/bc-equipment#<immutable-commit-sha>
 ```
 
 Pin an immutable commit SHA in both `package.json` and `package-lock.json`.
@@ -36,11 +36,11 @@ connection, JWT strategy, roles table or permission persistence.
 The host scans installed `@wasnaker/module-*` dependencies and generates its
 backend module registry. Each API package's `moduleDefinition.registerAsync()`
 is called automatically with the host authorization adapter. The host should
-not add a package-specific `RegionModule` import or manually list its entities,
+not add a package-specific `EquipmentModule` import or manually list its entities,
 migrations or seed services.
 
-The module enforces `read:region`, `create:region`, `update:region` and
-`delete:region` at the API boundary. The host supplies the authorization
+The module enforces `read:equipment`, `create:equipment`, `update:equipment` and
+`delete:equipment` at the API boundary. The host supplies the authorization
 adapter and resolves permissions from its PostgreSQL role-permission relation.
 
 ## PostgreSQL lifecycle
