@@ -14,10 +14,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useProvinces } from "../hooks/use-regions";
-import { useCreateRegency, useUpdateRegency } from "../hooks/use-regions";
-import { REGENCY_TYPES } from "../types/region";
-import type { Regency, Province } from "../types/region";
+import { useProvinces } from "../hooks/use-equipments";
+import { useCreateRegency, useUpdateRegency } from "../hooks/use-equipments";
+import { REGENCY_TYPES } from "../types/equipment";
+import type { Regency, Province } from "../types/equipment";
 
 interface RegencyFormDialogProps {
   open: boolean;
@@ -48,7 +48,7 @@ export function RegencyFormDialog({
   defaultProvinceId,
   onSuccess,
 }: RegencyFormDialogProps) {
-  const { t } = useTranslation("module-region");
+  const { t } = useTranslation("module-equipment");
   const createMutation = useCreateRegency();
   const updateMutation = useUpdateRegency();
   const { data: provincesData } = useProvinces(1, 200);

@@ -6,8 +6,8 @@ import { FormDialogLayout } from "@/components/form/form-dialog-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCreateProvince, useUpdateProvince } from "../hooks/use-regions";
-import type { Province } from "../types/region";
+import { useCreateProvince, useUpdateProvince } from "../hooks/use-equipments";
+import type { Province } from "../types/equipment";
 
 interface ProvinceFormDialogProps {
   open: boolean;
@@ -36,7 +36,7 @@ export function ProvinceFormDialog({
   editItem,
   onSuccess,
 }: ProvinceFormDialogProps) {
-  const { t } = useTranslation("module-region");
+  const { t } = useTranslation("module-equipment");
   const createMutation = useCreateProvince();
   const updateMutation = useUpdateProvince();
 

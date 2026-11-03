@@ -1,8 +1,8 @@
 "use client";
 
-import { useRegencies } from "../hooks/use-regions";
+import { useRegencies } from "../hooks/use-equipments";
 import { useTranslation } from "@/services/i18n/client";
-import type { Province } from "../types/region";
+import type { Province } from "../types/equipment";
 import type { DetailTab } from "@/components/small-table";
 
 interface ProvinceOverviewTabProps {
@@ -14,7 +14,7 @@ interface ProvinceRegenciesTabProps {
 }
 
 export function ProvinceOverviewTab({ item }: ProvinceOverviewTabProps) {
-  const { t } = useTranslation("module-region");
+  const { t } = useTranslation("module-equipment");
 
   return (
     <dl className="grid grid-cols-1 gap-x-4 gap-y-3 text-sm sm:grid-cols-2">
@@ -45,7 +45,7 @@ export function ProvinceOverviewTab({ item }: ProvinceOverviewTabProps) {
 }
 
 export function ProvinceRegenciesTab({ item: province }: ProvinceRegenciesTabProps) {
-  const { t } = useTranslation("module-region");
+  const { t } = useTranslation("module-equipment");
   const { data, isLoading } = useRegencies(String(province.id), 1, 50);
 
   if (isLoading) {

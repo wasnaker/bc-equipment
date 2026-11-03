@@ -6,7 +6,7 @@ import { useTranslation } from "@/services/i18n/client";
 import {
   useGetProvincesService,
   useGetRegenciesService,
-} from "../services/region-api";
+} from "../services/equipment-api";
 
 const PAGE_SIZE = 50;
 
@@ -33,12 +33,12 @@ async function countAllPages(
   while (true) {
     const response = await fetchPage(page);
     if (typeof response !== "object" || response === null) {
-      throw new Error("Unexpected Region pagination response");
+      throw new Error("Unexpected Equipment pagination response");
     }
 
     const payload = (response as Record<string, unknown>).data;
     if (!isPagePayload(payload)) {
-      throw new Error("Unexpected Region pagination response");
+      throw new Error("Unexpected Equipment pagination response");
     }
 
     total += payload.data.length;
@@ -47,7 +47,7 @@ async function countAllPages(
   }
 }
 
-function RegionMetric({
+function EquipmentMetric({
   value,
   isLoading,
   isError,
@@ -58,7 +58,7 @@ function RegionMetric({
   isError: boolean;
   href: string;
 }) {
-  const { t } = useTranslation("module-region");
+  const { t } = useTranslation("module-equipment");
 
   return (
     <Link
@@ -78,18 +78,18 @@ function RegionMetric({
 export function ProvinceCountWidget() {
   const service = useGetProvincesService();
   const query = useQuery({
-    queryKey: ["region", "dashboard", "province-count"],
+    queryKey: ["equipment", "dashboard", "province-count"],
     queryFn: () =>
       countAllPages((page) => service({ page, limit: PAGE_SIZE })),
     staleTime: 60_000,
   });
 
   return (
-    <RegionMetric
+    <EquipmentMetric
       value={query.data}
       isLoading={query.isLoading}
       isError={query.isError}
-      href="/admin/region"
+      href="/admin/equipment"
     />
   );
 }
@@ -97,18 +97,18 @@ export function ProvinceCountWidget() {
 export function RegencyCountWidget() {
   const service = useGetRegenciesService();
   const query = useQuery({
-    queryKey: ["region", "dashboard", "regency-count"],
+    queryKey: ["equipment", "dashboard", "regency-count"],
     queryFn: () =>
       countAllPages((page) => service({ page, limit: PAGE_SIZE })),
     staleTime: 60_000,
   });
 
   return (
-    <RegionMetric
+    <EquipmentMetric
       value={query.data}
       isLoading={query.isLoading}
       isError={query.isError}
-      href="/admin/region"
+      href="/admin/equipment"
     />
   );
 }
