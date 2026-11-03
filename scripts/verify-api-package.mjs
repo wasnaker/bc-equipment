@@ -9,7 +9,7 @@ for (const key of requiredExports) {
 for (const path of [
   'api/dist/index.js',
   'api/dist/index.d.ts',
-  'api/dist/equipment/region.manifest.js',
+  'api/dist/equipment/equipment.manifest.js',
   'api/dist/equipment/database/migrations/index.js',
 ]) {
   await access(new URL(`../${path}`, import.meta.url), constants.R_OK);
