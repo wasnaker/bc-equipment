@@ -1,17 +1,17 @@
-# Wasnaker Region module
+# Wasnaker Equipment module
 
-The Region module is the pilot implementation of the Wasnaker modular package
+The Equipment module is the pilot implementation of the Wasnaker modular package
 contract. This repository is the **single source of truth** for the module's
 backend and frontend capabilities.
 
 ## Capabilities
 
-- `@wasnaker/module-region/api` — NestJS module, services, entities and seed provider.
-- `@wasnaker/module-region/api/manifest` — backend module metadata and permissions.
-- `@wasnaker/module-region/api/migrations` — PostgreSQL migration classes.
-- `@wasnaker/module-region/web` — React/Next.js page and UI exports.
-- `@wasnaker/module-region/manifest` — frontend navigation and dashboard manifest.
-- `@wasnaker/module-region/locales/<language>` — module-owned translations.
+- `@wasnaker/module-equipment/api` — NestJS module, services, entities and seed provider.
+- `@wasnaker/module-equipment/api/manifest` — backend module metadata and permissions.
+- `@wasnaker/module-equipment/api/migrations` — PostgreSQL migration classes.
+- `@wasnaker/module-equipment/web` — React/Next.js page and UI exports.
+- `@wasnaker/module-equipment/manifest` — frontend navigation and dashboard manifest.
+- `@wasnaker/module-equipment/locales/<language>` — module-owned translations.
 
 A module may expose API, web, or both. Hosts install the same package and import
 only the capability they use. API and web dependencies are optional peers so an
