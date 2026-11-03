@@ -3,11 +3,11 @@
 import { useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "@/services/i18n/client";
-import { useProvincesServerSide, useProvince, useDeleteProvince } from "../hooks/use-equipments";
+import { useGroupsServerSide, useGroup, useDeleteGroup } from "../hooks/use-equipments";
 import { useMasterDetail } from "@/core/master-detail/use-master-detail";
 import { SmallTable, type SmallTableColumn, type DetailTab } from "@/components/small-table";
-import { ProvinceFormDialog } from "../components/province-form-dialog";
-import { ProvinceOverviewTab, ProvinceRegenciesTab } from "../components/province-detail-tab";
+import { GroupFormDialog } from "../components/group-form-dialog";
+import { GroupOverviewTab, GroupRegenciesTab } from "../components/group-detail-tab";
 import { Button } from "@/components/ui/button";
 import PencilIcon from "lucide-react/dist/esm/icons/pencil";
 import TrashIcon from "lucide-react/dist/esm/icons/trash";
@@ -15,7 +15,7 @@ import ArrowLeftIcon from "lucide-react/dist/esm/icons/arrow-left";
 import ArrowRightIcon from "lucide-react/dist/esm/icons/arrow-right";
 import MapPinIcon from "lucide-react/dist/esm/icons/map-pin";
 import { Suspense } from "react";
-import type { Province } from "../types/equipment";
+import type { Group } from "../types/equipment";
 
 function PageInner() {
   const { t } = useTranslation("module-equipment");
@@ -37,27 +37,27 @@ function PageInner() {
     selectedId != null && /^\d+$/.test(String(selectedId))
       ? Number(selectedId)
       : null;
-  const { data: selectedProvince, isLoading: detailLoading } =
-    useProvince(detailId);
+  const { data: selectedGroup, isLoading: detailLoading } =
+    useGroup(detailId);
 
   // ── Dialogs ────────────────────────────────────────────────────────────
   const [formOpen, setFormOpen] = useState(false);
-  const [editItem, setEditItem] = useState<Province | null>(null);
+  const [editItem, setEditItem] = useState<Group | null>(null);
 
   function openCreateDialog() {
     setEditItem(null);
     setFormOpen(true);
   }
 
-  function openEditDialog(item: Province) {
+  function openEditDialog(item: Group) {
     setEditItem(item);
     setFormOpen(true);
   }
 
   // ── Delete ──────────────────────────────────────────────────────────────
-  const deleteMutation = useDeleteProvince();
+  const deleteMutation = useDeleteGroup();
 
-  async function handleDelete(id: Province["id"]) {
+  async function handleDelete(id: Group["id"]) {
     if (!window.confirm(t("confirm.delete.message"))) return;
     await deleteMutation.mutateAsync({ id });
     // Tutup panel bila yang dihapus adalah baris terpilih.
@@ -70,7 +70,7 @@ function PageInner() {
   // ── Table data ──────────────────────────────────────────────────────────
   // Server-side pagination: page & search sudah dihandle useTable
   const {
-    data: provinces,
+    data: groups,
     total,
     limit,
     isLoading,
@@ -82,10 +82,10 @@ function PageInner() {
     setSearch,
     sort,
     setSort,
-  } = useProvincesServerSide();
+  } = useGroupsServerSide();
 
   // ── Columns ─────────────────────────────────────────────────────────────
-  const columns: SmallTableColumn<Province>[] = useMemo(
+  const columns: SmallTableColumn<Group>[] = useMemo(
     () => [
       {
         key: "id",
@@ -151,15 +151,15 @@ function PageInner() {
   // ── Custom tab bodies ──────────────────────────────────────────────────
   const customTabBody = useMemo(
     () => ({
-      overview: (item: Province) => <ProvinceOverviewTab item={item} />,
-      regencies: (item: Province) => <ProvinceRegenciesTab item={item} />,
+      overview: (item: Group) => <GroupOverviewTab item={item} />,
+      regencies: (item: Group) => <GroupRegenciesTab item={item} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [refreshKey]
   );
 
   // ── Toolbar for detail panel ────────────────────────────────────────────
-  function toolbar(item: Province) {
+  function toolbar(item: Group) {
     return (
       <div className="flex items-center gap-2">
         <Button
@@ -196,7 +196,7 @@ function PageInner() {
     );
   }
 
-  function renderHeader(item: Province) {
+  function renderHeader(item: Group) {
     return (
       <div className="flex items-center gap-2">
         <MapPinIcon className="size-4 text-primary" />
@@ -223,14 +223,14 @@ function PageInner() {
           </div>
           <div className="page-header__actions">
             <Button onClick={openCreateDialog}>
-              {t("actions.create_province")}
+              {t("actions.create_group")}
             </Button>
           </div>
         </div>
 
         {/* ── Table ─────────────────────────────────────────────────── */}
-        <SmallTable<Province>
-          items={provinces}
+        <SmallTable<Group>
+          items={groups}
           total={total}
           searchValue={search}
           onSearchChange={setSearch}
@@ -246,7 +246,7 @@ function PageInner() {
           onSelectId={select}
           getItemId={(item) => item.id}
           showDetail={showDetail}
-          detailItem={selectedProvince ?? null}
+          detailItem={selectedGroup ?? null}
           detailLoading={detailLoading}
           tabs={tabs}
           customTabBody={customTabBody}
@@ -280,7 +280,7 @@ function PageInner() {
       </div>
 
       {/* ── Create / Edit dialog ──────────────────────────────────────── */}
-      <ProvinceFormDialog
+      <GroupFormDialog
         open={formOpen}
         onOpenChange={(open) => {
           setFormOpen(open);
@@ -288,7 +288,7 @@ function PageInner() {
         }}
         editItem={editItem}
         onSuccess={(savedId) => {
-          qc.invalidateQueries({ queryKey: ["equipment", "provinces"] });
+          qc.invalidateQueries({ queryKey: ["equipment", "groups"] });
           setRefreshKey((k) => k + 1);
           // Pola core: panel detail menampilkan data hasil simpan.
           afterSave(savedId);

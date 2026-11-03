@@ -1,5 +1,5 @@
-// Province — wilayah level 1 di Indonesia
-export interface Province {
+// Group — wilayah level 1 di Indonesia
+export interface Group {
   id: number | string;
   name: string;
   isoCode: string | null;
@@ -9,10 +9,10 @@ export interface Province {
   updatedAt: string;
 }
 
-// Regency — wilayah level 2 (kabupaten / kota), child dari Province
-export interface Regency {
+// Subgroup — wilayah level 2 (kabupaten / kota), child dari Group
+export interface Subgroup {
   id: number | string;
-  provinceId: number | string;
+  groupId: number | string;
   name: string;
   type: "kabupaten" | "kota";
   isActive: boolean;
@@ -20,7 +20,7 @@ export interface Regency {
   updatedAt: string;
 }
 
-export const REGENCY_TYPES = [
+export const SUBGROUP_TYPES = [
   { value: "kabupaten" as const, label: "Kabupaten" },
   { value: "kota" as const, label: "Kota" },
 ];

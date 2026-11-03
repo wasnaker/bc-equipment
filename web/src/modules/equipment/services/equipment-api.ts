@@ -5,24 +5,24 @@ import wrapperFetchJsonResponse from "@/services/api/wrapper-fetch-json-response
 import type { InfinityPaginationType } from "@/services/api/types/infinity-pagination";
 import type { SortEnum } from "@/services/api/types/sort-type";
 import type { RequestConfigType } from "@/services/api/services/types/request-config";
-import type { Province, Regency } from "../types/equipment";
+import type { Group, Subgroup } from "../types/equipment";
 
-// ── Province ────────────────────────────────────────────────────────────────
+// ── Group ────────────────────────────────────────────────────────────────
 
-export type ProvinceListRequest = {
+export type GroupListRequest = {
   page: number;
   limit: number;
   filters?: Record<string, string | number | boolean>;
-  sort?: Array<{ orderBy: keyof Province; order: SortEnum }>;
+  sort?: Array<{ orderBy: keyof Group; order: SortEnum }>;
 };
 
-export type ProvinceListResponse = InfinityPaginationType<Province>;
+export type GroupListResponse = InfinityPaginationType<Group>;
 
-export function useGetProvincesService() {
+export function useGetGroupsService() {
   const fetch = useFetch();
   return useCallback(
-    (data: ProvinceListRequest, requestConfig?: RequestConfigType) => {
-      const url = new URL(`${API_URL}/v1/equipment/provinces`);
+    (data: GroupListRequest, requestConfig?: RequestConfigType) => {
+      const url = new URL(`${API_URL}/v1/equipment/groups`);
       url.searchParams.append("page", String(data.page));
       url.searchParams.append("limit", String(data.limit));
       if (data.filters) {
@@ -32,97 +32,97 @@ export function useGetProvincesService() {
         url.searchParams.append("sort", JSON.stringify(data.sort));
       }
       return fetch(url, { method: "GET", ...requestConfig }).then(
-        wrapperFetchJsonResponse<ProvinceListResponse>
+        wrapperFetchJsonResponse<GroupListResponse>
       );
     },
     [fetch]
   );
 }
 
-export type ProvinceGetRequest = { id: Province["id"] };
-export type ProvinceGetResponse = Province;
+export type GroupGetRequest = { id: Group["id"] };
+export type GroupGetResponse = Group;
 
-export function useGetProvinceService() {
+export function useGetGroupService() {
   const fetch = useFetch();
   return useCallback(
-    (data: ProvinceGetRequest, requestConfig?: RequestConfigType) => {
-      return fetch(`${API_URL}/v1/equipment/provinces/${data.id}`, {
+    (data: GroupGetRequest, requestConfig?: RequestConfigType) => {
+      return fetch(`${API_URL}/v1/equipment/groups/${data.id}`, {
         method: "GET",
         ...requestConfig,
-      }).then(wrapperFetchJsonResponse<ProvinceGetResponse>);
+      }).then(wrapperFetchJsonResponse<GroupGetResponse>);
     },
     [fetch]
   );
 }
 
-export type ProvincePostRequest = Pick<Province, "name" | "isoCode" | "latitude" | "longitude">;
-export type ProvincePostResponse = Province;
+export type GroupPostRequest = Pick<Group, "name" | "isoCode" | "latitude" | "longitude">;
+export type GroupPostResponse = Group;
 
-export function useCreateProvinceService() {
+export function useCreateGroupService() {
   const fetch = useFetch();
   return useCallback(
-    (data: ProvincePostRequest, requestConfig?: RequestConfigType) => {
-      return fetch(`${API_URL}/v1/equipment/provinces`, {
+    (data: GroupPostRequest, requestConfig?: RequestConfigType) => {
+      return fetch(`${API_URL}/v1/equipment/groups`, {
         method: "POST",
         body: JSON.stringify(data),
         ...requestConfig,
-      }).then(wrapperFetchJsonResponse<ProvincePostResponse>);
+      }).then(wrapperFetchJsonResponse<GroupPostResponse>);
     },
     [fetch]
   );
 }
 
-export type ProvincePatchRequest = {
-  id: Province["id"];
-  data: Partial<Omit<ProvincePostRequest, never>>;
+export type GroupPatchRequest = {
+  id: Group["id"];
+  data: Partial<Omit<GroupPostRequest, never>>;
 };
-export type ProvincePatchResponse = Province;
+export type GroupPatchResponse = Group;
 
-export function useUpdateProvinceService() {
+export function useUpdateGroupService() {
   const fetch = useFetch();
   return useCallback(
-    (data: ProvincePatchRequest, requestConfig?: RequestConfigType) => {
-      return fetch(`${API_URL}/v1/equipment/provinces/${data.id}`, {
+    (data: GroupPatchRequest, requestConfig?: RequestConfigType) => {
+      return fetch(`${API_URL}/v1/equipment/groups/${data.id}`, {
         method: "PATCH",
         body: JSON.stringify(data.data),
         ...requestConfig,
-      }).then(wrapperFetchJsonResponse<ProvincePatchResponse>);
+      }).then(wrapperFetchJsonResponse<GroupPatchResponse>);
     },
     [fetch]
   );
 }
 
-export type ProvinceDeleteRequest = { id: Province["id"] };
-export type ProvinceDeleteResponse = undefined;
+export type GroupDeleteRequest = { id: Group["id"] };
+export type GroupDeleteResponse = undefined;
 
-export function useDeleteProvinceService() {
+export function useDeleteGroupService() {
   const fetch = useFetch();
   return useCallback(
-    (data: ProvinceDeleteRequest, requestConfig?: RequestConfigType) => {
-      return fetch(`${API_URL}/v1/equipment/provinces/${data.id}`, {
+    (data: GroupDeleteRequest, requestConfig?: RequestConfigType) => {
+      return fetch(`${API_URL}/v1/equipment/groups/${data.id}`, {
         method: "DELETE",
         ...requestConfig,
-      }).then(wrapperFetchJsonResponse<ProvinceDeleteResponse>);
+      }).then(wrapperFetchJsonResponse<GroupDeleteResponse>);
     },
     [fetch]
   );
 }
 
-// ── Regency ─────────────────────────────────────────────────────────────────
+// ── Subgroup ─────────────────────────────────────────────────────────────────
 
-export type RegencyListRequest = {
+export type SubgroupListRequest = {
   page: number;
   limit: number;
   filters?: Record<string, string | number | boolean>;
-  sort?: Array<{ orderBy: keyof Regency; order: SortEnum }>;
+  sort?: Array<{ orderBy: keyof Subgroup; order: SortEnum }>;
 };
 
-export type RegencyListResponse = InfinityPaginationType<Regency>;
+export type SubgroupListResponse = InfinityPaginationType<Subgroup>;
 
 export function useGetRegenciesService() {
   const fetch = useFetch();
   return useCallback(
-    (data: RegencyListRequest, requestConfig?: RequestConfigType) => {
+    (data: SubgroupListRequest, requestConfig?: RequestConfigType) => {
       const url = new URL(`${API_URL}/v1/equipment/regencies`);
       url.searchParams.append("page", String(data.page));
       url.searchParams.append("limit", String(data.limit));
@@ -133,77 +133,77 @@ export function useGetRegenciesService() {
         url.searchParams.append("sort", JSON.stringify(data.sort));
       }
       return fetch(url, { method: "GET", ...requestConfig }).then(
-        wrapperFetchJsonResponse<RegencyListResponse>
+        wrapperFetchJsonResponse<SubgroupListResponse>
       );
     },
     [fetch]
   );
 }
 
-export type RegencyGetRequest = { id: Regency["id"] };
-export type RegencyGetResponse = Regency;
+export type SubgroupGetRequest = { id: Subgroup["id"] };
+export type SubgroupGetResponse = Subgroup;
 
-export function useGetRegencyService() {
+export function useGetSubgroupService() {
   const fetch = useFetch();
   return useCallback(
-    (data: RegencyGetRequest, requestConfig?: RequestConfigType) => {
+    (data: SubgroupGetRequest, requestConfig?: RequestConfigType) => {
       return fetch(`${API_URL}/v1/equipment/regencies/${data.id}`, {
         method: "GET",
         ...requestConfig,
-      }).then(wrapperFetchJsonResponse<RegencyGetResponse>);
+      }).then(wrapperFetchJsonResponse<SubgroupGetResponse>);
     },
     [fetch]
   );
 }
 
-export type RegencyPostRequest = Pick<Regency, "provinceId" | "name" | "type" | "isActive">;
-export type RegencyPostResponse = Regency;
+export type SubgroupPostRequest = Pick<Subgroup, "groupId" | "name" | "type" | "isActive">;
+export type SubgroupPostResponse = Subgroup;
 
-export function useCreateRegencyService() {
+export function useCreateSubgroupService() {
   const fetch = useFetch();
   return useCallback(
-    (data: RegencyPostRequest, requestConfig?: RequestConfigType) => {
+    (data: SubgroupPostRequest, requestConfig?: RequestConfigType) => {
       return fetch(`${API_URL}/v1/equipment/regencies`, {
         method: "POST",
         body: JSON.stringify(data),
         ...requestConfig,
-      }).then(wrapperFetchJsonResponse<RegencyPostResponse>);
+      }).then(wrapperFetchJsonResponse<SubgroupPostResponse>);
     },
     [fetch]
   );
 }
 
-export type RegencyPatchRequest = {
-  id: Regency["id"];
-  data: Partial<Omit<RegencyPostRequest, never>>;
+export type SubgroupPatchRequest = {
+  id: Subgroup["id"];
+  data: Partial<Omit<SubgroupPostRequest, never>>;
 };
-export type RegencyPatchResponse = Regency;
+export type SubgroupPatchResponse = Subgroup;
 
-export function useUpdateRegencyService() {
+export function useUpdateSubgroupService() {
   const fetch = useFetch();
   return useCallback(
-    (data: RegencyPatchRequest, requestConfig?: RequestConfigType) => {
+    (data: SubgroupPatchRequest, requestConfig?: RequestConfigType) => {
       return fetch(`${API_URL}/v1/equipment/regencies/${data.id}`, {
         method: "PATCH",
         body: JSON.stringify(data.data),
         ...requestConfig,
-      }).then(wrapperFetchJsonResponse<RegencyPatchResponse>);
+      }).then(wrapperFetchJsonResponse<SubgroupPatchResponse>);
     },
     [fetch]
   );
 }
 
-export type RegencyDeleteRequest = { id: Regency["id"] };
-export type RegencyDeleteResponse = undefined;
+export type SubgroupDeleteRequest = { id: Subgroup["id"] };
+export type SubgroupDeleteResponse = undefined;
 
-export function useDeleteRegencyService() {
+export function useDeleteSubgroupService() {
   const fetch = useFetch();
   return useCallback(
-    (data: RegencyDeleteRequest, requestConfig?: RequestConfigType) => {
+    (data: SubgroupDeleteRequest, requestConfig?: RequestConfigType) => {
       return fetch(`${API_URL}/v1/equipment/regencies/${data.id}`, {
         method: "DELETE",
         ...requestConfig,
-      }).then(wrapperFetchJsonResponse<RegencyDeleteResponse>);
+      }).then(wrapperFetchJsonResponse<SubgroupDeleteResponse>);
     },
     [fetch]
   );
@@ -211,16 +211,16 @@ export function useDeleteRegencyService() {
 
 /**
  * Convenience helper — non-hook, returns raw fetch promise.
- * Gunakan di dalam useEffect/detail-tab untuk fetch regencies by provinceId.
+ * Gunakan di dalam useEffect/detail-tab untuk fetch regencies by groupId.
  */
-export function fetchRegenciesByProvince(
-  provinceId: Province["id"],
+export function fetchRegenciesByGroup(
+  groupId: Group["id"],
   limit = 100,
   fetch: ReturnType<typeof import("@/services/api/use-fetch").default> | null = null
 ): Promise<Response> {
   const url = new URL(`${API_URL}/v1/equipment/regencies`);
   url.searchParams.append("page", "1");
   url.searchParams.append("limit", String(limit));
-  url.searchParams.append("filters", JSON.stringify({ provinceId: String(provinceId) }));
+  url.searchParams.append("filters", JSON.stringify({ groupId: String(groupId) }));
   return (fetch ?? globalThis.fetch)(url, { method: "GET" });
 }
