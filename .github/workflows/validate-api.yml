@@ -1,4 +1,4 @@
-name: Validate API package
+name: Validate Equipment package
 
 on:
   push:
@@ -12,18 +12,38 @@ permissions:
 
 jobs:
   api-package:
+    name: API build and package exports
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Equipment module
         uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - name: Install dependencies
+      - name: Install module dependencies
         run: npm ci
       - name: Build API
         run: npm run build:api
       - name: Verify package artifacts
         run: npm run verify:api-package
+
+  frontend-typecheck:
+    name: Frontend typecheck against host contracts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Equipment module
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Checkout frontend host
+        run: git clone --depth 1 https://github.com/wasnaker/brocoders-react-web.git "$RUNNER_WORKSPACE/brocoders-react-web"
+      - name: Install host dependencies
+        working-directory: ${{ runner.workspace }}/brocoders-react-web
+        run: npm ci
+      - name: Typecheck Equipment frontend
+        working-directory: ${{ runner.workspace }}/brocoders-react-web
+        run: ./node_modules/.bin/tsc --project "$GITHUB_WORKSPACE/web/tsconfig.check.json" --pretty false
