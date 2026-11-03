@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class Province {
+export class Group {
   @ApiProperty({ example: 1 })
   id: number | string;
 

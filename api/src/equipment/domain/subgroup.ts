@@ -1,21 +1,21 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export enum RegencyTypeEnum {
+export enum SubgroupTypeEnum {
   KABUPATEN = 'kabupaten',
   KOTA = 'kota',
 }
 
-export const REGENCY_TYPES = [
-  { value: RegencyTypeEnum.KABUPATEN, label: 'Kabupaten' },
-  { value: RegencyTypeEnum.KOTA, label: 'Kota' },
+export const SUBGROUP_TYPES = [
+  { value: SubgroupTypeEnum.KABUPATEN, label: 'Kabupaten' },
+  { value: SubgroupTypeEnum.KOTA, label: 'Kota' },
 ];
 
-export class Regency {
+export class Subgroup {
   @ApiProperty({ example: 1 })
   id: number | string;
 
   @ApiProperty({ example: 1 })
-  provinceId: number | string;
+  groupId: number | string;
 
   @ApiProperty({ example: 'Bandung' })
   name: string;
@@ -24,7 +24,7 @@ export class Regency {
   code?: string | null;
 
   @ApiProperty({ example: 'kota' })
-  type: RegencyTypeEnum;
+  type: SubgroupTypeEnum;
 
   @ApiProperty({ example: true })
   isActive: boolean;

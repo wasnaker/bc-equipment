@@ -10,7 +10,7 @@ import {
   Min,
 } from 'class-validator';
 
-export class CreateProvinceDto {
+export class CreateGroupDto {
   @ApiProperty({ example: 'Jawa Barat', maxLength: 190 })
   @IsNotEmpty()
   @IsString()

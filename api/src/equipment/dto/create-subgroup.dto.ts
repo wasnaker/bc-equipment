@@ -9,13 +9,13 @@ import {
   Matches,
   MaxLength,
 } from 'class-validator';
-import { Regency, RegencyTypeEnum } from '../domain/regency';
+import { Subgroup, SubgroupTypeEnum } from '../domain/subgroup';
 
-export class CreateRegencyDto {
+export class CreateSubgroupDto {
   @ApiProperty({ example: 1 })
   @Type(() => Number)
   @IsNotEmpty()
-  provinceId: Regency['provinceId'];
+  groupId: Subgroup['groupId'];
 
   @ApiProperty({ example: 'Bandung', maxLength: 190 })
   @IsNotEmpty()
@@ -23,10 +23,10 @@ export class CreateRegencyDto {
   @MaxLength(190)
   name: string;
 
-  @ApiProperty({ example: 'kota', enum: RegencyTypeEnum })
+  @ApiProperty({ example: 'kota', enum: SubgroupTypeEnum })
   @IsNotEmpty()
-  @IsEnum(RegencyTypeEnum)
-  type: RegencyTypeEnum;
+  @IsEnum(SubgroupTypeEnum)
+  type: SubgroupTypeEnum;
 
   @ApiPropertyOptional({ example: '32.73', description: 'Kode BPS 4 digit' })
   @IsOptional()
