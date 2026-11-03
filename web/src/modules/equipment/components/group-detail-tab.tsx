@@ -2,18 +2,18 @@
 
 import { useRegencies } from "../hooks/use-equipments";
 import { useTranslation } from "@/services/i18n/client";
-import type { Province } from "../types/equipment";
+import type { Group } from "../types/equipment";
 import type { DetailTab } from "@/components/small-table";
 
-interface ProvinceOverviewTabProps {
-  item: Province;
+interface GroupOverviewTabProps {
+  item: Group;
 }
 
-interface ProvinceRegenciesTabProps {
-  item: Province;
+interface GroupRegenciesTabProps {
+  item: Group;
 }
 
-export function ProvinceOverviewTab({ item }: ProvinceOverviewTabProps) {
+export function GroupOverviewTab({ item }: GroupOverviewTabProps) {
   const { t } = useTranslation("module-equipment");
 
   return (
@@ -44,9 +44,9 @@ export function ProvinceOverviewTab({ item }: ProvinceOverviewTabProps) {
   );
 }
 
-export function ProvinceRegenciesTab({ item: province }: ProvinceRegenciesTabProps) {
+export function GroupRegenciesTab({ item: group }: GroupRegenciesTabProps) {
   const { t } = useTranslation("module-equipment");
-  const { data, isLoading } = useRegencies(String(province.id), 1, 50);
+  const { data, isLoading } = useRegencies(String(group.id), 1, 50);
 
   if (isLoading) {
     return (
@@ -89,12 +89,12 @@ export function ProvinceRegenciesTab({ item: province }: ProvinceRegenciesTabPro
 }
 
 // Custom tab body map for SmallTable — exported as a factory so page can spread it
-export function buildProvinceTabBodies(
-  _province: Province | null,
+export function buildGroupTabBodies(
+  _group: Group | null,
   _tab: DetailTab
-): Record<string, (item: Province, tab: DetailTab) => React.ReactNode> {
+): Record<string, (item: Group, tab: DetailTab) => React.ReactNode> {
   return {
-    overview: (item) => <ProvinceOverviewTab item={item} />,
-    regencies: (item) => <ProvinceRegenciesTab item={item} />,
+    overview: (item) => <GroupOverviewTab item={item} />,
+    regencies: (item) => <GroupRegenciesTab item={item} />,
   };
 }

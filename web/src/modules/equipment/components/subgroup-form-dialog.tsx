@@ -14,50 +14,50 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useProvinces } from "../hooks/use-equipments";
-import { useCreateRegency, useUpdateRegency } from "../hooks/use-equipments";
-import { REGENCY_TYPES } from "../types/equipment";
-import type { Regency, Province } from "../types/equipment";
+import { useGroups } from "../hooks/use-equipments";
+import { useCreateSubgroup, useUpdateSubgroup } from "../hooks/use-equipments";
+import { SUBGROUP_TYPES } from "../types/equipment";
+import type { Subgroup, Group } from "../types/equipment";
 
-interface RegencyFormDialogProps {
+interface SubgroupFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  editItem?: Regency | null;
-  /** Pre-selected provinceId when creating from province detail */
-  defaultProvinceId?: Province["id"] | null;
-  onSuccess: (savedId: Regency["id"]) => void;
+  editItem?: Subgroup | null;
+  /** Pre-selected groupId when creating from group detail */
+  defaultGroupId?: Group["id"] | null;
+  onSuccess: (savedId: Subgroup["id"]) => void;
 }
 
 interface FormState {
-  provinceId: string;
+  groupId: string;
   name: string;
   type: "kabupaten" | "kota";
   isActive: boolean;
 }
 
 interface FormErrors {
-  provinceId?: string;
+  groupId?: string;
   name?: string;
   type?: string;
 }
 
-export function RegencyFormDialog({
+export function SubgroupFormDialog({
   open,
   onOpenChange,
   editItem,
-  defaultProvinceId,
+  defaultGroupId,
   onSuccess,
-}: RegencyFormDialogProps) {
+}: SubgroupFormDialogProps) {
   const { t } = useTranslation("module-equipment");
-  const createMutation = useCreateRegency();
-  const updateMutation = useUpdateRegency();
-  const { data: provincesData } = useProvinces(1, 200);
+  const createMutation = useCreateSubgroup();
+  const updateMutation = useUpdateSubgroup();
+  const { data: groupsData } = useGroups(1, 200);
 
   const isEditing = Boolean(editItem);
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   const [form, setForm] = useState<FormState>({
-    provinceId: "",
+    groupId: "",
     name: "",
     type: "kabupaten",
     isActive: true,
@@ -67,10 +67,10 @@ export function RegencyFormDialog({
   useEffect(() => {
     if (open) {
       setForm({
-        provinceId: editItem
-          ? String(editItem.provinceId)
-          : defaultProvinceId != null
-            ? String(defaultProvinceId)
+        groupId: editItem
+          ? String(editItem.groupId)
+          : defaultGroupId != null
+            ? String(defaultGroupId)
             : "",
         name: editItem?.name ?? "",
         type: editItem?.type ?? "kabupaten",
@@ -78,11 +78,11 @@ export function RegencyFormDialog({
       });
       setErrors({});
     }
-  }, [open, editItem, defaultProvinceId]);
+  }, [open, editItem, defaultGroupId]);
 
   function validate(): boolean {
     const e: FormErrors = {};
-    if (!form.provinceId) e.provinceId = t("form.validation.required");
+    if (!form.groupId) e.groupId = t("form.validation.required");
     if (!form.name.trim()) e.name = t("form.validation.required");
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -93,13 +93,13 @@ export function RegencyFormDialog({
     if (!validate()) return;
 
     const payload = {
-      provinceId: Number(form.provinceId),
+      groupId: Number(form.groupId),
       name: form.name.trim(),
       type: form.type,
       isActive: form.isActive,
     };
 
-    let savedId: Regency["id"] | undefined;
+    let savedId: Subgroup["id"] | undefined;
     if (isEditing && editItem) {
       const result = await updateMutation.mutateAsync({
         id: editItem.id,
@@ -121,13 +121,13 @@ export function RegencyFormDialog({
       setErrors((prev) => ({ ...prev, [key]: undefined }));
   }
 
-  const provinces = provincesData?.data ?? [];
+  const groups = groupsData?.data ?? [];
 
   return (
     <FormDialogLayout
       open={open}
       onOpenChange={onOpenChange}
-      title={isEditing ? t("actions.edit_regency") : t("actions.create_regency")}
+      title={isEditing ? t("actions.edit_subgroup") : t("actions.create_subgroup")}
       onSubmit={handleSubmit}
       footer={
         <>
@@ -145,41 +145,41 @@ export function RegencyFormDialog({
         </>
       }
     >
-          {/* Province */}
+          {/* Group */}
           <div className="space-y-1.5">
-            <Label htmlFor="regency-province">
-              {t("form.field.province")} <span className="text-destructive">*</span>
+            <Label htmlFor="subgroup-group">
+              {t("form.field.group")} <span className="text-destructive">*</span>
             </Label>
             <Select
-              value={form.provinceId}
-              onValueChange={(v) => setField("provinceId", v)}
+              value={form.groupId}
+              onValueChange={(v) => setField("groupId", v)}
             >
               <SelectTrigger
-                id="regency-province"
-                aria-invalid={Boolean(errors.provinceId)}
+                id="subgroup-group"
+                aria-invalid={Boolean(errors.groupId)}
               >
-                <SelectValue placeholder={t("form.placeholder.province")} />
+                <SelectValue placeholder={t("form.placeholder.group")} />
               </SelectTrigger>
               <SelectContent>
-                {provinces.map((p) => (
+                {groups.map((p) => (
                   <SelectItem key={String(p.id)} value={String(p.id)}>
                     {p.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            {errors.provinceId && (
-              <p className="text-xs text-destructive">{errors.provinceId}</p>
+            {errors.groupId && (
+              <p className="text-xs text-destructive">{errors.groupId}</p>
             )}
           </div>
 
           {/* Name */}
           <div className="space-y-1.5">
-            <Label htmlFor="regency-name">
+            <Label htmlFor="subgroup-name">
               {t("form.field.name")} <span className="text-destructive">*</span>
             </Label>
             <Input
-              id="regency-name"
+              id="subgroup-name"
               value={form.name}
               onChange={(e) => setField("name", e.target.value)}
               placeholder={t("form.placeholder.name")}
@@ -192,16 +192,16 @@ export function RegencyFormDialog({
 
           {/* Type */}
           <div className="space-y-1.5">
-            <Label htmlFor="regency-type">{t("form.field.type")}</Label>
+            <Label htmlFor="subgroup-type">{t("form.field.type")}</Label>
             <Select
               value={form.type}
               onValueChange={(v) => setField("type", v as "kabupaten" | "kota")}
             >
-              <SelectTrigger id="regency-type">
+              <SelectTrigger id="subgroup-type">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {REGENCY_TYPES.map((rt) => (
+                {SUBGROUP_TYPES.map((rt) => (
                   <SelectItem key={rt.value} value={rt.value}>
                     {rt.label}
                   </SelectItem>
@@ -213,12 +213,12 @@ export function RegencyFormDialog({
           {/* isActive */}
           <div className="flex items-center gap-2">
             <Checkbox
-              id="regency-active"
+              id="subgroup-active"
               checked={form.isActive}
               onCheckedChange={(v) => setField("isActive", Boolean(v))}
             />
             <Label
-              htmlFor="regency-active"
+              htmlFor="subgroup-active"
               className="cursor-pointer text-sm font-normal"
             >
               {t("form.field.isActive")}

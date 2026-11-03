@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "@/components/link";
 import { useTranslation } from "@/services/i18n/client";
 import {
-  useGetProvincesService,
+  useGetGroupsService,
   useGetRegenciesService,
 } from "../services/equipment-api";
 
@@ -75,10 +75,10 @@ function EquipmentMetric({
   );
 }
 
-export function ProvinceCountWidget() {
-  const service = useGetProvincesService();
+export function GroupCountWidget() {
+  const service = useGetGroupsService();
   const query = useQuery({
-    queryKey: ["equipment", "dashboard", "province-count"],
+    queryKey: ["equipment", "dashboard", "group-count"],
     queryFn: () =>
       countAllPages((page) => service({ page, limit: PAGE_SIZE })),
     staleTime: 60_000,
@@ -94,10 +94,10 @@ export function ProvinceCountWidget() {
   );
 }
 
-export function RegencyCountWidget() {
+export function SubgroupCountWidget() {
   const service = useGetRegenciesService();
   const query = useQuery({
-    queryKey: ["equipment", "dashboard", "regency-count"],
+    queryKey: ["equipment", "dashboard", "subgroup-count"],
     queryFn: () =>
       countAllPages((page) => service({ page, limit: PAGE_SIZE })),
     staleTime: 60_000,

@@ -6,14 +6,14 @@ import { FormDialogLayout } from "@/components/form/form-dialog-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCreateProvince, useUpdateProvince } from "../hooks/use-equipments";
-import type { Province } from "../types/equipment";
+import { useCreateGroup, useUpdateGroup } from "../hooks/use-equipments";
+import type { Group } from "../types/equipment";
 
-interface ProvinceFormDialogProps {
+interface GroupFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  editItem?: Province | null;
-  onSuccess: (savedId: Province["id"]) => void;
+  editItem?: Group | null;
+  onSuccess: (savedId: Group["id"]) => void;
 }
 
 interface FormState {
@@ -30,15 +30,15 @@ interface FormErrors {
   longitude?: string;
 }
 
-export function ProvinceFormDialog({
+export function GroupFormDialog({
   open,
   onOpenChange,
   editItem,
   onSuccess,
-}: ProvinceFormDialogProps) {
+}: GroupFormDialogProps) {
   const { t } = useTranslation("module-equipment");
-  const createMutation = useCreateProvince();
-  const updateMutation = useUpdateProvince();
+  const createMutation = useCreateGroup();
+  const updateMutation = useUpdateGroup();
 
   const isEditing = Boolean(editItem);
   const isPending = createMutation.isPending || updateMutation.isPending;
@@ -89,7 +89,7 @@ export function ProvinceFormDialog({
       longitude: form.longitude ? Number(form.longitude) : null,
     };
 
-    let savedId: Province["id"] | undefined;
+    let savedId: Group["id"] | undefined;
     if (isEditing && editItem) {
       const result = await updateMutation.mutateAsync({
         id: editItem.id,
@@ -114,7 +114,7 @@ export function ProvinceFormDialog({
     <FormDialogLayout
       open={open}
       onOpenChange={onOpenChange}
-      title={isEditing ? t("actions.edit_province") : t("actions.create_province")}
+      title={isEditing ? t("actions.edit_group") : t("actions.create_group")}
       onSubmit={handleSubmit}
       footer={
         <>
@@ -134,11 +134,11 @@ export function ProvinceFormDialog({
     >
           {/* Name */}
           <div className="space-y-1.5">
-            <Label htmlFor="province-name">
+            <Label htmlFor="group-name">
               {t("form.field.name")} <span className="text-destructive">*</span>
             </Label>
             <Input
-              id="province-name"
+              id="group-name"
               value={form.name}
               onChange={(e) => setField("name", e.target.value)}
               placeholder={t("form.placeholder.name")}
@@ -151,9 +151,9 @@ export function ProvinceFormDialog({
 
           {/* ISO Code */}
           <div className="space-y-1.5">
-            <Label htmlFor="province-isoCode">{t("form.field.isoCode")}</Label>
+            <Label htmlFor="group-isoCode">{t("form.field.isoCode")}</Label>
             <Input
-              id="province-isoCode"
+              id="group-isoCode"
               value={form.isoCode}
               onChange={(e) => setField("isoCode", e.target.value)}
               placeholder="e.g. 31"
@@ -164,9 +164,9 @@ export function ProvinceFormDialog({
           {/* Coordinates row */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="province-lat">{t("form.field.latitude")}</Label>
+              <Label htmlFor="group-lat">{t("form.field.latitude")}</Label>
               <Input
-                id="province-lat"
+                id="group-lat"
                 type="number"
                 step="any"
                 value={form.latitude}
@@ -179,9 +179,9 @@ export function ProvinceFormDialog({
               )}
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="province-lng">{t("form.field.longitude")}</Label>
+              <Label htmlFor="group-lng">{t("form.field.longitude")}</Label>
               <Input
-                id="province-lng"
+                id="group-lng"
                 type="number"
                 step="any"
                 value={form.longitude}
