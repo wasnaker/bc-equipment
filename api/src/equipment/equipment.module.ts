@@ -4,7 +4,6 @@ import { GroupEntity } from './infrastructure/persistence/relational/entities/gr
 import { SubgroupEntity } from './infrastructure/persistence/relational/entities/subgroup.entity';
 import { EquipmentService } from './services/equipment.service';
 import { EquipmentController } from './controllers/equipment.controller';
-import { EquipmentSeedService } from './database/equipment-seed.service';
 import { GroupRepository } from './infrastructure/persistence/group.repository';
 import { SubgroupRepository } from './infrastructure/persistence/subgroup.repository';
 import { GroupsRelationalRepository } from './infrastructure/persistence/relational/repositories/group.repository';
@@ -18,13 +17,12 @@ export type { EquipmentModuleOptions, EquipmentModuleAsyncOptions } from './equi
   imports: [TypeOrmModule.forFeature([GroupEntity, SubgroupEntity])],
   providers: [
     EquipmentService,
-    EquipmentSeedService,
     EquipmentAccessGuard,
     { provide: GroupRepository, useClass: GroupsRelationalRepository },
     { provide: SubgroupRepository, useClass: RegenciesRelationalRepository },
   ],
   controllers: [EquipmentController],
-  exports: [EquipmentService, EquipmentSeedService],
+  exports: [EquipmentService],
 })
 export class EquipmentModule {
   static registerAsync(options: EquipmentModuleAsyncOptions): DynamicModule {
