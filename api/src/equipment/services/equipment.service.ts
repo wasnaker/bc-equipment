@@ -3,201 +3,201 @@ import {
   Injectable,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { CreateProvinceDto } from '../dto/create-province.dto';
-import { UpdateProvinceDto } from '../dto/update-province.dto';
-import { FilterProvinceDto, SortProvinceDto } from '../dto/query-province.dto';
-import { CreateRegencyDto } from '../dto/create-regency.dto';
-import { UpdateRegencyDto } from '../dto/update-regency.dto';
-import { FilterRegencyDto, SortRegencyDto } from '../dto/query-regency.dto';
-import { Province } from '../domain/province';
-import { Regency } from '../domain/regency';
-import { ProvinceRepository } from '../infrastructure/persistence/province.repository';
-import { RegencyRepository } from '../infrastructure/persistence/regency.repository';
+import { CreateGroupDto } from '../dto/create-group.dto';
+import { UpdateGroupDto } from '../dto/update-group.dto';
+import { FilterGroupDto, SortGroupDto } from '../dto/query-group.dto';
+import { CreateSubgroupDto } from '../dto/create-subgroup.dto';
+import { UpdateSubgroupDto } from '../dto/update-subgroup.dto';
+import { FilterSubgroupDto, SortSubgroupDto } from '../dto/query-subgroup.dto';
+import { Group } from '../domain/group';
+import { Subgroup } from '../domain/subgroup';
+import { GroupRepository } from '../infrastructure/persistence/group.repository';
+import { SubgroupRepository } from '../infrastructure/persistence/subgroup.repository';
 import { NullableType } from '../../utils/types/nullable.type';
 import { IPaginationOptions } from '../../utils/types/pagination-options';
 
 @Injectable()
 export class EquipmentService {
   constructor(
-    private readonly provinceRepository: ProvinceRepository,
-    private readonly regencyRepository: RegencyRepository,
+    private readonly groupRepository: GroupRepository,
+    private readonly subgroupRepository: SubgroupRepository,
   ) {}
 
-  // ─── Provinces ────────────────────────────────────────────────────────────
+  // ─── Groups ────────────────────────────────────────────────────────────
 
-  async createProvince(
-    createProvinceDto: CreateProvinceDto,
-  ): Promise<Province> {
-    const existing = await this.provinceRepository.findByName(
-      createProvinceDto.name,
+  async createGroup(
+    createGroupDto: CreateGroupDto,
+  ): Promise<Group> {
+    const existing = await this.groupRepository.findByName(
+      createGroupDto.name,
     );
     if (existing) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
-          name: 'provinceNameAlreadyExists',
+          name: 'groupNameAlreadyExists',
         },
       });
     }
 
-    if (createProvinceDto.isoCode) {
-      const existingIsoCode = await this.provinceRepository.findByIsoCode(
-        createProvinceDto.isoCode,
+    if (createGroupDto.isoCode) {
+      const existingIsoCode = await this.groupRepository.findByIsoCode(
+        createGroupDto.isoCode,
       );
       if (existingIsoCode) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: { isoCode: 'provinceIsoCodeAlreadyExists' },
+          errors: { isoCode: 'groupIsoCodeAlreadyExists' },
         });
       }
     }
 
-    return this.provinceRepository.create({
-      name: createProvinceDto.name,
-      isoCode: createProvinceDto.isoCode ?? null,
-      latitude: createProvinceDto.latitude ?? null,
-      longitude: createProvinceDto.longitude ?? null,
+    return this.groupRepository.create({
+      name: createGroupDto.name,
+      isoCode: createGroupDto.isoCode ?? null,
+      latitude: createGroupDto.latitude ?? null,
+      longitude: createGroupDto.longitude ?? null,
     });
   }
 
-  async findManyProvincesWithPagination({
+  async findManyGroupsWithPagination({
     filterOptions,
     sortOptions,
     paginationOptions,
   }: {
-    filterOptions?: FilterProvinceDto | null;
-    sortOptions?: SortProvinceDto[] | null;
+    filterOptions?: FilterGroupDto | null;
+    sortOptions?: SortGroupDto[] | null;
     paginationOptions: IPaginationOptions;
-  }): Promise<Province[]> {
-    return this.provinceRepository.findManyWithPagination({
+  }): Promise<Group[]> {
+    return this.groupRepository.findManyWithPagination({
       filterOptions,
       sortOptions,
       paginationOptions,
     });
   }
 
-  async findProvinceById(id: Province['id']): Promise<NullableType<Province>> {
-    return this.provinceRepository.findById(id);
+  async findGroupById(id: Group['id']): Promise<NullableType<Group>> {
+    return this.groupRepository.findById(id);
   }
 
-  async findProvinceByIsoCode(
-    isoCode: Province['isoCode'],
-  ): Promise<NullableType<Province>> {
-    return this.provinceRepository.findByIsoCode(isoCode);
+  async findGroupByIsoCode(
+    isoCode: Group['isoCode'],
+  ): Promise<NullableType<Group>> {
+    return this.groupRepository.findByIsoCode(isoCode);
   }
 
-  async updateProvince(
-    id: Province['id'],
-    updateProvinceDto: UpdateProvinceDto,
-  ): Promise<Province> {
-    const province = await this.provinceRepository.findById(id);
-    if (!province) {
+  async updateGroup(
+    id: Group['id'],
+    updateGroupDto: UpdateGroupDto,
+  ): Promise<Group> {
+    const group = await this.groupRepository.findById(id);
+    if (!group) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
-          province: 'provinceNotExists',
+          group: 'groupNotExists',
         },
       });
     }
 
-    if (updateProvinceDto.name) {
-      const existing = await this.provinceRepository.findByName(
-        updateProvinceDto.name,
+    if (updateGroupDto.name) {
+      const existing = await this.groupRepository.findByName(
+        updateGroupDto.name,
       );
       if (existing && existing.id !== id) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
           errors: {
-            name: 'provinceNameAlreadyExists',
+            name: 'groupNameAlreadyExists',
           },
         });
       }
     }
 
-    if (updateProvinceDto.isoCode) {
-      const existingIsoCode = await this.provinceRepository.findByIsoCode(
-        updateProvinceDto.isoCode,
+    if (updateGroupDto.isoCode) {
+      const existingIsoCode = await this.groupRepository.findByIsoCode(
+        updateGroupDto.isoCode,
       );
       if (existingIsoCode && existingIsoCode.id !== id) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: { isoCode: 'provinceIsoCodeAlreadyExists' },
+          errors: { isoCode: 'groupIsoCodeAlreadyExists' },
         });
       }
     }
 
-    const updated = await this.provinceRepository.update(id, {
-      ...updateProvinceDto,
+    const updated = await this.groupRepository.update(id, {
+      ...updateGroupDto,
     });
     if (!updated) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
-          province: 'provinceNotExists',
+          group: 'groupNotExists',
         },
       });
     }
     return updated;
   }
 
-  async removeProvince(id: Province['id']): Promise<void> {
-    const province = await this.provinceRepository.findById(id);
-    if (!province) {
+  async removeGroup(id: Group['id']): Promise<void> {
+    const group = await this.groupRepository.findById(id);
+    if (!group) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
-          province: 'provinceNotExists',
+          group: 'groupNotExists',
         },
       });
     }
 
     // The PostgreSQL foreign key owns the cascade. Delete the parent once so
     // the database guarantees atomic referential integrity.
-    await this.provinceRepository.remove(id);
+    await this.groupRepository.remove(id);
   }
 
-  async countAllProvinces(): Promise<number> {
-    return this.provinceRepository.countAll();
+  async countAllGroups(): Promise<number> {
+    return this.groupRepository.countAll();
   }
 
-  async countProvinces(filterOptions?: FilterProvinceDto | null): Promise<number> {
-    if (this.provinceRepository.countWithFilter) {
-      return this.provinceRepository.countWithFilter(filterOptions);
+  async countGroups(filterOptions?: FilterGroupDto | null): Promise<number> {
+    if (this.groupRepository.countWithFilter) {
+      return this.groupRepository.countWithFilter(filterOptions);
     }
-    return this.provinceRepository.countAll();
+    return this.groupRepository.countAll();
   }
 
   // ─── Regencies ─────────────────────────────────────────────────────────────
 
-  async createRegency(createRegencyDto: CreateRegencyDto): Promise<Regency> {
-    const province = await this.provinceRepository.findById(
-      createRegencyDto.provinceId,
+  async createSubgroup(createSubgroupDto: CreateSubgroupDto): Promise<Subgroup> {
+    const group = await this.groupRepository.findById(
+      createSubgroupDto.groupId,
     );
-    if (!province) {
+    if (!group) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
-          province: 'provinceNotExists',
+          group: 'groupNotExists',
         },
       });
     }
 
-    const existing = await this.regencyRepository.findByProvinceIdAndName(
-      createRegencyDto.provinceId,
-      createRegencyDto.name,
+    const existing = await this.subgroupRepository.findByGroupIdAndName(
+      createSubgroupDto.groupId,
+      createSubgroupDto.name,
     );
     if (existing) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: { name: 'regencyNameAlreadyExists' },
+        errors: { name: 'subgroupNameAlreadyExists' },
       });
     }
 
-    return this.regencyRepository.create({
-      provinceId: createRegencyDto.provinceId,
-      name: createRegencyDto.name,
-      type: createRegencyDto.type,
-      isActive: createRegencyDto.isActive ?? true,
+    return this.subgroupRepository.create({
+      groupId: createSubgroupDto.groupId,
+      name: createSubgroupDto.name,
+      type: createSubgroupDto.type,
+      isActive: createSubgroupDto.isActive ?? true,
     });
   }
 
@@ -206,115 +206,115 @@ export class EquipmentService {
     sortOptions,
     paginationOptions,
   }: {
-    filterOptions?: FilterRegencyDto | null;
-    sortOptions?: SortRegencyDto[] | null;
+    filterOptions?: FilterSubgroupDto | null;
+    sortOptions?: SortSubgroupDto[] | null;
     paginationOptions: IPaginationOptions;
-  }): Promise<Regency[]> {
-    return this.regencyRepository.findManyWithPagination({
+  }): Promise<Subgroup[]> {
+    return this.subgroupRepository.findManyWithPagination({
       filterOptions,
       sortOptions,
       paginationOptions,
     });
   }
 
-  async findRegenciesByProvinceId(
-    provinceId: Regency['provinceId'],
-  ): Promise<Regency[]> {
-    return this.regencyRepository.findByProvinceId(provinceId);
+  async findRegenciesByGroupId(
+    groupId: Subgroup['groupId'],
+  ): Promise<Subgroup[]> {
+    return this.subgroupRepository.findByGroupId(groupId);
   }
 
-  async findRegencyById(id: Regency['id']): Promise<NullableType<Regency>> {
-    return this.regencyRepository.findById(id);
+  async findSubgroupById(id: Subgroup['id']): Promise<NullableType<Subgroup>> {
+    return this.subgroupRepository.findById(id);
   }
 
-  async updateRegency(
-    id: Regency['id'],
-    updateRegencyDto: UpdateRegencyDto,
-  ): Promise<Regency> {
-    const regency = await this.regencyRepository.findById(id);
-    if (!regency) {
+  async updateSubgroup(
+    id: Subgroup['id'],
+    updateSubgroupDto: UpdateSubgroupDto,
+  ): Promise<Subgroup> {
+    const subgroup = await this.subgroupRepository.findById(id);
+    if (!subgroup) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
-          regency: 'regencyNotExists',
+          subgroup: 'subgroupNotExists',
         },
       });
     }
 
-    if (updateRegencyDto.provinceId !== undefined) {
-      const province = await this.provinceRepository.findById(
-        updateRegencyDto.provinceId,
+    if (updateSubgroupDto.groupId !== undefined) {
+      const group = await this.groupRepository.findById(
+        updateSubgroupDto.groupId,
       );
-      if (!province) {
+      if (!group) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
           errors: {
-            province: 'provinceNotExists',
+            group: 'groupNotExists',
           },
         });
       }
     }
 
-    const targetProvinceId = updateRegencyDto.provinceId ?? regency.provinceId;
-    const targetName = updateRegencyDto.name ?? regency.name;
-    const existing = await this.regencyRepository.findByProvinceIdAndName(
-      targetProvinceId,
+    const targetGroupId = updateSubgroupDto.groupId ?? subgroup.groupId;
+    const targetName = updateSubgroupDto.name ?? subgroup.name;
+    const existing = await this.subgroupRepository.findByGroupIdAndName(
+      targetGroupId,
       targetName,
     );
     if (existing && existing.id !== id) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: { name: 'regencyNameAlreadyExists' },
+        errors: { name: 'subgroupNameAlreadyExists' },
       });
     }
 
-    const updated = await this.regencyRepository.update(id, {
-      ...updateRegencyDto,
+    const updated = await this.subgroupRepository.update(id, {
+      ...updateSubgroupDto,
     });
     if (!updated) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
-          regency: 'regencyNotExists',
+          subgroup: 'subgroupNotExists',
         },
       });
     }
     return updated;
   }
 
-  async removeRegency(id: Regency['id']): Promise<void> {
-    const regency = await this.regencyRepository.findById(id);
-    if (!regency) {
+  async removeSubgroup(id: Subgroup['id']): Promise<void> {
+    const subgroup = await this.subgroupRepository.findById(id);
+    if (!subgroup) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
-          regency: 'regencyNotExists',
+          subgroup: 'subgroupNotExists',
         },
       });
     }
 
-    await this.regencyRepository.remove(id);
+    await this.subgroupRepository.remove(id);
   }
 
   async countAllRegencies(): Promise<number> {
-    return this.regencyRepository.countAll();
+    return this.subgroupRepository.countAll();
   }
 
   async countRegencies(
-    filterOptions?: FilterRegencyDto | null,
+    filterOptions?: FilterSubgroupDto | null,
   ): Promise<number> {
-    if (this.regencyRepository.countWithFilter) {
-      return this.regencyRepository.countWithFilter(filterOptions);
+    if (this.subgroupRepository.countWithFilter) {
+      return this.subgroupRepository.countWithFilter(filterOptions);
     }
-    if (filterOptions?.provinceId !== undefined) {
-      return this.regencyRepository.countByProvinceId(filterOptions.provinceId);
+    if (filterOptions?.groupId !== undefined) {
+      return this.subgroupRepository.countByGroupId(filterOptions.groupId);
     }
-    return this.regencyRepository.countAll();
+    return this.subgroupRepository.countAll();
   }
 
-  async countRegenciesByProvinceId(
-    provinceId: Regency['provinceId'],
+  async countRegenciesByGroupId(
+    groupId: Subgroup['groupId'],
   ): Promise<number> {
-    return this.regencyRepository.countByProvinceId(provinceId);
+    return this.subgroupRepository.countByGroupId(groupId);
   }
 }

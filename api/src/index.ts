@@ -3,4 +3,4 @@ export type { EquipmentModuleOptions, EquipmentModuleAsyncOptions } from './equi
 export { EquipmentService } from './equipment/services/equipment.service';
 export { EquipmentSeedService } from './equipment/database/equipment-seed.service';
 
-export { EQUIPMENT_ENTITIES, ProvinceEntity, RegencyEntity } from './equipment/equipment.entities';
+export { EQUIPMENT_ENTITIES, GroupEntity, SubgroupEntity } from './equipment/equipment.entities';
