@@ -37,13 +37,11 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
-        with:
-          node-version: 22
       - name: Checkout frontend host
-        run: git clone --depth 1 https://github.com/wasnaker/brocoders-react-web.git "$RUNNER_WORKSPACE/brocoders-react-web"
+        run: git clone --depth 1 https://github.com/wasnaker/brocoders-react-web.git "$RUNNER_WORKSPACE/../brocoders-react-web"
       - name: Install host dependencies
-        working-directory: ${{ runner.workspace }}/brocoders-react-web
+        working-directory: ${{ runner.workspace }}/../brocoders-react-web
         run: npm ci
       - name: Typecheck Equipment frontend
-        working-directory: ${{ runner.workspace }}/brocoders-react-web
+        working-directory: ${{ runner.workspace }}/../brocoders-react-web
         run: ./node_modules/.bin/tsc --project "$GITHUB_WORKSPACE/web/tsconfig.check.json" --pretty false
