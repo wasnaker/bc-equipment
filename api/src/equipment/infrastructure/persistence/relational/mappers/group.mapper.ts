@@ -1,9 +1,9 @@
-import { Province } from '../../../../domain/province';
-import { ProvinceEntity } from '../entities/province.entity';
+import { Group } from '../../../../domain/group';
+import { GroupEntity } from '../entities/group.entity';
 
-export class ProvinceMapper {
-  static toDomain(raw: ProvinceEntity): Province {
-    const domainEntity = new Province();
+export class GroupMapper {
+  static toDomain(raw: GroupEntity): Group {
+    const domainEntity = new Group();
     domainEntity.id = raw.id;
     domainEntity.name = raw.name;
     domainEntity.isoCode = raw.isoCode;
@@ -15,8 +15,8 @@ export class ProvinceMapper {
     return domainEntity;
   }
 
-  static toPersistence(domainEntity: Partial<Province>): ProvinceEntity {
-    const persistenceEntity = new ProvinceEntity();
+  static toPersistence(domainEntity: Partial<Group>): GroupEntity {
+    const persistenceEntity = new GroupEntity();
     if (domainEntity.id && typeof domainEntity.id === 'number') {
       persistenceEntity.id = domainEntity.id;
     }

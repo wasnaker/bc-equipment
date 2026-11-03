@@ -1,27 +1,27 @@
-import { Regency } from '../../../../domain/regency';
-import { RegencyEntity } from '../entities/regency.entity';
+import { Subgroup } from '../../../../domain/subgroup';
+import { SubgroupEntity } from '../entities/subgroup.entity';
 
-export class RegencyMapper {
-  static toDomain(raw: RegencyEntity): Regency {
-    const domainEntity = new Regency();
+export class SubgroupMapper {
+  static toDomain(raw: SubgroupEntity): Subgroup {
+    const domainEntity = new Subgroup();
     domainEntity.id = raw.id;
-    domainEntity.provinceId = raw.provinceId;
+    domainEntity.groupId = raw.groupId;
     domainEntity.name = raw.name;
     domainEntity.code = raw.code;
-    domainEntity.type = raw.type as Regency['type'];
+    domainEntity.type = raw.type as Subgroup['type'];
     domainEntity.isActive = raw.isActive;
     domainEntity.createdAt = raw.createdAt;
     domainEntity.updatedAt = raw.updatedAt;
     return domainEntity;
   }
 
-  static toPersistence(domainEntity: Partial<Regency>): RegencyEntity {
-    const persistenceEntity = new RegencyEntity();
+  static toPersistence(domainEntity: Partial<Subgroup>): SubgroupEntity {
+    const persistenceEntity = new SubgroupEntity();
     if (domainEntity.id && typeof domainEntity.id === 'number') {
       persistenceEntity.id = domainEntity.id;
     }
-    if (domainEntity.provinceId !== undefined) {
-      persistenceEntity.provinceId = Number(domainEntity.provinceId);
+    if (domainEntity.groupId !== undefined) {
+      persistenceEntity.groupId = Number(domainEntity.groupId);
     }
     persistenceEntity.name = domainEntity.name as string;
     if (domainEntity.code !== undefined) {
