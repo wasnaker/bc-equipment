@@ -10,26 +10,26 @@ import {
 } from 'typeorm';
 
 import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
-import { ProvinceEntity } from './province.entity';
+import { GroupEntity } from './group.entity';
 
-@Index('UQ_regency_province_name', ['provinceId', 'name'], { unique: true })
+@Index('UQ_subgroup_group_name', ['groupId', 'name'], { unique: true })
 @Entity({
-  name: 'regency',
+  name: 'subgroup',
 })
-export class RegencyEntity extends EntityRelationalHelper {
+export class SubgroupEntity extends EntityRelationalHelper {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Index()
   @Column({ type: Number })
-  provinceId: number;
+  groupId: number;
 
-  @ManyToOne(() => ProvinceEntity, {
+  @ManyToOne(() => GroupEntity, {
     onDelete: 'CASCADE',
     nullable: false,
   })
-  @JoinColumn({ name: 'provinceId' })
-  province?: ProvinceEntity;
+  @JoinColumn({ name: 'groupId' })
+  group?: GroupEntity;
 
   @Index()
   @Column({ type: String, length: 190 })

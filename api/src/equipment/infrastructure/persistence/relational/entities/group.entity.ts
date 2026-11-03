@@ -9,11 +9,11 @@ import {
 
 import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
 
-@Index('UQ_province_name', ['name'], { unique: true })
+@Index('UQ_group_name', ['name'], { unique: true })
 @Entity({
-  name: 'province',
+  name: 'group',
 })
-export class ProvinceEntity extends EntityRelationalHelper {
+export class GroupEntity extends EntityRelationalHelper {
   @PrimaryGeneratedColumn()
   id: number;
 
