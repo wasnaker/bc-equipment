@@ -3,29 +3,24 @@ import { GroupEntity } from '../entities/group.entity';
 
 export class GroupMapper {
   static toDomain(raw: GroupEntity): Group {
-    const domainEntity = new Group();
-    domainEntity.id = raw.id;
-    domainEntity.name = raw.name;
-    domainEntity.isoCode = raw.isoCode;
-    domainEntity.latitude = raw.latitude === null ? null : Number(raw.latitude);
-    domainEntity.longitude =
-      raw.longitude === null ? null : Number(raw.longitude);
-    domainEntity.createdAt = raw.createdAt;
-    domainEntity.updatedAt = raw.updatedAt;
-    return domainEntity;
+    const value = new Group();
+    value.id = raw.id;
+    value.name = raw.name;
+    value.description = raw.description;
+    value.isActive = raw.isActive;
+    value.createdAt = raw.createdAt;
+    value.updatedAt = raw.updatedAt;
+    return value;
   }
 
-  static toPersistence(domainEntity: Partial<Group>): GroupEntity {
-    const persistenceEntity = new GroupEntity();
-    if (domainEntity.id && typeof domainEntity.id === 'number') {
-      persistenceEntity.id = domainEntity.id;
-    }
-    persistenceEntity.name = domainEntity.name as string;
-    persistenceEntity.isoCode = domainEntity.isoCode ?? null;
-    persistenceEntity.latitude = domainEntity.latitude ?? null;
-    persistenceEntity.longitude = domainEntity.longitude ?? null;
-    persistenceEntity.createdAt = domainEntity.createdAt as Date;
-    persistenceEntity.updatedAt = domainEntity.updatedAt as Date;
-    return persistenceEntity;
+  static toPersistence(value: Partial<Group>): GroupEntity {
+    const entity = new GroupEntity();
+    if (value.id && typeof value.id === 'number') entity.id = value.id;
+    if (value.name !== undefined) entity.name = value.name;
+    if (value.description !== undefined) entity.description = value.description ?? null;
+    if (value.isActive !== undefined) entity.isActive = value.isActive;
+    if (value.createdAt !== undefined) entity.createdAt = value.createdAt;
+    if (value.updatedAt !== undefined) entity.updatedAt = value.updatedAt;
+    return entity;
   }
 }

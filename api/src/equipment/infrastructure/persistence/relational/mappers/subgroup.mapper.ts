@@ -3,34 +3,26 @@ import { SubgroupEntity } from '../entities/subgroup.entity';
 
 export class SubgroupMapper {
   static toDomain(raw: SubgroupEntity): Subgroup {
-    const domainEntity = new Subgroup();
-    domainEntity.id = raw.id;
-    domainEntity.groupId = raw.groupId;
-    domainEntity.name = raw.name;
-    domainEntity.code = raw.code;
-    domainEntity.type = raw.type as Subgroup['type'];
-    domainEntity.isActive = raw.isActive;
-    domainEntity.createdAt = raw.createdAt;
-    domainEntity.updatedAt = raw.updatedAt;
-    return domainEntity;
+    const value = new Subgroup();
+    value.id = raw.id;
+    value.groupId = raw.groupId;
+    value.name = raw.name;
+    value.description = raw.description;
+    value.isActive = raw.isActive;
+    value.createdAt = raw.createdAt;
+    value.updatedAt = raw.updatedAt;
+    return value;
   }
 
-  static toPersistence(domainEntity: Partial<Subgroup>): SubgroupEntity {
-    const persistenceEntity = new SubgroupEntity();
-    if (domainEntity.id && typeof domainEntity.id === 'number') {
-      persistenceEntity.id = domainEntity.id;
-    }
-    if (domainEntity.groupId !== undefined) {
-      persistenceEntity.groupId = Number(domainEntity.groupId);
-    }
-    persistenceEntity.name = domainEntity.name as string;
-    if (domainEntity.code !== undefined) {
-      persistenceEntity.code = domainEntity.code;
-    }
-    persistenceEntity.type = domainEntity.type as string;
-    persistenceEntity.isActive = domainEntity.isActive ?? true;
-    persistenceEntity.createdAt = domainEntity.createdAt as Date;
-    persistenceEntity.updatedAt = domainEntity.updatedAt as Date;
-    return persistenceEntity;
+  static toPersistence(value: Partial<Subgroup>): SubgroupEntity {
+    const entity = new SubgroupEntity();
+    if (value.id && typeof value.id === 'number') entity.id = value.id;
+    if (value.groupId !== undefined) entity.groupId = Number(value.groupId);
+    if (value.name !== undefined) entity.name = value.name;
+    if (value.description !== undefined) entity.description = value.description ?? null;
+    if (value.isActive !== undefined) entity.isActive = value.isActive;
+    if (value.createdAt !== undefined) entity.createdAt = value.createdAt;
+    if (value.updatedAt !== undefined) entity.updatedAt = value.updatedAt;
+    return entity;
   }
 }
