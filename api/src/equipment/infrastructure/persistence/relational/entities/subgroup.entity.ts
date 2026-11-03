@@ -8,14 +8,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-
 import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
 import { GroupEntity } from './group.entity';
 
-@Index('UQ_subgroup_group_name', ['groupId', 'name'], { unique: true })
-@Entity({
-  name: 'subgroup',
-})
+@Index('UQ_equipment_subgroup_group_name', ['groupId', 'name'], { unique: true })
+@Entity({ name: 'equipment_subgroup' })
 export class SubgroupEntity extends EntityRelationalHelper {
   @PrimaryGeneratedColumn()
   id: number;
@@ -24,10 +21,7 @@ export class SubgroupEntity extends EntityRelationalHelper {
   @Column({ type: Number })
   groupId: number;
 
-  @ManyToOne(() => GroupEntity, {
-    onDelete: 'CASCADE',
-    nullable: false,
-  })
+  @ManyToOne(() => GroupEntity, { onDelete: 'CASCADE', nullable: false })
   @JoinColumn({ name: 'groupId' })
   group?: GroupEntity;
 
@@ -35,12 +29,8 @@ export class SubgroupEntity extends EntityRelationalHelper {
   @Column({ type: String, length: 190 })
   name: string;
 
-  /** Kode BPS 4 digit, mis. 11.01 */
-  @Column({ type: String, unique: true, nullable: true })
-  code: string | null;
-
-  @Column({ type: String, default: 'kabupaten' })
-  type: string;
+  @Column({ type: String, length: 500, nullable: true })
+  description: string | null;
 
   @Column({ type: Boolean, default: true })
   isActive: boolean;
