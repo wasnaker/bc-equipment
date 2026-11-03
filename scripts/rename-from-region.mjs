@@ -8,7 +8,7 @@
  * diubah di tahap ini; entity diganti menyusul sesuai kebutuhan modul.
  *
  * Pemakaian:
- *   node scripts/rename-from-region.mjs --name customer --version 0.1.0
+ *   node scripts/rename-from-region.mjs --name equipment --display Equipment --version 0.4.1
  *
  * Idempoten: menolak jalan jika `api/src/region` sudah tidak ada atau
  * `api/src/<name>` sudah ada.
@@ -27,6 +27,7 @@ const version = get('--version', '0.1.0');
 const display = get('--display', name[0].toUpperCase() + name.slice(1));
 const root = process.cwd();
 const SELF = 'rename-from-region.mjs';
+const packageName = `@wasnaker/module-${name}`;
 
 const srcRegion = path.join(root, 'api', 'src', 'region');
 const srcTarget = path.join(root, 'api', 'src', name);
@@ -96,6 +97,28 @@ for (const pkgPath of ['package.json', path.join('api', 'package.json')]) {
   fs.writeFileSync(full, JSON.stringify(pkg, null, 2) + '\n');
   console.log(`version ${pkgPath}: ${version}`);
 }
+// ── 3b) Sinkronkan identitas package-lock ───────────────────────────────────
+const lockPath = path.join(root, 'package-lock.json');
+if (fs.existsSync(lockPath)) {
+  const lock = JSON.parse(fs.readFileSync(lockPath, 'utf8'));
+  lock.name = packageName;
+  lock.version = version;
+  if (lock.packages?.['']) {
+    lock.packages[''].name = packageName;
+    lock.packages[''].version = version;
+  }
+  fs.writeFileSync(lockPath, JSON.stringify(lock, null, 2) + '\\n');
+  console.log(`package-lock identity: ${packageName}@${version}`);
+}
+
+// Hapus artefak hasil build lama. Folder dist akan dibentuk ulang oleh tsc;
+// membiarkan dist/region dapat membuat package masih memuat artefak modul lama.
+const distPath = path.join(root, 'api', 'dist');
+if (fs.existsSync(distPath)) {
+  fs.rmSync(distPath, { recursive: true, force: true });
+  console.log('clean: api/dist (akan dibangun ulang)');
+}
+
 // Manifest backend: version: '<semver>'
 function setManifestVersion(dir) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
