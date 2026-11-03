@@ -3,10 +3,10 @@
   "title": "地域",
   "subtitle": "インドネシアの行政区域リファレンスデータ",
   "actions": {
-    "create_province": "州を追加",
-    "create_regency": "郡/市を追加",
-    "edit_province": "州を編集",
-    "edit_regency": "郡/市を編集",
+    "create_group": "州を追加",
+    "create_subgroup": "郡/市を追加",
+    "edit_group": "州を編集",
+    "edit_subgroup": "郡/市を編集",
     "edit": "編集",
     "delete": "削除",
     "save": "保存",
@@ -48,13 +48,13 @@
       "isoCode": "コード (ISO)",
       "latitude": "緯度",
       "longitude": "経度",
-      "province": "州",
+      "group": "州",
       "type": "種別",
       "isActive": "有効"
     },
     "placeholder": {
       "name": "例: 西ジャワ",
-      "province": "州を選択"
+      "group": "州を選択"
     },
     "validation": {
       "required": "この項目は必須です。",

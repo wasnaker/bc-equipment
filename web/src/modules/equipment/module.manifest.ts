@@ -1,8 +1,8 @@
 import { defineModuleManifest } from "@/core/modules/types";
 import MapPin from "lucide-react/dist/esm/icons/map-pin";
 import {
-  ProvinceCountWidget,
-  RegencyCountWidget,
+  GroupCountWidget,
+  SubgroupCountWidget,
 } from "./components/dashboard-widgets";
 
 /**
@@ -30,21 +30,21 @@ export default defineModuleManifest({
   // (toggle di toolbar dashboard) tetap menang atas nilai ini.
   dashboardWidgets: [
     {
-      id: "equipment-province-count",
-      label: { namespace: "module-equipment", key: "dashboard.provinces" },
+      id: "equipment-group-count",
+      label: { namespace: "module-equipment", key: "dashboard.groups" },
       area: "summary",
       position: 60,
       permission: "read:equipment",
-      component: ProvinceCountWidget,
+      component: GroupCountWidget,
       defaultVisible: true,
     },
     {
-      id: "equipment-regency-count",
+      id: "equipment-subgroup-count",
       label: { namespace: "module-equipment", key: "dashboard.regencies" },
       area: "summary",
       position: 70,
       permission: "read:equipment",
-      component: RegencyCountWidget,
+      component: SubgroupCountWidget,
       defaultVisible: false,
     },
   ],

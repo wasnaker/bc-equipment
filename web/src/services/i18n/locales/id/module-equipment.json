@@ -3,10 +3,10 @@
   "title": "Wilayah",
   "subtitle": "Data referensi wilayah administrasi Indonesia",
   "actions": {
-    "create_province": "Tambah Provinsi",
-    "create_regency": "Tambah Kabupaten/Kota",
-    "edit_province": "Edit Provinsi",
-    "edit_regency": "Edit Kabupaten/Kota",
+    "create_group": "Tambah Provinsi",
+    "create_subgroup": "Tambah Kabupaten/Kota",
+    "edit_group": "Edit Provinsi",
+    "edit_subgroup": "Edit Kabupaten/Kota",
     "edit": "Edit",
     "delete": "Hapus",
     "save": "Simpan",
@@ -38,7 +38,7 @@
     "regencies_empty": "Belum ada kabupaten/kota."
   },
   "dashboard": {
-    "provinces": "Total Provinsi",
+    "groups": "Total Provinsi",
     "regencies": "Total Kabupaten/Kota",
     "open_module": "Buka module Wilayah",
     "load_error": "Data gagal dimuat"
@@ -54,13 +54,13 @@
       "isoCode": "Kode (ISO)",
       "latitude": "Lintang",
       "longitude": "Bujur",
-      "province": "Provinsi",
+      "group": "Provinsi",
       "type": "Jenis",
       "isActive": "Aktif"
     },
     "placeholder": {
       "name": "mis. Jawa Barat",
-      "province": "Pilih provinsi"
+      "group": "Pilih provinsi"
     },
     "validation": {
       "required": "Kolom ini wajib diisi.",
