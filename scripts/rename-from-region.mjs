@@ -107,7 +107,7 @@ if (fs.existsSync(lockPath)) {
     lock.packages[''].name = packageName;
     lock.packages[''].version = version;
   }
-  fs.writeFileSync(lockPath, JSON.stringify(lock, null, 2) + '\\n');
+  fs.writeFileSync(lockPath, JSON.stringify(lock, null, 2) + '\n');
   console.log(`package-lock identity: ${packageName}@${version}`);
 }
 
