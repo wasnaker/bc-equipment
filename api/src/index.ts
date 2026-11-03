@@ -1,6 +1,6 @@
-export { RegionModule, REGION_MODULE_OPTIONS } from './region/region.module';
-export type { RegionModuleOptions, RegionModuleAsyncOptions } from './region/region.options';
-export { RegionService } from './region/services/region.service';
-export { RegionSeedService } from './region/database/region-seed.service';
+export { EquipmentModule, EQUIPMENT_MODULE_OPTIONS } from './equipment/equipment.module';
+export type { EquipmentModuleOptions, EquipmentModuleAsyncOptions } from './equipment/equipment.options';
+export { EquipmentService } from './equipment/services/equipment.service';
+export { EquipmentSeedService } from './equipment/database/equipment-seed.service';
 
-export { REGION_ENTITIES, ProvinceEntity, RegencyEntity } from './region/region.entities';
+export { EQUIPMENT_ENTITIES, ProvinceEntity, RegencyEntity } from './equipment/equipment.entities';
