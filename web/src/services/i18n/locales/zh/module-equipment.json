@@ -3,10 +3,10 @@
   "title": "地区",
   "subtitle": "印度尼西亚行政区划参考数据",
   "actions": {
-    "create_province": "添加省份",
-    "create_regency": "添加县/市",
-    "edit_province": "编辑省份",
-    "edit_regency": "编辑县/市",
+    "create_group": "添加省份",
+    "create_subgroup": "添加县/市",
+    "edit_group": "编辑省份",
+    "edit_subgroup": "编辑县/市",
     "edit": "编辑",
     "delete": "删除",
     "save": "保存",
@@ -48,13 +48,13 @@
       "isoCode": "代码 (ISO)",
       "latitude": "纬度",
       "longitude": "经度",
-      "province": "省份",
+      "group": "省份",
       "type": "类型",
       "isActive": "启用"
     },
     "placeholder": {
       "name": "例如：西爪哇",
-      "province": "选择省份"
+      "group": "选择省份"
     },
     "validation": {
       "required": "此项为必填项。",
