@@ -12,13 +12,13 @@ export interface BackendModuleManifest {
 
 export const moduleManifest: BackendModuleManifest = {
   id: 'equipment',
-  version: '0.4.0',
+  version: '0.4.1',
   capabilities: ['api', 'web'],
   permissions: [
     { name: 'read:equipment', description: 'Allows viewing Equipment module navigation and data' },
-    { name: 'create:equipment', description: 'Allows creating provinces and regencies' },
-    { name: 'update:equipment', description: 'Allows updating provinces and regencies' },
-    { name: 'delete:equipment', description: 'Allows deleting provinces and regencies' },
+    { name: 'create:equipment', description: 'Allows creating equipment records' },
+    { name: 'update:equipment', description: 'Allows updating equipment records' },
+    { name: 'delete:equipment', description: 'Allows deleting equipment records' },
   ],
 };
 
