@@ -21,14 +21,14 @@
       "default": "./api/dist/index.js"
     },
     "./api/manifest": {
-      "types": "./api/dist/region/region.manifest.d.ts",
-      "require": "./api/dist/region/region.manifest.js",
-      "default": "./api/dist/region/region.manifest.js"
+      "types": "./api/dist/equipment/region.manifest.d.ts",
+      "require": "./api/dist/equipment/region.manifest.js",
+      "default": "./api/dist/equipment/region.manifest.js"
     },
     "./api/migrations": {
-      "types": "./api/dist/region/database/migrations/index.d.ts",
-      "require": "./api/dist/region/database/migrations/index.js",
-      "default": "./api/dist/region/database/migrations/index.js"
+      "types": "./api/dist/equipment/database/migrations/index.d.ts",
+      "require": "./api/dist/equipment/database/migrations/index.js",
+      "default": "./api/dist/equipment/database/migrations/index.js"
     },
     "./locales/en": "./web/src/services/i18n/locales/en/module-region.json",
     "./locales/id": "./web/src/services/i18n/locales/id/module-region.json",
@@ -36,19 +36,19 @@
     "./locales/ko": "./web/src/services/i18n/locales/ko/module-region.json",
     "./locales/zh": "./web/src/services/i18n/locales/zh/module-region.json",
     "./api/entities": {
-      "types": "./api/dist/region/region.entities.d.ts",
-      "require": "./api/dist/region/region.entities.js",
-      "default": "./api/dist/region/region.entities.js"
+      "types": "./api/dist/equipment/region.entities.d.ts",
+      "require": "./api/dist/equipment/region.entities.js",
+      "default": "./api/dist/equipment/region.entities.js"
     },
     "./api/definition": {
-      "types": "./api/dist/region/region.definition.d.ts",
-      "require": "./api/dist/region/region.definition.js",
-      "default": "./api/dist/region/region.definition.js"
+      "types": "./api/dist/equipment/region.definition.d.ts",
+      "require": "./api/dist/equipment/region.definition.js",
+      "default": "./api/dist/equipment/region.definition.js"
     },
     "./api/seeds": {
-      "types": "./api/dist/region/region.seeds.d.ts",
-      "require": "./api/dist/region/region.seeds.js",
-      "default": "./api/dist/region/region.seeds.js"
+      "types": "./api/dist/equipment/region.seeds.d.ts",
+      "require": "./api/dist/equipment/region.seeds.js",
+      "default": "./api/dist/equipment/region.seeds.js"
     }
   },
   "scripts": {
@@ -169,10 +169,10 @@
         "api/dist/index.d.ts"
       ],
       "api/manifest": [
-        "api/dist/region/region.manifest.d.ts"
+        "api/dist/equipment/region.manifest.d.ts"
       ],
       "api/migrations": [
-        "api/dist/region/database/migrations/index.d.ts"
+        "api/dist/equipment/database/migrations/index.d.ts"
       ],
       "web": [
         "web/src/modules/region/index.ts"
@@ -181,13 +181,13 @@
         "web/src/modules/region/module.manifest.ts"
       ],
       "api/entities": [
-        "api/dist/region/region.entities.d.ts"
+        "api/dist/equipment/region.entities.d.ts"
       ],
       "api/definition": [
-        "api/dist/region/region.definition.d.ts"
+        "api/dist/equipment/region.definition.d.ts"
       ],
       "api/seeds": [
-        "api/dist/region/region.seeds.d.ts"
+        "api/dist/equipment/region.seeds.d.ts"
       ]
     }
   }
