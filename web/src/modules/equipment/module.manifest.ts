@@ -6,21 +6,21 @@ import {
 } from "./components/dashboard-widgets";
 
 /**
- * Manifest modul Region.
+ * Manifest modul Equipment.
  *
- * Modul ini menyediakan halaman admin di /admin/region.
- * String UI memakai namespace "module-region" (lihat
- * src/services/i18n/locales/<lang>/module-region.json).
+ * Modul ini menyediakan halaman admin di /admin/equipment.
+ * String UI memakai namespace "module-equipment" (lihat
+ * src/services/i18n/locales/<lang>/module-equipment.json).
  */
 export default defineModuleManifest({
-  alias: "region",
+  alias: "equipment",
   menu: [
     {
-      slug: "region",
-      label: { namespace: "module-region", key: "menu" },
-      href: "/admin/region",
+      slug: "equipment",
+      label: { namespace: "module-equipment", key: "menu" },
+      href: "/admin/equipment",
       position: 60,
-      permission: "read:region",
+      permission: "read:equipment",
       icon: MapPin,
     },
   ],
@@ -30,20 +30,20 @@ export default defineModuleManifest({
   // (toggle di toolbar dashboard) tetap menang atas nilai ini.
   dashboardWidgets: [
     {
-      id: "region-province-count",
-      label: { namespace: "module-region", key: "dashboard.provinces" },
+      id: "equipment-province-count",
+      label: { namespace: "module-equipment", key: "dashboard.provinces" },
       area: "summary",
       position: 60,
-      permission: "read:region",
+      permission: "read:equipment",
       component: ProvinceCountWidget,
       defaultVisible: true,
     },
     {
-      id: "region-regency-count",
-      label: { namespace: "module-region", key: "dashboard.regencies" },
+      id: "equipment-regency-count",
+      label: { namespace: "module-equipment", key: "dashboard.regencies" },
       area: "summary",
       position: 70,
-      permission: "read:region",
+      permission: "read:equipment",
       component: RegencyCountWidget,
       defaultVisible: false,
     },

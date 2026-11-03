@@ -5,7 +5,7 @@ import wrapperFetchJsonResponse from "@/services/api/wrapper-fetch-json-response
 import type { InfinityPaginationType } from "@/services/api/types/infinity-pagination";
 import type { SortEnum } from "@/services/api/types/sort-type";
 import type { RequestConfigType } from "@/services/api/services/types/request-config";
-import type { Province, Regency } from "../types/region";
+import type { Province, Regency } from "../types/equipment";
 
 // ── Province ────────────────────────────────────────────────────────────────
 
@@ -22,7 +22,7 @@ export function useGetProvincesService() {
   const fetch = useFetch();
   return useCallback(
     (data: ProvinceListRequest, requestConfig?: RequestConfigType) => {
-      const url = new URL(`${API_URL}/v1/region/provinces`);
+      const url = new URL(`${API_URL}/v1/equipment/provinces`);
       url.searchParams.append("page", String(data.page));
       url.searchParams.append("limit", String(data.limit));
       if (data.filters) {
@@ -46,7 +46,7 @@ export function useGetProvinceService() {
   const fetch = useFetch();
   return useCallback(
     (data: ProvinceGetRequest, requestConfig?: RequestConfigType) => {
-      return fetch(`${API_URL}/v1/region/provinces/${data.id}`, {
+      return fetch(`${API_URL}/v1/equipment/provinces/${data.id}`, {
         method: "GET",
         ...requestConfig,
       }).then(wrapperFetchJsonResponse<ProvinceGetResponse>);
@@ -62,7 +62,7 @@ export function useCreateProvinceService() {
   const fetch = useFetch();
   return useCallback(
     (data: ProvincePostRequest, requestConfig?: RequestConfigType) => {
-      return fetch(`${API_URL}/v1/region/provinces`, {
+      return fetch(`${API_URL}/v1/equipment/provinces`, {
         method: "POST",
         body: JSON.stringify(data),
         ...requestConfig,
@@ -82,7 +82,7 @@ export function useUpdateProvinceService() {
   const fetch = useFetch();
   return useCallback(
     (data: ProvincePatchRequest, requestConfig?: RequestConfigType) => {
-      return fetch(`${API_URL}/v1/region/provinces/${data.id}`, {
+      return fetch(`${API_URL}/v1/equipment/provinces/${data.id}`, {
         method: "PATCH",
         body: JSON.stringify(data.data),
         ...requestConfig,
@@ -99,7 +99,7 @@ export function useDeleteProvinceService() {
   const fetch = useFetch();
   return useCallback(
     (data: ProvinceDeleteRequest, requestConfig?: RequestConfigType) => {
-      return fetch(`${API_URL}/v1/region/provinces/${data.id}`, {
+      return fetch(`${API_URL}/v1/equipment/provinces/${data.id}`, {
         method: "DELETE",
         ...requestConfig,
       }).then(wrapperFetchJsonResponse<ProvinceDeleteResponse>);
@@ -123,7 +123,7 @@ export function useGetRegenciesService() {
   const fetch = useFetch();
   return useCallback(
     (data: RegencyListRequest, requestConfig?: RequestConfigType) => {
-      const url = new URL(`${API_URL}/v1/region/regencies`);
+      const url = new URL(`${API_URL}/v1/equipment/regencies`);
       url.searchParams.append("page", String(data.page));
       url.searchParams.append("limit", String(data.limit));
       if (data.filters) {
@@ -147,7 +147,7 @@ export function useGetRegencyService() {
   const fetch = useFetch();
   return useCallback(
     (data: RegencyGetRequest, requestConfig?: RequestConfigType) => {
-      return fetch(`${API_URL}/v1/region/regencies/${data.id}`, {
+      return fetch(`${API_URL}/v1/equipment/regencies/${data.id}`, {
         method: "GET",
         ...requestConfig,
       }).then(wrapperFetchJsonResponse<RegencyGetResponse>);
@@ -163,7 +163,7 @@ export function useCreateRegencyService() {
   const fetch = useFetch();
   return useCallback(
     (data: RegencyPostRequest, requestConfig?: RequestConfigType) => {
-      return fetch(`${API_URL}/v1/region/regencies`, {
+      return fetch(`${API_URL}/v1/equipment/regencies`, {
         method: "POST",
         body: JSON.stringify(data),
         ...requestConfig,
@@ -183,7 +183,7 @@ export function useUpdateRegencyService() {
   const fetch = useFetch();
   return useCallback(
     (data: RegencyPatchRequest, requestConfig?: RequestConfigType) => {
-      return fetch(`${API_URL}/v1/region/regencies/${data.id}`, {
+      return fetch(`${API_URL}/v1/equipment/regencies/${data.id}`, {
         method: "PATCH",
         body: JSON.stringify(data.data),
         ...requestConfig,
@@ -200,7 +200,7 @@ export function useDeleteRegencyService() {
   const fetch = useFetch();
   return useCallback(
     (data: RegencyDeleteRequest, requestConfig?: RequestConfigType) => {
-      return fetch(`${API_URL}/v1/region/regencies/${data.id}`, {
+      return fetch(`${API_URL}/v1/equipment/regencies/${data.id}`, {
         method: "DELETE",
         ...requestConfig,
       }).then(wrapperFetchJsonResponse<RegencyDeleteResponse>);
@@ -218,7 +218,7 @@ export function fetchRegenciesByProvince(
   limit = 100,
   fetch: ReturnType<typeof import("@/services/api/use-fetch").default> | null = null
 ): Promise<Response> {
-  const url = new URL(`${API_URL}/v1/region/regencies`);
+  const url = new URL(`${API_URL}/v1/equipment/regencies`);
   url.searchParams.append("page", "1");
   url.searchParams.append("limit", String(limit));
   url.searchParams.append("filters", JSON.stringify({ provinceId: String(provinceId) }));

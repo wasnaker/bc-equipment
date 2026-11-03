@@ -11,8 +11,8 @@ import {
   useCreateRegencyService,
   useUpdateRegencyService,
   useDeleteRegencyService,
-} from "../services/region-api";
-import type { Province, Regency } from "../types/region";
+} from "../services/equipment-api";
+import type { Province, Regency } from "../types/equipment";
 import { useTable } from "@/core/table/use-table";
 import { SortEnum } from "@/services/api/types/sort-type";
 
@@ -25,7 +25,7 @@ export function useProvinces(
 ) {
   const service = useGetProvincesService();
   return useQuery({
-    queryKey: ["region", "provinces", page, limit, filters],
+    queryKey: ["equipment", "provinces", page, limit, filters],
     queryFn: async () => {
       const res = await service({ page, limit, filters });
       if (res.status === HTTP_CODES_ENUM.UNPROCESSABLE_ENTITY) {
@@ -44,7 +44,7 @@ export function useProvinces(
 export function useProvincesServerSide() {
   const service = useGetProvincesService();
   return useTable<Province>({
-    queryKey: ["region", "provinces"],
+    queryKey: ["equipment", "provinces"],
     // Default page size mengikuti Core Settings.
     searchDebounce: 300,
     defaultSort: { field: "name", order: "ASC" },
@@ -78,7 +78,7 @@ export function useProvincesServerSide() {
         throw new Error("Gagal memuat data provinsi");
       }
 
-      // Endpoint Region mengembalikan total hasil SETELAH filter/search.
+      // Endpoint Equipment mengembalikan total hasil SETELAH filter/search.
       // Jangan mengestimasi total dari hasNextPage karena pagination bisa salah.
       const response = res.data as {
         data?: Province[];
@@ -99,7 +99,7 @@ export function useProvincesServerSide() {
 export function useProvince(id: Province["id"] | null) {
   const service = useGetProvinceService();
   return useQuery({
-    queryKey: ["region", "province", id],
+    queryKey: ["equipment", "province", id],
     queryFn: async () => {
       const res = await service({ id: id as Province["id"] });
       if (res.status === HTTP_CODES_ENUM.UNPROCESSABLE_ENTITY) {
@@ -124,7 +124,7 @@ export function useCreateProvince() {
       return res.data;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["region", "provinces"] });
+      qc.invalidateQueries({ queryKey: ["equipment", "provinces"] });
     },
   });
 }
@@ -148,8 +148,8 @@ export function useUpdateProvince() {
       return res.data;
     },
     onSuccess: (_res, vars) => {
-      qc.invalidateQueries({ queryKey: ["region", "provinces"] });
-      qc.invalidateQueries({ queryKey: ["region", "province", vars.id] });
+      qc.invalidateQueries({ queryKey: ["equipment", "provinces"] });
+      qc.invalidateQueries({ queryKey: ["equipment", "province", vars.id] });
     },
   });
 }
@@ -169,7 +169,7 @@ export function useDeleteProvince() {
       return undefined;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["region", "provinces"] });
+      qc.invalidateQueries({ queryKey: ["equipment", "provinces"] });
     },
   });
 }
@@ -183,7 +183,7 @@ export function useRegencies(
 ) {
   const service = useGetRegenciesService();
   return useQuery({
-    queryKey: ["region", "regencies", provinceId, page, limit],
+    queryKey: ["equipment", "regencies", provinceId, page, limit],
     queryFn: async () => {
       const res = await service({
         page,
@@ -203,7 +203,7 @@ export function useRegencies(
 export function useRegency(id: Regency["id"] | null) {
   const service = useGetRegencyService();
   return useQuery({
-    queryKey: ["region", "regency", id],
+    queryKey: ["equipment", "regency", id],
     queryFn: async () => {
       const res = await service({ id: id as Regency["id"] });
       if (res.status === HTTP_CODES_ENUM.UNPROCESSABLE_ENTITY) {
@@ -228,7 +228,7 @@ export function useCreateRegency() {
       return res.data;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["region", "regencies"] });
+      qc.invalidateQueries({ queryKey: ["equipment", "regencies"] });
     },
   });
 }
@@ -252,8 +252,8 @@ export function useUpdateRegency() {
       return res.data;
     },
     onSuccess: (_res, vars) => {
-      qc.invalidateQueries({ queryKey: ["region", "regencies"] });
-      qc.invalidateQueries({ queryKey: ["region", "regency", vars.id] });
+      qc.invalidateQueries({ queryKey: ["equipment", "regencies"] });
+      qc.invalidateQueries({ queryKey: ["equipment", "regency", vars.id] });
     },
   });
 }
@@ -273,7 +273,7 @@ export function useDeleteRegency() {
       return undefined;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["region", "regencies"] });
+      qc.invalidateQueries({ queryKey: ["equipment", "regencies"] });
     },
   });
 }

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "@/services/i18n/client";
-import { useProvincesServerSide, useProvince, useDeleteProvince } from "../hooks/use-regions";
+import { useProvincesServerSide, useProvince, useDeleteProvince } from "../hooks/use-equipments";
 import { useMasterDetail } from "@/core/master-detail/use-master-detail";
 import { SmallTable, type SmallTableColumn, type DetailTab } from "@/components/small-table";
 import { ProvinceFormDialog } from "../components/province-form-dialog";
@@ -15,10 +15,10 @@ import ArrowLeftIcon from "lucide-react/dist/esm/icons/arrow-left";
 import ArrowRightIcon from "lucide-react/dist/esm/icons/arrow-right";
 import MapPinIcon from "lucide-react/dist/esm/icons/map-pin";
 import { Suspense } from "react";
-import type { Province } from "../types/region";
+import type { Province } from "../types/equipment";
 
 function PageInner() {
-  const { t } = useTranslation("module-region");
+  const { t } = useTranslation("module-equipment");
   const qc = useQueryClient();
 
   // ── State master-detail (pola core: seleksi, panel, hash) ──────────────
@@ -288,7 +288,7 @@ function PageInner() {
         }}
         editItem={editItem}
         onSuccess={(savedId) => {
-          qc.invalidateQueries({ queryKey: ["region", "provinces"] });
+          qc.invalidateQueries({ queryKey: ["equipment", "provinces"] });
           setRefreshKey((k) => k + 1);
           // Pola core: panel detail menampilkan data hasil simpan.
           afterSave(savedId);
@@ -298,7 +298,7 @@ function PageInner() {
   );
 }
 
-export function RegionPage() {
+export function EquipmentPage() {
   return (
     <Suspense fallback={<div className="p-8 text-muted-foreground">Loading…</div>}>
       <PageInner />
