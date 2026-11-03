@@ -8,14 +8,14 @@ import {
   Matches,
   MaxLength,
 } from 'class-validator';
-import { CreateRegencyDto } from './create-regency.dto';
-import { Regency, RegencyTypeEnum } from '../domain/regency';
+import { CreateSubgroupDto } from './create-subgroup.dto';
+import { Subgroup, SubgroupTypeEnum } from '../domain/subgroup';
 
-export class UpdateRegencyDto extends PartialType(CreateRegencyDto) {
+export class UpdateSubgroupDto extends PartialType(CreateSubgroupDto) {
   @ApiPropertyOptional({ example: 1 })
   @Type(() => Number)
   @IsOptional()
-  provinceId?: Regency['provinceId'];
+  groupId?: Subgroup['groupId'];
 
   @ApiPropertyOptional({ example: 'Bandung', maxLength: 190 })
   @IsOptional()
@@ -23,10 +23,10 @@ export class UpdateRegencyDto extends PartialType(CreateRegencyDto) {
   @MaxLength(190)
   name?: string;
 
-  @ApiPropertyOptional({ example: 'kota', enum: RegencyTypeEnum })
+  @ApiPropertyOptional({ example: 'kota', enum: SubgroupTypeEnum })
   @IsOptional()
-  @IsEnum(RegencyTypeEnum)
-  type?: RegencyTypeEnum;
+  @IsEnum(SubgroupTypeEnum)
+  type?: SubgroupTypeEnum;
 
   @ApiPropertyOptional({ example: '32.73', description: 'Kode BPS 4 digit' })
   @IsOptional()

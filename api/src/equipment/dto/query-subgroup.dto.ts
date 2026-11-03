@@ -9,13 +9,13 @@ import {
   IsString,
   Min,
 } from 'class-validator';
-import { Regency, RegencyTypeEnum } from '../domain/regency';
+import { Subgroup, SubgroupTypeEnum } from '../domain/subgroup';
 
-export class FilterRegencyDto {
-  @ApiPropertyOptional({ name: 'province_id', example: 1 })
+export class FilterSubgroupDto {
+  @ApiPropertyOptional({ name: 'group_id', example: 1 })
   @IsOptional()
   @Transform(({ value, obj }) => {
-    const rawValue = value ?? obj?.province_id;
+    const rawValue = value ?? obj?.group_id;
     if (rawValue === undefined || rawValue === null || rawValue === '') {
       return undefined;
     }
@@ -24,19 +24,19 @@ export class FilterRegencyDto {
   })
   @IsInt()
   @Min(1)
-  provinceId?: Regency['provinceId'];
+  groupId?: Subgroup['groupId'];
 
-  @ApiPropertyOptional({ enum: RegencyTypeEnum })
+  @ApiPropertyOptional({ enum: SubgroupTypeEnum })
   @IsOptional()
-  @IsEnum(RegencyTypeEnum)
-  type?: RegencyTypeEnum;
+  @IsEnum(SubgroupTypeEnum)
+  type?: SubgroupTypeEnum;
 }
 
-export class SortRegencyDto {
+export class SortSubgroupDto {
   @ApiProperty()
   @Type(() => String)
   @IsString()
-  orderBy: keyof Regency;
+  orderBy: keyof Subgroup;
 
   @ApiProperty({ enum: ['ASC', 'DESC'] })
   @Transform(({ value }) => String(value).toUpperCase())
@@ -44,7 +44,7 @@ export class SortRegencyDto {
   order: string;
 }
 
-export class QueryRegencyDto {
+export class QuerySubgroupDto {
   @ApiPropertyOptional({ minimum: 1, default: 1 })
   @Transform(({ value }) => (value === undefined || value === '' ? 1 : Number(value)))
   @IsInt()
@@ -60,10 +60,10 @@ export class QueryRegencyDto {
   @IsOptional()
   limit?: number;
 
-  @ApiPropertyOptional({ name: 'province_id', example: 1 })
+  @ApiPropertyOptional({ name: 'group_id', example: 1 })
   @IsOptional()
   @Transform(({ value, obj }) => {
-    const rawValue = value ?? obj?.province_id;
+    const rawValue = value ?? obj?.group_id;
     if (rawValue === undefined || rawValue === null || rawValue === '') {
       return undefined;
     }
@@ -72,7 +72,7 @@ export class QueryRegencyDto {
   })
   @IsInt()
   @Min(1)
-  provinceId?: Regency['provinceId'];
+  groupId?: Subgroup['groupId'];
 
   @ApiPropertyOptional({ type: String })
   @IsOptional()
@@ -83,8 +83,8 @@ export class QueryRegencyDto {
       return undefined;
     }
   })
-  @Type(() => FilterRegencyDto)
-  filters?: FilterRegencyDto | null;
+  @Type(() => FilterSubgroupDto)
+  filters?: FilterSubgroupDto | null;
 
   @ApiPropertyOptional({ type: String })
   @IsOptional()
@@ -95,6 +95,6 @@ export class QueryRegencyDto {
       return undefined;
     }
   })
-  @Type(() => SortRegencyDto)
-  sort?: SortRegencyDto[] | null;
+  @Type(() => SortSubgroupDto)
+  sort?: SortSubgroupDto[] | null;
 }

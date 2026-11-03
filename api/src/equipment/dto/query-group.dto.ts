@@ -1,20 +1,20 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import { IsIn, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
-import { Province } from '../domain/province';
+import { Group } from '../domain/group';
 
-export class FilterProvinceDto {
+export class FilterGroupDto {
   @ApiPropertyOptional({ example: 'jawa' })
   @IsOptional()
   @IsString()
   search?: string;
 }
 
-export class SortProvinceDto {
+export class SortGroupDto {
   @ApiProperty()
   @Type(() => String)
   @IsString()
-  orderBy: keyof Province;
+  orderBy: keyof Group;
 
   @ApiProperty({ enum: ['ASC', 'DESC'] })
   @Transform(({ value }) => String(value).toUpperCase())
@@ -22,7 +22,7 @@ export class SortProvinceDto {
   order: string;
 }
 
-export class QueryProvinceDto {
+export class QueryGroupDto {
   @ApiPropertyOptional()
   @Transform(({ value }) => (value === undefined || value === '' ? 1 : Number(value)))
   @IsInt()
@@ -47,8 +47,8 @@ export class QueryProvinceDto {
       return undefined;
     }
   })
-  @Type(() => FilterProvinceDto)
-  filters?: FilterProvinceDto | null;
+  @Type(() => FilterGroupDto)
+  filters?: FilterGroupDto | null;
 
   @ApiPropertyOptional({ type: String })
   @IsOptional()
@@ -59,6 +59,6 @@ export class QueryProvinceDto {
       return undefined;
     }
   })
-  @Type(() => SortProvinceDto)
-  sort?: SortProvinceDto[] | null;
+  @Type(() => SortGroupDto)
+  sort?: SortGroupDto[] | null;
 }

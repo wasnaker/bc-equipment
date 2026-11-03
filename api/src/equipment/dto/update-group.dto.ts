@@ -8,9 +8,9 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { CreateProvinceDto } from './create-province.dto';
+import { CreateGroupDto } from './create-group.dto';
 
-export class UpdateProvinceDto extends PartialType(CreateProvinceDto) {
+export class UpdateGroupDto extends PartialType(CreateGroupDto) {
   @ApiPropertyOptional({ example: 'Jawa Barat', maxLength: 190 })
   @IsOptional()
   @IsString()
