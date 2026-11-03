@@ -10,8 +10,8 @@
     "plugins": []
   },
   "include": [
-    "src/modules/region/**/*.ts",
-    "src/modules/region/**/*.tsx",
+    "src/modules/equipment/**/*.ts",
+    "src/modules/equipment/**/*.tsx",
     "../../../brocoders-react-web/src/types/lucide-react.d.ts"
   ]
 }
