@@ -1,41 +1,21 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Max,
-  MaxLength,
-  Min,
-} from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreateGroupDto {
-  @ApiProperty({ example: 'Jawa Barat', maxLength: 190 })
+  @ApiProperty({ example: 'Operations', maxLength: 190 })
   @IsNotEmpty()
   @IsString()
   @MaxLength(190)
   name: string;
 
-  @ApiPropertyOptional({ example: 'JB', maxLength: 10, nullable: true })
+  @ApiPropertyOptional({ example: 'Operational equipment grouping', maxLength: 500, nullable: true })
   @IsOptional()
   @IsString()
-  @MaxLength(10)
-  isoCode?: string | null;
+  @MaxLength(500)
+  description?: string | null;
 
-  @ApiPropertyOptional({ example: -6.9, nullable: true })
+  @ApiPropertyOptional({ example: true, default: true })
   @IsOptional()
-  @Type(() => Number)
-  @IsNumber({ allowNaN: false, allowInfinity: false })
-  @Min(-90)
-  @Max(90)
-  latitude?: number | null;
-
-  @ApiPropertyOptional({ example: 107.6, nullable: true })
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber({ allowNaN: false, allowInfinity: false })
-  @Min(-180)
-  @Max(180)
-  longitude?: number | null;
+  @IsBoolean()
+  isActive?: boolean;
 }
