@@ -69,7 +69,7 @@ export function SubgroupFormDialog({ open, onOpenChange, editItem, defaultGroupI
         <Label htmlFor="subgroup-group">{t("form.field.group")} <span className="text-destructive">*</span></Label>
         <Select value={groupId} onValueChange={setGroupId}>
           <SelectTrigger id="subgroup-group" aria-invalid={Boolean(errors.groupId)}><SelectValue placeholder={t("form.placeholder.group")} /></SelectTrigger>
-          <SelectContent>{groups.map(group => <SelectItem key={String(group.id)} value={String(group.id)}>{group.name}</SelectItem>)}</SelectContent>
+          <SelectContent>{groups.map((group: Group) => <SelectItem key={String(group.id)} value={String(group.id)}>{group.name}</SelectItem>)}</SelectContent>
         </Select>
         {errors.groupId && <p className="text-xs text-destructive">{errors.groupId}</p>}
       </div>
