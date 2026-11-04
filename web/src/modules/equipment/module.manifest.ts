@@ -4,16 +4,39 @@ import {
   GroupCountWidget,
   SubgroupCountWidget,
 } from "./components/dashboard-widgets";
+import { EquipmentPage } from "./pages/equipment-page";
+import { SubgroupsPage } from "./pages/subgroups-page";
+import { CategoriesPage } from "./pages/categories-page";
+import { EquipmentTypesPage } from "./pages/equipment-types-page";
 
 /**
- * Manifest modul Equipment.
- *
- * Modul ini menyediakan halaman admin di /admin/equipment.
- * String UI memakai namespace "module-equipment" (lihat
- * src/services/i18n/locales/<lang>/module-equipment.json).
+ * Equipment owns its admin pages and navigation. The host resolves these
+ * canonical paths through the shared module page registry.
  */
 export default defineModuleManifest({
   alias: "equipment",
+  pages: [
+    {
+      path: "/admin/equipment",
+      component: EquipmentPage,
+      permission: "read:equipment",
+    },
+    {
+      path: "/admin/equipment/subgroups",
+      component: SubgroupsPage,
+      permission: "read:equipment",
+    },
+    {
+      path: "/admin/equipment/categories",
+      component: CategoriesPage,
+      permission: "read:equipment",
+    },
+    {
+      path: "/admin/equipment/items",
+      component: EquipmentTypesPage,
+      permission: "read:equipment",
+    },
+  ],
   menu: [
     {
       slug: "equipment",
@@ -53,10 +76,6 @@ export default defineModuleManifest({
       ],
     },
   ],
-  // Satu module dapat mendaftarkan beberapa widget sekaligus.
-  // defaultVisible: konstanta statis modul — meng-override default true saat
-  // global Settings › Misc › dashboardWidgetsEnabled = ON. Preferensi user
-  // (toggle di toolbar dashboard) tetap menang atas nilai ini.
   dashboardWidgets: [
     {
       id: "equipment-group-count",
