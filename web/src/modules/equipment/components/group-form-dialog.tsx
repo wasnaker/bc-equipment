@@ -6,195 +6,68 @@ import { FormDialogLayout } from "@/components/form/form-dialog-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useCreateGroup, useUpdateGroup } from "../hooks/use-equipments";
 import type { Group } from "../types/equipment";
 
-interface GroupFormDialogProps {
+interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   editItem?: Group | null;
   onSuccess: (savedId: Group["id"]) => void;
 }
 
-interface FormState {
-  name: string;
-  isoCode: string;
-  latitude: string;
-  longitude: string;
-}
-
-interface FormErrors {
-  name?: string;
-  isoCode?: string;
-  latitude?: string;
-  longitude?: string;
-}
-
-export function GroupFormDialog({
-  open,
-  onOpenChange,
-  editItem,
-  onSuccess,
-}: GroupFormDialogProps) {
+export function GroupFormDialog({ open, onOpenChange, editItem, onSuccess }: Props) {
   const { t } = useTranslation("module-equipment");
   const createMutation = useCreateGroup();
   const updateMutation = useUpdateGroup();
-
   const isEditing = Boolean(editItem);
   const isPending = createMutation.isPending || updateMutation.isPending;
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [isActive, setIsActive] = useState(true);
+  const [error, setError] = useState("");
 
-  const [form, setForm] = useState<FormState>({
-    name: "",
-    isoCode: "",
-    latitude: "",
-    longitude: "",
-  });
-  const [errors, setErrors] = useState<FormErrors>({});
-
-  // Reset form when dialog opens / editItem changes
   useEffect(() => {
-    if (open) {
-      setForm({
-        name: editItem?.name ?? "",
-        isoCode: editItem?.isoCode ?? "",
-        latitude: editItem?.latitude != null ? String(editItem.latitude) : "",
-        longitude:
-          editItem?.longitude != null ? String(editItem.longitude) : "",
-      });
-      setErrors({});
-    }
+    if (!open) return;
+    setName(editItem?.name ?? "");
+    setDescription(editItem?.description ?? "");
+    setIsActive(editItem?.isActive ?? true);
+    setError("");
   }, [open, editItem]);
-
-  function validate(): boolean {
-    const e: FormErrors = {};
-    if (!form.name.trim()) e.name = t("form.validation.required");
-    if (form.latitude && isNaN(Number(form.latitude))) {
-      e.latitude = t("form.validation.number");
-    }
-    if (form.longitude && isNaN(Number(form.longitude))) {
-      e.longitude = t("form.validation.number");
-    }
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!validate()) return;
-
-    const payload = {
-      name: form.name.trim(),
-      isoCode: form.isoCode.trim() || null,
-      latitude: form.latitude ? Number(form.latitude) : null,
-      longitude: form.longitude ? Number(form.longitude) : null,
-    };
-
-    let savedId: Group["id"] | undefined;
-    if (isEditing && editItem) {
-      const result = await updateMutation.mutateAsync({
-        id: editItem.id,
-        data: payload,
-      });
-      savedId = result.id;
-    } else {
-      const result = await createMutation.mutateAsync(payload);
-      savedId = result.id;
-    }
-
+    if (!name.trim()) { setError(t("form.validation.required")); return; }
+    const payload = { name: name.trim(), description: description.trim() || null, isActive };
+    const result = isEditing && editItem
+      ? await updateMutation.mutateAsync({ id: editItem.id, data: payload })
+      : await createMutation.mutateAsync(payload);
     onOpenChange(false);
-    if (savedId != null) onSuccess(savedId);
-  }
-
-  function setField(key: keyof FormState, value: string) {
-    setForm((prev) => ({ ...prev, [key]: value }));
-    if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
+    onSuccess(result.id);
   }
 
   return (
-    <FormDialogLayout
-      open={open}
-      onOpenChange={onOpenChange}
+    <FormDialogLayout open={open} onOpenChange={onOpenChange}
       title={isEditing ? t("actions.edit_group") : t("actions.create_group")}
       onSubmit={handleSubmit}
-      footer={
-        <>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-            disabled={isPending}
-          >
-            {t("actions.cancel")}
-          </Button>
-          <Button type="submit" disabled={isPending}>
-            {isPending ? t("actions.saving") : t("actions.save")}
-          </Button>
-        </>
-      }
-    >
-          {/* Name */}
-          <div className="space-y-1.5">
-            <Label htmlFor="group-name">
-              {t("form.field.name")} <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              id="group-name"
-              value={form.name}
-              onChange={(e) => setField("name", e.target.value)}
-              placeholder={t("form.placeholder.name")}
-              aria-invalid={Boolean(errors.name)}
-            />
-            {errors.name && (
-              <p className="text-xs text-destructive">{errors.name}</p>
-            )}
-          </div>
-
-          {/* ISO Code */}
-          <div className="space-y-1.5">
-            <Label htmlFor="group-isoCode">{t("form.field.isoCode")}</Label>
-            <Input
-              id="group-isoCode"
-              value={form.isoCode}
-              onChange={(e) => setField("isoCode", e.target.value)}
-              placeholder="e.g. 31"
-              maxLength={10}
-            />
-          </div>
-
-          {/* Coordinates row */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="group-lat">{t("form.field.latitude")}</Label>
-              <Input
-                id="group-lat"
-                type="number"
-                step="any"
-                value={form.latitude}
-                onChange={(e) => setField("latitude", e.target.value)}
-                placeholder="-6.200000"
-                aria-invalid={Boolean(errors.latitude)}
-              />
-              {errors.latitude && (
-                <p className="text-xs text-destructive">{errors.latitude}</p>
-              )}
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="group-lng">{t("form.field.longitude")}</Label>
-              <Input
-                id="group-lng"
-                type="number"
-                step="any"
-                value={form.longitude}
-                onChange={(e) => setField("longitude", e.target.value)}
-                placeholder="106.816666"
-                aria-invalid={Boolean(errors.longitude)}
-              />
-              {errors.longitude && (
-                <p className="text-xs text-destructive">{errors.longitude}</p>
-              )}
-            </div>
-          </div>
-
+      footer={<>
+        <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>{t("actions.cancel")}</Button>
+        <Button type="submit" disabled={isPending}>{isPending ? t("actions.saving") : t("actions.save")}</Button>
+      </>}>
+      <div className="space-y-1.5">
+        <Label htmlFor="group-name">{t("form.field.name")} <span className="text-destructive">*</span></Label>
+        <Input id="group-name" value={name} onChange={e => setName(e.target.value)} maxLength={190} aria-invalid={Boolean(error)} />
+        {error && <p className="text-xs text-destructive">{error}</p>}
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="group-description">{t("form.field.description")}</Label>
+        <Input id="group-description" value={description} onChange={e => setDescription(e.target.value)} maxLength={500} />
+      </div>
+      <div className="flex items-center gap-2">
+        <Checkbox id="group-active" checked={isActive} onCheckedChange={value => setIsActive(Boolean(value))} />
+        <Label htmlFor="group-active" className="cursor-pointer text-sm font-normal">{t("form.field.isActive")}</Label>
+      </div>
     </FormDialogLayout>
   );
 }
