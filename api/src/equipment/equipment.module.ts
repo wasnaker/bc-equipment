@@ -16,6 +16,7 @@ import { CategoriesRelationalRepository } from './infrastructure/persistence/rel
 import { EquipmentRelationalRepository } from './infrastructure/persistence/relational/repositories/equipment.repository';
 import { EquipmentAccessGuard } from './security/equipment-access.guard';
 import { EquipmentMasterDataSeedService } from './database/seeds/master-data/equipment-master-data.seed.service';
+import { EquipmentCatalogSeedService } from './database/seeds/master-data/equipment-catalog.seed.service';
 import { EQUIPMENT_MODULE_OPTIONS, EquipmentModuleAsyncOptions } from './equipment.options';
 export { EQUIPMENT_MODULE_OPTIONS } from './equipment.options';
 export type { EquipmentModuleOptions, EquipmentModuleAsyncOptions } from './equipment.options';
@@ -25,6 +26,7 @@ export type { EquipmentModuleOptions, EquipmentModuleAsyncOptions } from './equi
   providers: [
     EquipmentService, EquipmentAccessGuard,
     EquipmentMasterDataSeedService,
+    EquipmentCatalogSeedService,
     { provide: GroupRepository, useClass: GroupsRelationalRepository },
     { provide: SubgroupRepository, useClass: SubgroupsRelationalRepository },
     { provide: CategoryRepository, useClass: CategoriesRelationalRepository },

@@ -26,6 +26,7 @@ const category_repository_2 = require("./infrastructure/persistence/relational/r
 const equipment_repository_2 = require("./infrastructure/persistence/relational/repositories/equipment.repository");
 const equipment_access_guard_1 = require("./security/equipment-access.guard");
 const equipment_master_data_seed_service_1 = require("./database/seeds/master-data/equipment-master-data.seed.service");
+const equipment_catalog_seed_service_1 = require("./database/seeds/master-data/equipment-catalog.seed.service");
 const equipment_options_1 = require("./equipment.options");
 var equipment_options_2 = require("./equipment.options");
 Object.defineProperty(exports, "EQUIPMENT_MODULE_OPTIONS", { enumerable: true, get: function () { return equipment_options_2.EQUIPMENT_MODULE_OPTIONS; } });
@@ -42,6 +43,7 @@ exports.EquipmentModule = EquipmentModule = EquipmentModule_1 = __decorate([
         providers: [
             equipment_service_1.EquipmentService, equipment_access_guard_1.EquipmentAccessGuard,
             equipment_master_data_seed_service_1.EquipmentMasterDataSeedService,
+            equipment_catalog_seed_service_1.EquipmentCatalogSeedService,
             { provide: group_repository_1.GroupRepository, useClass: group_repository_2.GroupsRelationalRepository },
             { provide: subgroup_repository_1.SubgroupRepository, useClass: subgroup_repository_2.SubgroupsRelationalRepository },
             { provide: category_repository_1.CategoryRepository, useClass: category_repository_2.CategoriesRelationalRepository },
