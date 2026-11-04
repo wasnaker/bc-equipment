@@ -1,10 +1,12 @@
 import { BeforeInsert, Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
 import { CategoryEntity } from './category.entity';
+import { SubgroupEntity } from './subgroup.entity';
 import { generateEquipmentUlid } from '../../../../utils/equipment-ulid.generator';
 
 @Index('UQ_equipment_ulid', ['ulid'], { unique: true })
 @Index('UQ_equipment_code', ['code'], { unique: true })
+@Index('IDX_equipment_subgroupId', ['subgroupId'])
 @Index('IDX_equipment_categoryId', ['categoryId'])
 @Entity({ name: 'equipment' })
 export class EquipmentEntity extends EntityRelationalHelper {
@@ -18,11 +20,18 @@ export class EquipmentEntity extends EntityRelationalHelper {
   code: string | null;
 
   @Column({ type: 'int' })
-  categoryId: number;
+  subgroupId: number;
 
-  @ManyToOne(() => CategoryEntity, { onDelete: 'RESTRICT', nullable: false })
+  @ManyToOne(() => SubgroupEntity, { onDelete: 'RESTRICT', nullable: false })
+  @JoinColumn({ name: 'subgroupId' })
+  subgroup?: SubgroupEntity;
+
+  @Column({ type: 'int', nullable: true })
+  categoryId: number | null;
+
+  @ManyToOne(() => CategoryEntity, { onDelete: 'SET NULL', nullable: true })
   @JoinColumn({ name: 'categoryId' })
-  category?: CategoryEntity;
+  category?: CategoryEntity | null;
 
   @Column({ type: 'varchar', length: 190 })
   name: string;

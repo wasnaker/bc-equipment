@@ -141,7 +141,7 @@ export function useGetEquipmentItemService() {
   return useCallback((data: { id: EquipmentItem["id"] }, config?: RequestConfigType) =>
     fetch(`${API_URL}/v1/equipment/items/${data.id}`, { method: "GET", ...config }).then(wrapperFetchJsonResponse<EquipmentItem>), [fetch]);
 }
-export type EquipmentItemWriteRequest = Pick<EquipmentItem, "categoryId" | "name" | "description" | "isActive">;
+export type EquipmentItemWriteRequest = Pick<EquipmentItem, "subgroupId" | "categoryId" | "name" | "description" | "isActive">;
 export function useCreateEquipmentItemService() {
   const fetch = useFetch();
   return useCallback((data: EquipmentItemWriteRequest, config?: RequestConfigType) =>

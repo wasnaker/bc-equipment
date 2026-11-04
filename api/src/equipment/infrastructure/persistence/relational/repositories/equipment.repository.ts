@@ -21,6 +21,7 @@ export class EquipmentRelationalRepository implements EquipmentRepository {
 
   private where(filters?: FilterEquipmentDto | null): FindOptionsWhere<EquipmentEntity> {
     const where: FindOptionsWhere<EquipmentEntity> = {};
+    if (filters?.subgroupId != null) where.subgroupId = Number(filters.subgroupId);
     if (filters?.categoryId != null) where.categoryId = Number(filters.categoryId);
     if (filters?.isActive !== undefined) where.isActive = filters.isActive;
     return where;
@@ -47,11 +48,13 @@ export class EquipmentRelationalRepository implements EquipmentRepository {
     return (await this.repository.find({ where: { categoryId: Number(categoryId) }, order: { name: 'ASC' } })).map(EquipmentMapper.toDomain);
   }
 
-  async findByCategoryIdAndName(categoryId: Equipment['categoryId'], name: Equipment['name']): Promise<NullableType<Equipment>> {
-    const row = await this.repository.createQueryBuilder('equipment')
-      .where('"equipment"."categoryId" = :categoryId', { categoryId: Number(categoryId) })
-      .andWhere('lower(btrim("equipment"."name")) = lower(btrim(:name))', { name })
-      .getOne();
+  async findBySubgroupIdCategoryIdAndName(subgroupId: Equipment['subgroupId'], categoryId: Equipment['categoryId'], name: Equipment['name']): Promise<NullableType<Equipment>> {
+    const query = this.repository.createQueryBuilder('equipment')
+      .where('"equipment"."subgroupId" = :subgroupId', { subgroupId: Number(subgroupId) })
+      .andWhere('lower(btrim("equipment"."name")) = lower(btrim(:name))', { name });
+    if (categoryId == null) query.andWhere('"equipment"."categoryId" IS NULL');
+    else query.andWhere('"equipment"."categoryId" = :categoryId', { categoryId: Number(categoryId) });
+    const row = await query.getOne();
     return row ? EquipmentMapper.toDomain(row) : null;
   }
 
