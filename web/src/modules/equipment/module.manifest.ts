@@ -4,16 +4,43 @@ import {
   GroupCountWidget,
   SubgroupCountWidget,
 } from "./components/dashboard-widgets";
+import { EquipmentPage } from "./pages/equipment-page";
+import { SubgroupsPage } from "./pages/subgroups-page";
+import { CategoriesPage } from "./pages/categories-page";
+import { EquipmentTypesPage } from "./pages/equipment-types-page";
 
 /**
- * Manifest modul Equipment.
- *
- * Modul ini menyediakan halaman admin di /admin/equipment.
- * String UI memakai namespace "module-equipment" (lihat
- * src/services/i18n/locales/<lang>/module-equipment.json).
+ * Equipment owns its admin pages and navigation. The host resolves these
+ * canonical paths through the shared module page registry.
  */
 export default defineModuleManifest({
   alias: "equipment",
+  pages: [
+    {
+      path: "/admin/equipment",
+      component: EquipmentPage,
+      title: { namespace: "module-equipment", key: "title" },
+      permission: "read:equipment",
+    },
+    {
+      path: "/admin/equipment/subgroups",
+      component: SubgroupsPage,
+      title: { namespace: "module-equipment", key: "subgroups_title" },
+      permission: "read:equipment",
+    },
+    {
+      path: "/admin/equipment/categories",
+      component: CategoriesPage,
+      title: { namespace: "module-equipment", key: "categories_title" },
+      permission: "read:equipment",
+    },
+    {
+      path: "/admin/equipment/items",
+      component: EquipmentTypesPage,
+      title: { namespace: "module-equipment", key: "equipment_page_title" },
+      permission: "read:equipment",
+    },
+  ],
   menu: [
     {
       slug: "equipment",
@@ -53,10 +80,6 @@ export default defineModuleManifest({
       ],
     },
   ],
-  // Satu module dapat mendaftarkan beberapa widget sekaligus.
-  // defaultVisible: konstanta statis modul — meng-override default true saat
-  // global Settings › Misc › dashboardWidgetsEnabled = ON. Preferensi user
-  // (toggle di toolbar dashboard) tetap menang atas nilai ini.
   dashboardWidgets: [
     {
       id: "equipment-group-count",
