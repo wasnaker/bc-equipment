@@ -5,6 +5,7 @@ on:
     branches:
       - chore/equipment-package-identity
       - feat/equipment-groups-subgroups
+      - feat/equipment-categories
   pull_request:
   workflow_dispatch:
 

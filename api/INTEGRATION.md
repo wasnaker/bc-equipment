@@ -65,3 +65,16 @@ role assignments.
 npm run build:api
 npm run verify:api-package
 ```
+
+
+## Category
+
+Category merupakan child dari Subgroup. Entity, repository, migration, dan CRUD
+Category dikelola oleh module ini. Host cukup mendaftarkan `CategoryEntity` dan
+menjalankan migration module melalui package registry.
+
+- `GET/POST /v1/equipment/categories`
+- `GET/PATCH/DELETE /v1/equipment/categories/:id`
+- Filter list menggunakan `filters={"subgroupId": <id>}`.
+- Penghapusan Subgroup menghapus Category turunannya melalui foreign key
+  `ON DELETE CASCADE`.

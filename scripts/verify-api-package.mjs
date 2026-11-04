@@ -47,10 +47,12 @@ for (const path of [
   'api/dist/index.d.ts',
   'api/dist/equipment/equipment.manifest.js',
   'api/dist/equipment/equipment.entities.js',
+  'api/dist/equipment/infrastructure/persistence/relational/entities/category.entity.js',
   'api/dist/equipment/equipment.definition.js',
   'api/dist/equipment/equipment.seeds.js',
   'api/dist/equipment/database/migrations/index.js',
   'api/dist/equipment/database/migrations/1793710214000000000-ConvertProvinceRegencyToEquipmentGroups.js',
+  'api/dist/equipment/database/migrations/1793710215000000000-CreateEquipmentCategory.js',
 ]) {
   await access(new URL(`../${path}`, import.meta.url), constants.R_OK);
 }

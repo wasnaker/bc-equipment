@@ -27,7 +27,7 @@ npm run module:rm -- equipment
 Next.js membutuhkan route entry fisik di host. Route ini hanya adapter tipis;
 implementasi halaman tetap berada di package:
 
-`src/app/admin/equipment/page.tsx`:
+`src/app/admin/equipment/page.tsx` (route Group) dan `src/app/admin/equipment/subgroups/page.tsx` (route Subgroup):
 
 ```tsx
 import type { Metadata } from "next";
@@ -62,6 +62,8 @@ function Equipment() {
 export default withPageRequiredAuth(Equipment, { roles: [RoleEnum.ADMIN] });
 ```
 
+Untuk route Subgroup, buat adapter `src/app/[language]/admin/equipment/subgroups/page-content.tsx` yang mengimpor `SubgroupsPage` dari `@wasnaker/module-equipment`, lalu bungkus dengan guard autentikasi host yang sama. Route ini menampilkan daftar Subgroup dengan panel detail dan tab Category.
+
 ## 3. Kontrak package
 
 - Manifest: `@wasnaker/module-equipment/manifest`
@@ -85,6 +87,9 @@ Semua request menggunakan API_URL host (`/api/v1`):
 | List subgroup | `GET /v1/equipment/subgroups?filters=...` |
 | Detail subgroup | `GET /v1/equipment/subgroups/:id` |
 | CRUD subgroup | `POST/PATCH/DELETE /v1/equipment/subgroups` |
+| List Category | `GET /v1/equipment/categories?filters=...` |
+| Detail Category | `GET /v1/equipment/categories/:id` |
+| CRUD Category | `POST/PATCH/DELETE /v1/equipment/categories` |
 
 ## 5. Pengembangan lokal
 
