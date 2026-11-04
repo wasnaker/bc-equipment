@@ -87,5 +87,7 @@
     "load_error": "機器タイプを読み込めません。",
     "save_error": "機器タイプを保存できません。",
     "delete_error": "機器タイプを削除できません。"
-  }
+  },
+  "menu_categories": "カテゴリ",
+  "menu_equipment": "設備"
 }
