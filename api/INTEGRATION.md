@@ -28,10 +28,10 @@ Every backend-capable module exposes:
 
 A module without entities, migrations or seed providers exports an empty array.
 The package owns controllers, DTOs, domain, services, entities, repositories,
-migrations and permission definitions. Seed providers are optional; this
-Equipment implementation exports an empty seed-provider array because groups
-and subgroups are user-managed records. It never owns the host's database
-connection, JWT strategy, roles table or permission persistence.
+migrations and permission definitions. Equipment exports an idempotent
+`EquipmentMasterDataSeedService` for the canonical K3 classification data
+(6 groups and 20 subgroups). It never owns the host's database connection,
+JWT strategy, roles table or permission persistence.
 
 ## Register in NestJS
 
@@ -58,6 +58,11 @@ providers from the same definitions. Each module seed must be idempotent.
 Permission definitions are seeded before module seeds, and the host's default
 admin role receives newly registered permissions without overwriting existing
 role assignments.
+
+The Equipment master-data seed matches groups and subgroups by their natural
+keys. Existing names, descriptions, active flags and custom non-default ordering
+are retained; missing legacy metadata (codes, abbreviations, sort order and
+subgroup color) is filled on repeated runs without replacing user values.
 
 ## Build locally
 
