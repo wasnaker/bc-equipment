@@ -1,5 +1,6 @@
 {
   "menu": "Equipment",
+  "menu_groups": "Grup",
   "title": "Equipment",
   "subtitle": "Kelola peralatan berdasarkan grup dan subgrup",
   "actions": {
