@@ -89,7 +89,7 @@
     "delete_error": "장비 유형을 삭제하지 못했습니다."
   },
   "menu_categories": "카테고리",
-  "menu_equipment": "장비",
+  "menu_equipment": "장비 유형",
   "categories_title": "카테고리",
   "categories_subtitle": "하위 그룹별 카테고리 관리",
   "equipment_page_title": "장비",
