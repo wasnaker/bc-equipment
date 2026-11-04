@@ -75,5 +75,16 @@
   "subgroups_subtitle": "Manage subgroups and their categories",
   "subgroups_empty": "No subgroups yet.",
   "subgroups_search": "Search subgroups…",
-  "subgroups_search_label": "Search subgroups by name or description"
+  "subgroups_search_label": "Search subgroups by name or description",
+  "equipment": {
+    "title": "Equipment types",
+    "manage": "Manage types",
+    "hide": "Hide types",
+    "empty": "No equipment types yet.",
+    "create": "Add equipment type",
+    "edit": "Edit equipment type",
+    "load_error": "Unable to load equipment types.",
+    "save_error": "Unable to save equipment type.",
+    "delete_error": "Unable to delete equipment type."
+  }
 }
