@@ -40,7 +40,7 @@ export default defineModuleManifest({
     },
     {
       id: "equipment-subgroup-count",
-      label: { namespace: "module-equipment", key: "dashboard.regencies" },
+      label: { namespace: "module-equipment", key: "dashboard.subgroups" },
       area: "summary",
       position: 70,
       permission: "read:equipment",

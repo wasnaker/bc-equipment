@@ -105,8 +105,7 @@ function PageInner() {
           <span className="font-medium">{item.name}</span>
         ),
       },
-      {
-        key: "description", label: t("table.description"), render: item => <span className="text-muted-foreground">{item.description ?? "—"}</span>,
+      { key: "description", label: t("table.description"), render: item => <span className="text-muted-foreground">{item.description || "—"}</span> },
       { key: "isActive", label: t("table.status"), render: item => <span>{item.isActive ? t("status.active") : t("status.inactive")}</span> },
     ],
     [t]
