@@ -3,6 +3,12 @@ import { Transform, Type } from 'class-transformer';
 import { IsBoolean, IsIn, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class FilterEquipmentDto {
+  @ApiPropertyOptional({ name: 'subgroup_id' })
+  @IsOptional()
+  @Transform(({ value, obj }) => Number(value ?? obj?.subgroup_id))
+  @IsInt() @Min(1)
+  subgroupId?: number;
+
   @ApiPropertyOptional({ name: 'category_id' })
   @IsOptional()
   @Transform(({ value, obj }) => Number(value ?? obj?.category_id))
@@ -26,6 +32,11 @@ export class SortEquipmentDto {
   order: 'ASC' | 'DESC';
 }
 export class QueryEquipmentDto {
+  @ApiPropertyOptional({ name: 'subgroup_id' })
+  @IsOptional() @Transform(({ value, obj }) => Number(value ?? obj?.subgroup_id))
+  @IsInt() @Min(1)
+  subgroupId?: number;
+
   @ApiPropertyOptional({ default: 1 })
   @IsOptional() @Transform(({ value }) => value === undefined ? 1 : Number(value))
   @IsInt() @Min(1) page = 1;
