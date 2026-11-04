@@ -4,9 +4,10 @@ import {
   useGetGroupsService, useGetGroupService, useCreateGroupService, useUpdateGroupService, useDeleteGroupService,
   useGetSubgroupsService, useGetSubgroupService, useCreateSubgroupService, useUpdateSubgroupService, useDeleteSubgroupService,
   useGetCategoriesService, useGetCategoryService, useCreateCategoryService, useUpdateCategoryService, useDeleteCategoryService,
+  useGetEquipmentItemsService, useGetEquipmentItemService, useCreateEquipmentItemService, useUpdateEquipmentItemService, useDeleteEquipmentItemService,
 } from "../services/equipment-api";
-import type { Group, Subgroup, Category } from "../types/equipment";
-import type { GroupListResponse, SubgroupListResponse, CategoryListResponse } from "../services/equipment-api";
+import type { Group, Subgroup, Category, EquipmentItem } from "../types/equipment";
+import type { GroupListResponse, SubgroupListResponse, CategoryListResponse, EquipmentItemListResponse } from "../services/equipment-api";
 import { useTable } from "@/core/table/use-table";
 import { SortEnum } from "@/services/api/types/sort-type";
 
@@ -102,6 +103,15 @@ export function useSubgroup(id: Subgroup["id"] | null) {
   });
 }
 
+/** Flat list of all subgroups (untuk dropdown, page 1 limit 50). */
+export function useSubgroupsQuery() {
+  const service = useGetSubgroupsService();
+  return useQuery({
+    queryKey: ["equipment", "subgroups", "all"],
+    queryFn: async () => unwrapResponse<SubgroupListResponse>(await service({ page: 1, limit: 50 })),
+  });
+}
+
 export function useCreateSubgroup() {
   const service = useCreateSubgroupService(); const qc = useQueryClient();
   return useMutation({
@@ -159,12 +169,42 @@ export function useCategories(subgroupId: Subgroup["id"] | null, page = 1, limit
   });
 }
 
+export function useCategoriesServerSide() {
+  const service = useGetCategoriesService();
+  return useTable<Category>({
+    queryKey: ["equipment", "categories"],
+    searchDebounce: 300,
+    defaultSort: { field: "name", order: "ASC" },
+    fetchFn: async ({ page, limit, search, sort, filters, signal }) => {
+      const activeFilters = Object.fromEntries(Object.entries(filters ?? {}).filter(([, value]) => value != null)) as Record<string, string | number | boolean>;
+      if (search) activeFilters.search = search;
+      const response = await service({
+        page, limit,
+        filters: Object.keys(activeFilters).length ? activeFilters : undefined,
+        sort: sort ? [{ orderBy: sort.field as keyof Category, order: sort.order === "ASC" ? SortEnum.ASC : SortEnum.DESC }] : undefined,
+      }, { signal });
+      const payload = unwrapResponse<{ data?: Category[]; total?: number }>(response);
+      if (typeof payload.total !== "number") throw new Error("Categories API response is missing total");
+      return { data: payload.data ?? [], total: payload.total };
+    },
+  });
+}
+
 export function useCategory(id: Category["id"] | null) {
   const service = useGetCategoryService();
   return useQuery({
     queryKey: ["equipment", "category", id],
     queryFn: async () => unwrapResponse<Category>(await service({ id: id as Category["id"] })),
     enabled: id != null,
+  });
+}
+
+/** Flat list of all categories (untuk dropdown). */
+export function useCategoriesQuery() {
+  const service = useGetCategoriesService();
+  return useQuery({
+    queryKey: ["equipment", "categories", "all"],
+    queryFn: async () => unwrapResponse<CategoryListResponse>(await service({ page: 1, limit: 50 })),
   });
 }
 
@@ -192,5 +232,56 @@ export function useDeleteCategory() {
       if (response.status !== HTTP_CODES_ENUM.NO_CONTENT) unwrapResponse<undefined>(response);
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["equipment", "categories"] }),
+  });
+}
+
+// ── Equipment items (types) ──────────────────────────────────────────────
+
+export function useEquipmentItemsServerSide(categoryId: Category["id"] | null) {
+  const service = useGetEquipmentItemsService();
+  return useTable<EquipmentItem>({
+    queryKey: ["equipment", "items", categoryId],
+    searchDebounce: 300,
+    defaultSort: { field: "name", order: "ASC" },
+    fetchFn: async ({ page, limit, search, sort, filters, signal }) => {
+      const activeFilters = Object.fromEntries(Object.entries(filters ?? {}).filter(([, value]) => value != null)) as Record<string, string | number | boolean>;
+      if (categoryId != null) activeFilters.categoryId = categoryId;
+      if (search) activeFilters.search = search;
+      const response = await service({
+        page, limit,
+        filters: Object.keys(activeFilters).length ? activeFilters : undefined,
+        sort: sort ? [{ orderBy: sort.field as keyof EquipmentItem, order: sort.order === "ASC" ? SortEnum.ASC : SortEnum.DESC }] : undefined,
+      }, { signal });
+      const payload = unwrapResponse<{ data?: EquipmentItem[]; total?: number }>(response);
+      if (typeof payload.total !== "number") throw new Error("Items API response is missing total");
+      return { data: payload.data ?? [], total: payload.total };
+    },
+  });
+}
+
+export function useCreateEquipmentItem() {
+  const service = useCreateEquipmentItemService(); const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: Parameters<typeof service>[0]) => unwrapResponse<EquipmentItem>(await service(data)),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["equipment", "items"] }),
+  });
+}
+
+export function useUpdateEquipmentItem() {
+  const service = useUpdateEquipmentItemService(); const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: Parameters<typeof service>[0]) => unwrapResponse<EquipmentItem>(await service(data)),
+    onSuccess: (_res, vars) => { qc.invalidateQueries({ queryKey: ["equipment", "items"] }); qc.invalidateQueries({ queryKey: ["equipment", "item", vars.id] }); },
+  });
+}
+
+export function useDeleteEquipmentItem() {
+  const service = useDeleteEquipmentItemService(); const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id }: { id: EquipmentItem["id"] }) => {
+      const response = await service({ id });
+      if (response.status !== HTTP_CODES_ENUM.NO_CONTENT) unwrapResponse<undefined>(response);
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["equipment", "items"] }),
   });
 }

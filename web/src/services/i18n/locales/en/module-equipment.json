@@ -30,7 +30,8 @@
     "search_label": "Search groups by name or description",
     "error": "Unable to load data. Please try again.",
     "description": "Description",
-    "status": "Status"
+    "status": "Status",
+    "code": "Code"
   },
   "detail": {
     "overview": "Overview",
@@ -56,11 +57,15 @@
       "name": "Name",
       "group": "Group",
       "isActive": "Active",
-      "description": "Description"
+      "description": "Description",
+      "subgroup": "Subgroup",
+      "category": "Category"
     },
     "placeholder": {
       "name": "Enter a group name",
-      "group": "Select group"
+      "group": "Select group",
+      "subgroup": "Select subgroup",
+      "category": "Select category"
     },
     "validation": {
       "required": "This field is required.",
@@ -92,6 +97,11 @@
   "menu_equipment": "Equipment Types",
   "categories_title": "Categories",
   "categories_subtitle": "Manage categories by subgroup",
+  "categories_search": "Search categories…",
+  "categories_search_label": "Search categories by name or description",
+  "categories_empty": "No categories yet.",
   "equipment_page_title": "Equipment",
-  "equipment_page_subtitle": "Manage equipment types within each category"
+  "equipment_page_subtitle": "Manage equipment types within each category",
+  "equipment_search": "Search equipment types…",
+  "equipment_search_label": "Search equipment types by name, code, or description"
 }

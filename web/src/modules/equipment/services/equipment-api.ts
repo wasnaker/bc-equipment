@@ -5,7 +5,7 @@ import wrapperFetchJsonResponse from "@/services/api/wrapper-fetch-json-response
 import type { InfinityPaginationType } from "@/services/api/types/infinity-pagination";
 import type { SortEnum } from "@/services/api/types/sort-type";
 import type { RequestConfigType } from "@/services/api/services/types/request-config";
-import type { Group, Subgroup, Category } from "../types/equipment";
+import type { Group, Subgroup, Category, EquipmentItem } from "../types/equipment";
 
 type ListRequest<T> = {
   page: number;
@@ -121,4 +121,39 @@ export function useDeleteCategoryService() {
   const fetch = useFetch();
   return useCallback((data: { id: Category["id"] }, config?: RequestConfigType) =>
     fetch(`${API_URL}/v1/equipment/categories/${data.id}`, { method: "DELETE", ...config }).then(wrapperFetchJsonResponse<undefined>), [fetch]);
+}
+
+export type EquipmentItemListRequest = ListRequest<EquipmentItem>;
+export type EquipmentItemListResponse = InfinityPaginationType<EquipmentItem>;
+export function useGetEquipmentItemsService() {
+  const fetch = useFetch();
+  return useCallback((data: EquipmentItemListRequest, config?: RequestConfigType) => {
+    const url = new URL(`${API_URL}/v1/equipment/items`);
+    url.searchParams.set("page", String(data.page));
+    url.searchParams.set("limit", String(data.limit));
+    if (data.filters) url.searchParams.set("filters", JSON.stringify(data.filters));
+    if (data.sort) url.searchParams.set("sort", JSON.stringify(data.sort));
+    return fetch(url, { method: "GET", ...config }).then(wrapperFetchJsonResponse<EquipmentItemListResponse>);
+  }, [fetch]);
+}
+export function useGetEquipmentItemService() {
+  const fetch = useFetch();
+  return useCallback((data: { id: EquipmentItem["id"] }, config?: RequestConfigType) =>
+    fetch(`${API_URL}/v1/equipment/items/${data.id}`, { method: "GET", ...config }).then(wrapperFetchJsonResponse<EquipmentItem>), [fetch]);
+}
+export type EquipmentItemWriteRequest = Pick<EquipmentItem, "categoryId" | "name" | "description" | "isActive">;
+export function useCreateEquipmentItemService() {
+  const fetch = useFetch();
+  return useCallback((data: EquipmentItemWriteRequest, config?: RequestConfigType) =>
+    fetch(`${API_URL}/v1/equipment/items`, { method: "POST", body: JSON.stringify(data), ...config }).then(wrapperFetchJsonResponse<EquipmentItem>), [fetch]);
+}
+export function useUpdateEquipmentItemService() {
+  const fetch = useFetch();
+  return useCallback((data: { id: EquipmentItem["id"]; data: Partial<EquipmentItemWriteRequest> }, config?: RequestConfigType) =>
+    fetch(`${API_URL}/v1/equipment/items/${data.id}`, { method: "PATCH", body: JSON.stringify(data.data), ...config }).then(wrapperFetchJsonResponse<EquipmentItem>), [fetch]);
+}
+export function useDeleteEquipmentItemService() {
+  const fetch = useFetch();
+  return useCallback((data: { id: EquipmentItem["id"] }, config?: RequestConfigType) =>
+    fetch(`${API_URL}/v1/equipment/items/${data.id}`, { method: "DELETE", ...config }).then(wrapperFetchJsonResponse<undefined>), [fetch]);
 }

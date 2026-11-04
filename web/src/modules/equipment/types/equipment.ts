@@ -26,3 +26,15 @@ export interface Category {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface EquipmentItem {
+  id: number | string;
+  ulid: string;
+  code: string;
+  categoryId: number | string;
+  name: string;
+  description: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

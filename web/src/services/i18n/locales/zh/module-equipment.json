@@ -30,7 +30,8 @@
     "search_label": "按名称或描述搜索组",
     "error": "数据加载失败，请重试。",
     "description": "描述",
-    "status": "状态"
+    "status": "状态",
+    "code": "代码"
   },
   "detail": {
     "overview": "概览",
@@ -50,11 +51,15 @@
       "name": "名称",
       "group": "组",
       "isActive": "启用",
-      "description": "描述"
+      "description": "描述",
+      "subgroup": "子组",
+      "category": "类别"
     },
     "placeholder": {
       "name": "输入组名称",
-      "group": "选择组"
+      "group": "选择组",
+      "subgroup": "选择子组",
+      "category": "选择类别"
     },
     "validation": {
       "required": "此项为必填项。",
@@ -92,6 +97,11 @@
   "menu_equipment": "设备类型",
   "categories_title": "类别",
   "categories_subtitle": "按子组管理类别",
+  "categories_search": "搜索类别…",
+  "categories_search_label": "按名称或描述搜索类别",
+  "categories_empty": "暂无类别。",
   "equipment_page_title": "设备",
-  "equipment_page_subtitle": "管理各类别下的设备类型"
+  "equipment_page_subtitle": "管理各类别下的设备类型",
+  "equipment_search": "搜索设备类型…",
+  "equipment_search_label": "按名称、代码或描述搜索设备类型"
 }

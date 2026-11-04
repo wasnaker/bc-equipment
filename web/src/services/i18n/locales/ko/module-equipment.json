@@ -30,7 +30,8 @@
     "search_label": "이름 또는 설명으로 그룹 검색",
     "error": "데이터를 불러오지 못했습니다. 다시 시도해 주세요.",
     "description": "설명",
-    "status": "상태"
+    "status": "상태",
+    "code": "코드"
   },
   "detail": {
     "overview": "개요",
@@ -50,11 +51,15 @@
       "name": "이름",
       "group": "그룹",
       "isActive": "활성",
-      "description": "설명"
+      "description": "설명",
+      "subgroup": "하위 그룹",
+      "category": "카테고리"
     },
     "placeholder": {
       "name": "그룹 이름 입력",
-      "group": "그룹 선택"
+      "group": "그룹 선택",
+      "subgroup": "하위 그룹 선택",
+      "category": "카테고리 선택"
     },
     "validation": {
       "required": "이 필드는 필수입니다.",
@@ -92,6 +97,11 @@
   "menu_equipment": "장비 유형",
   "categories_title": "카테고리",
   "categories_subtitle": "하위 그룹별 카테고리 관리",
+  "categories_search": "카테고리 검색…",
+  "categories_search_label": "이름 또는 설명으로 카테고리 검색",
+  "categories_empty": "카테고리가 없습니다.",
   "equipment_page_title": "장비",
-  "equipment_page_subtitle": "각 카테고리의 장비 유형 관리"
+  "equipment_page_subtitle": "각 카테고리의 장비 유형 관리",
+  "equipment_search": "장비 유형 검색…",
+  "equipment_search_label": "이름, 코드, 설명으로 장비 유형 검색"
 }

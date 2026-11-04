@@ -7,14 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useCreateCategory, useUpdateCategory } from "../hooks/use-equipments";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useSubgroupsQuery, useCreateCategory, useUpdateCategory } from "../hooks/use-equipments";
 import type { Category, Subgroup } from "../types/equipment";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   editItem?: Category | null;
-  subgroupId: Subgroup["id"];
+  subgroupId: Subgroup["id"] | null | undefined;
   onSuccess: (savedId: Category["id"]) => void;
 }
 
@@ -22,8 +23,10 @@ export function CategoryFormDialog({ open, onOpenChange, editItem, subgroupId, o
   const { t } = useTranslation("module-equipment");
   const createMutation = useCreateCategory();
   const updateMutation = useUpdateCategory();
+  const { data: subgroupsData } = useSubgroupsQuery();
   const isEditing = Boolean(editItem);
   const isPending = createMutation.isPending || updateMutation.isPending;
+  const [selectedSubgroupId, setSelectedSubgroupId] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [isActive, setIsActive] = useState(true);
@@ -31,17 +34,20 @@ export function CategoryFormDialog({ open, onOpenChange, editItem, subgroupId, o
 
   useEffect(() => {
     if (!open) return;
+    setSelectedSubgroupId(editItem ? String(editItem.subgroupId) : subgroupId != null ? String(subgroupId) : "");
     setName(editItem?.name ?? "");
     setDescription(editItem?.description ?? "");
     setIsActive(editItem?.isActive ?? true);
     setError("");
-  }, [open, editItem]);
+  }, [open, editItem, subgroupId]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim()) { setError(t("form.validation.required")); return; }
+    const resolvedSubgroupId = editItem?.subgroupId ?? (selectedSubgroupId ? Number(selectedSubgroupId) : null);
+    if (resolvedSubgroupId == null) { setError(t("form.validation.required")); return; }
     setError("");
-    const payload = { subgroupId: Number(subgroupId), name: name.trim(), description: description.trim() || null, isActive };
+    const payload = { subgroupId: resolvedSubgroupId, name: name.trim(), description: description.trim() || null, isActive };
     const result = isEditing && editItem
       ? await updateMutation.mutateAsync({ id: editItem.id, data: payload })
       : await createMutation.mutateAsync(payload);
@@ -49,6 +55,7 @@ export function CategoryFormDialog({ open, onOpenChange, editItem, subgroupId, o
     onSuccess(result.id);
   }
 
+  const subgroups = subgroupsData?.data ?? [];
   return (
     <FormDialogLayout open={open} onOpenChange={onOpenChange}
       title={isEditing ? t("actions.edit_category") : t("actions.create_category")}
@@ -57,6 +64,15 @@ export function CategoryFormDialog({ open, onOpenChange, editItem, subgroupId, o
         <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>{t("actions.cancel")}</Button>
         <Button type="submit" disabled={isPending}>{isPending ? t("actions.saving") : t("actions.save")}</Button>
       </>}>
+      {!editItem && subgroupId == null && (
+        <div className="space-y-1.5">
+          <Label htmlFor="category-subgroup">{t("form.field.subgroup")} <span className="text-destructive">*</span></Label>
+          <Select value={selectedSubgroupId} onValueChange={setSelectedSubgroupId}>
+            <SelectTrigger id="category-subgroup"><SelectValue placeholder={t("form.placeholder.subgroup")} /></SelectTrigger>
+            <SelectContent>{subgroups.map((subgroup: Subgroup) => <SelectItem key={String(subgroup.id)} value={String(subgroup.id)}>{subgroup.name}</SelectItem>)}</SelectContent>
+          </Select>
+        </div>
+      )}
       <div className="space-y-1.5">
         <Label htmlFor="category-name">{t("form.field.name")} <span className="text-destructive">*</span></Label>
         <Input id="category-name" value={name} onChange={e => setName(e.target.value)} maxLength={190} aria-invalid={Boolean(error)} />

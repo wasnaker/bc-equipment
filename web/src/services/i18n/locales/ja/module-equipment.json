@@ -30,7 +30,8 @@
     "search_label": "名前または説明でグループを検索",
     "error": "データを読み込めませんでした。もう一度お試しください。",
     "description": "説明",
-    "status": "状態"
+    "status": "状態",
+    "code": "コード"
   },
   "detail": {
     "overview": "概要",
@@ -50,11 +51,15 @@
       "name": "名前",
       "group": "グループ",
       "isActive": "有効",
-      "description": "説明"
+      "description": "説明",
+      "subgroup": "サブグループ",
+      "category": "カテゴリ"
     },
     "placeholder": {
       "name": "グループ名を入力",
-      "group": "グループを選択"
+      "group": "グループを選択",
+      "subgroup": "サブグループを選択",
+      "category": "カテゴリを選択"
     },
     "validation": {
       "required": "この項目は必須です。",
@@ -92,6 +97,11 @@
   "menu_equipment": "設備の種類",
   "categories_title": "カテゴリ",
   "categories_subtitle": "サブグループごとにカテゴリを管理",
+  "categories_search": "カテゴリを検索…",
+  "categories_search_label": "名前または説明でカテゴリを検索",
+  "categories_empty": "カテゴリはまだありません。",
   "equipment_page_title": "設備",
-  "equipment_page_subtitle": "各カテゴリに属する設備タイプを管理"
+  "equipment_page_subtitle": "各カテゴリに属する設備タイプを管理",
+  "equipment_search": "設備タイプを検索…",
+  "equipment_search_label": "名前、コード、説明で設備タイプを検索"
 }

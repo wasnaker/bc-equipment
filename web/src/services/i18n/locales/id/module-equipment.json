@@ -30,7 +30,8 @@
     "search_label": "Cari grup berdasarkan nama atau deskripsi",
     "error": "Gagal memuat data. Silakan coba lagi.",
     "description": "Deskripsi",
-    "status": "Status"
+    "status": "Status",
+    "code": "Kode"
   },
   "detail": {
     "overview": "Ringkasan",
@@ -56,11 +57,15 @@
       "name": "Nama",
       "group": "Grup",
       "isActive": "Aktif",
-      "description": "Deskripsi"
+      "description": "Deskripsi",
+      "subgroup": "Subgrup",
+      "category": "Kategori"
     },
     "placeholder": {
       "name": "Masukkan nama grup",
-      "group": "Pilih grup"
+      "group": "Pilih grup",
+      "subgroup": "Pilih subgrup",
+      "category": "Pilih kategori"
     },
     "validation": {
       "required": "Kolom ini wajib diisi.",
@@ -92,6 +97,11 @@
   "menu_equipment": "Tipe Peralatan",
   "categories_title": "Kategori",
   "categories_subtitle": "Kelola kategori berdasarkan subgrup",
+  "categories_search": "Cari kategori…",
+  "categories_search_label": "Cari kategori berdasarkan nama atau deskripsi",
+  "categories_empty": "Belum ada kategori.",
   "equipment_page_title": "Equipment",
-  "equipment_page_subtitle": "Kelola tipe peralatan pada setiap kategori"
+  "equipment_page_subtitle": "Kelola tipe peralatan pada setiap kategori",
+  "equipment_search": "Cari tipe peralatan…",
+  "equipment_search_label": "Cari tipe peralatan berdasarkan nama, kode, atau deskripsi"
 }
