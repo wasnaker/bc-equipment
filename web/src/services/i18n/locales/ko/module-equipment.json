@@ -1,5 +1,6 @@
 {
   "menu": "Equipment",
+  "menu_groups": "그룹",
   "title": "Equipment",
   "subtitle": "장비를 그룹 및 하위 그룹으로 관리합니다",
   "actions": {
