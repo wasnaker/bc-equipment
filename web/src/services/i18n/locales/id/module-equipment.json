@@ -1,7 +1,7 @@
 {
   "menu": "Wilayah",
   "title": "Wilayah",
-  "subtitle": "Data referensi wilayah administrasi Indonesia",
+  "subtitle": "Kelola peralatan berdasarkan grup dan subgrup",
   "actions": {
     "create_group": "Tambah Provinsi",
     "create_subgroup": "Tambah Kabupaten/Kota",
@@ -19,29 +19,27 @@
   },
   "table": {
     "name": "Nama",
-    "isoCode": "Kode",
-    "coordinates": "Koordinat",
-    "latitude": "Lintang",
-    "longitude": "Bujur",
     "loading": "Memuat…",
-    "empty": "Belum ada provinsi.",
+    "empty": "Belum ada grup.",
     "of": "dari",
     "page": "Halaman {{page}} dari {{total}}",
-    "search": "Cari provinsi…",
-    "search_label": "Cari provinsi berdasarkan nama atau kode ISO",
-    "error": "Gagal memuat data. Silakan coba lagi."
+    "search": "Cari grup…",
+    "search_label": "Cari grup berdasarkan nama atau deskripsi",
+    "error": "Gagal memuat data. Silakan coba lagi.",
+    "description": "Deskripsi",
+    "status": "Status"
   },
   "detail": {
     "overview": "Ringkasan",
-    "regencies": "Kabupaten/Kota",
     "empty": "Tidak ada data.",
-    "regencies_empty": "Belum ada kabupaten/kota."
+    "subgroups": "Subgrup",
+    "subgroups_empty": "Belum ada subgrup."
   },
   "dashboard": {
-    "groups": "Total Provinsi",
-    "regencies": "Total Kabupaten/Kota",
+    "groups": "Total Grup",
     "open_module": "Buka module Wilayah",
-    "load_error": "Data gagal dimuat"
+    "load_error": "Data gagal dimuat",
+    "subgroups": "Total Subgrup"
   },
   "confirm": {
     "delete": {
@@ -51,20 +49,21 @@
   "form": {
     "field": {
       "name": "Nama",
-      "isoCode": "Kode (ISO)",
-      "latitude": "Lintang",
-      "longitude": "Bujur",
-      "group": "Provinsi",
-      "type": "Jenis",
-      "isActive": "Aktif"
+      "group": "Grup",
+      "isActive": "Aktif",
+      "description": "Deskripsi"
     },
     "placeholder": {
       "name": "mis. Jawa Barat",
-      "group": "Pilih provinsi"
+      "group": "Pilih grup"
     },
     "validation": {
       "required": "Kolom ini wajib diisi.",
       "number": "Harus berupa angka yang valid."
     }
+  },
+  "status": {
+    "active": "Aktif",
+    "inactive": "Nonaktif"
   }
 }

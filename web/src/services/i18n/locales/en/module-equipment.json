@@ -1,7 +1,7 @@
 {
   "menu": "Equipment",
   "title": "Equipment",
-  "subtitle": "Data referensi wilayah administrasi Indonesia",
+  "subtitle": "Organize equipment into groups and subgroups",
   "actions": {
     "create_group": "Add Group",
     "create_subgroup": "Add Subgroup",
@@ -19,29 +19,27 @@
   },
   "table": {
     "name": "Name",
-    "isoCode": "Code",
-    "coordinates": "Coordinates",
-    "latitude": "Latitude",
-    "longitude": "Longitude",
     "loading": "Loading…",
     "empty": "No groups yet.",
     "of": "of",
     "page": "Page {{page}} of {{total}}",
     "search": "Search groups…",
-    "search_label": "Search groups by name or ISO code",
-    "error": "Unable to load data. Please try again."
+    "search_label": "Search groups by name or description",
+    "error": "Unable to load data. Please try again.",
+    "description": "Description",
+    "status": "Status"
   },
   "detail": {
     "overview": "Overview",
-    "regencies": "Regencies",
     "empty": "No data.",
-    "regencies_empty": "No regencies yet."
+    "subgroups": "Subgroups",
+    "subgroups_empty": "No subgroups yet."
   },
   "dashboard": {
     "groups": "Total Groups",
-    "regencies": "Total Regencies / Cities",
     "open_module": "Open Equipment module",
-    "load_error": "Unable to load data"
+    "load_error": "Unable to load data",
+    "subgroups": "Total Subgroups"
   },
   "confirm": {
     "delete": {
@@ -51,12 +49,9 @@
   "form": {
     "field": {
       "name": "Name",
-      "isoCode": "Code (ISO)",
-      "latitude": "Latitude",
-      "longitude": "Longitude",
       "group": "Group",
-      "type": "Type",
-      "isActive": "Active"
+      "isActive": "Active",
+      "description": "Description"
     },
     "placeholder": {
       "name": "e.g. West Java",
@@ -66,5 +61,9 @@
       "required": "This field is required.",
       "number": "Must be a valid number."
     }
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
   }
 }

@@ -1,7 +1,7 @@
 {
   "menu": "地域",
   "title": "地域",
-  "subtitle": "インドネシアの行政区域リファレンスデータ",
+  "subtitle": "機器をグループとサブグループで管理",
   "actions": {
     "create_group": "州を追加",
     "create_subgroup": "郡/市を追加",
@@ -19,23 +19,21 @@
   },
   "table": {
     "name": "名前",
-    "isoCode": "コード",
-    "coordinates": "座標",
-    "latitude": "緯度",
-    "longitude": "経度",
     "loading": "読み込み中…",
-    "empty": "州がまだありません。",
+    "empty": "グループはまだありません。",
     "of": "/",
     "page": "{{total}} ページ中 {{page}} ページ目",
-    "search": "都道府県を検索…",
-    "search_label": "名称または ISO コードで検索",
-    "error": "データを読み込めませんでした。もう一度お試しください。"
+    "search": "グループを検索…",
+    "search_label": "名前または説明でグループを検索",
+    "error": "データを読み込めませんでした。もう一度お試しください。",
+    "description": "説明",
+    "status": "状態"
   },
   "detail": {
     "overview": "概要",
-    "regencies": "郡/市",
     "empty": "データがありません。",
-    "regencies_empty": "郡/市がまだありません。"
+    "subgroups": "サブグループ",
+    "subgroups_empty": "サブグループはまだありません。"
   },
   "confirm": {
     "delete": {
@@ -45,20 +43,27 @@
   "form": {
     "field": {
       "name": "名前",
-      "isoCode": "コード (ISO)",
-      "latitude": "緯度",
-      "longitude": "経度",
-      "group": "州",
-      "type": "種別",
-      "isActive": "有効"
+      "group": "グループ",
+      "isActive": "有効",
+      "description": "説明"
     },
     "placeholder": {
       "name": "例: 西ジャワ",
-      "group": "州を選択"
+      "group": "グループを選択"
     },
     "validation": {
       "required": "この項目は必須です。",
       "number": "有効な数値を入力してください。"
     }
+  },
+  "dashboard": {
+    "groups": "グループ数",
+    "subgroups": "サブグループ数",
+    "open_module": "Open Equipment module",
+    "load_error": "Unable to load data"
+  },
+  "status": {
+    "active": "有効",
+    "inactive": "無効"
   }
 }
