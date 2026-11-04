@@ -36,7 +36,7 @@ export function CategoryEquipmentManager({ category }: { category: Category }) {
       url.searchParams.set("page", "1"); url.searchParams.set("limit", "50");
       url.searchParams.set("category_id", String(category.id));
       const result = await fetch(url, { method: "GET" }).then(wrapperFetchJsonResponse<ListResult>);
-      if (result.status >= 200 && result.status < 300) setItems(result.data?.data ?? []);
+      if (result.status >= 200 && result.status < 300) setItems((result as any).data?.data ?? []);
       else setError(t("equipment.load_error"));
     } catch { setError(t("equipment.load_error")); }
     finally { setLoading(false); }
