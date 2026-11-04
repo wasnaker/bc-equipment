@@ -26,6 +26,7 @@ export function SubgroupCategoriesTab({ item }: { item: Subgroup }) {
   const deleteMutation = useDeleteCategory();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editItem, setEditItem] = useState<Category | null>(null);
+  const [expandedCategoryId, setExpandedCategoryId] = useState<string | null>(null);
 
   function createCategory() { setEditItem(null); setDialogOpen(true); }
   function editCategory(category: Category) { setEditItem(category); setDialogOpen(true); }
@@ -52,7 +53,8 @@ export function SubgroupCategoriesTab({ item }: { item: Subgroup }) {
               <p className="text-sm font-medium">{category.name}</p>
               {category.description && <p className="text-xs text-muted-foreground">{category.description}</p>}
               <p className="text-xs text-muted-foreground">{category.isActive ? t("status.active") : t("status.inactive")}</p>
-              <CategoryEquipmentManager category={category} />
+              <Button size="sm" variant="ghost" className="mt-1 h-7 px-2 text-xs" onClick={() => setExpandedCategoryId(current => current === String(category.id) ? null : String(category.id))}>{expandedCategoryId === String(category.id) ? t("equipment.hide") : t("equipment.manage")}</Button>
+              {expandedCategoryId === String(category.id) && <CategoryEquipmentManager category={category} />}
             </div>
             <div className="flex shrink-0 items-center gap-1">
               <Button size="sm" variant="outline" onClick={() => editCategory(category)}>{t("actions.edit")}</Button>
