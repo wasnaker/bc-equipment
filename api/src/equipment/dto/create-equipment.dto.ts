@@ -5,7 +5,11 @@ import { IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString, MaxLength, Min } fr
 export class CreateEquipmentDto {
   @ApiProperty({ example: 1 })
   @Type(() => Number) @IsInt() @Min(1)
-  categoryId: number;
+  subgroupId: number;
+
+  @ApiPropertyOptional({ example: 1, nullable: true })
+  @IsOptional() @Type(() => Number) @IsInt() @Min(1)
+  categoryId?: number | null;
 
   @ApiProperty({ example: 'Excavator', maxLength: 190 })
   @IsString() @IsNotEmpty() @MaxLength(190)
