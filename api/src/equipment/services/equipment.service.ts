@@ -8,6 +8,11 @@ import { FilterSubgroupDto, SortSubgroupDto } from '../dto/query-subgroup.dto';
 import { Group } from '../domain/group';
 import { Subgroup } from '../domain/subgroup';
 import { Category } from '../domain/category';
+import { Equipment } from '../domain/equipment';
+import { CreateEquipmentDto } from '../dto/create-equipment.dto';
+import { UpdateEquipmentDto } from '../dto/update-equipment.dto';
+import { FilterEquipmentDto, SortEquipmentDto } from '../dto/query-equipment.dto';
+import { EquipmentRepository } from '../infrastructure/persistence/equipment.repository';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { FilterCategoryDto, SortCategoryDto } from '../dto/query-category.dto';
@@ -23,6 +28,7 @@ export class EquipmentService {
     private readonly groupRepository: GroupRepository,
     private readonly subgroupRepository: SubgroupRepository,
     private readonly categoryRepository: CategoryRepository,
+    private readonly equipmentRepository: EquipmentRepository,
   ) {}
 
   async createGroup(dto: CreateGroupDto): Promise<Group> {
@@ -154,5 +160,40 @@ export class EquipmentService {
   countCategoriesBySubgroupId(subgroupId: Category['subgroupId']): Promise<number> {
     return this.categoryRepository.countBySubgroupId(subgroupId);
   }
+
+
+  async createEquipment(dto: CreateEquipmentDto): Promise<Equipment> {
+    if (!(await this.categoryRepository.findById(dto.categoryId))) throw new UnprocessableEntityException({ status: 422, errors: { category: 'categoryNotExists' } });
+    const name = dto.name.trim();
+    if (await this.equipmentRepository.findByCategoryIdAndName(dto.categoryId, name)) throw new UnprocessableEntityException({ status: 422, errors: { name: 'equipmentNameAlreadyExists' } });
+    return this.equipmentRepository.create({ categoryId: dto.categoryId, name, description: dto.description?.trim() || null, isActive: dto.isActive ?? true });
+  }
+
+  findManyEquipmentWithPagination(args: { filterOptions?: FilterEquipmentDto | null; sortOptions?: SortEquipmentDto[] | null; paginationOptions: IPaginationOptions }): Promise<Equipment[]> {
+    return this.equipmentRepository.findManyWithPagination(args);
+  }
+
+  findEquipmentById(id: Equipment['id']): Promise<NullableType<Equipment>> { return this.equipmentRepository.findById(id); }
+
+  async updateEquipment(id: Equipment['id'], dto: UpdateEquipmentDto): Promise<Equipment> {
+    const current = await this.equipmentRepository.findById(id);
+    if (!current) throw new UnprocessableEntityException({ status: 422, errors: { equipment: 'equipmentNotExists' } });
+    const categoryId = dto.categoryId ?? Number(current.categoryId);
+    if (dto.categoryId !== undefined && !(await this.categoryRepository.findById(dto.categoryId))) throw new UnprocessableEntityException({ status: 422, errors: { category: 'categoryNotExists' } });
+    const name = dto.name?.trim() ?? current.name;
+    const duplicate = await this.equipmentRepository.findByCategoryIdAndName(categoryId, name);
+    if (duplicate && String(duplicate.id) !== String(id)) throw new UnprocessableEntityException({ status: 422, errors: { name: 'equipmentNameAlreadyExists' } });
+    const updated = await this.equipmentRepository.update(id, { ...dto, categoryId, name });
+    if (!updated) throw new UnprocessableEntityException({ status: 422, errors: { equipment: 'equipmentNotExists' } });
+    return updated;
+  }
+
+  async removeEquipment(id: Equipment['id']): Promise<void> {
+    if (!(await this.equipmentRepository.findById(id))) throw new UnprocessableEntityException({ status: 422, errors: { equipment: 'equipmentNotExists' } });
+    await this.equipmentRepository.remove(id);
+  }
+
+  countEquipment(filters?: FilterEquipmentDto | null): Promise<number> { return this.equipmentRepository.countWithFilter(filters); }
+  countEquipmentByCategoryId(categoryId: Equipment['categoryId']): Promise<number> { return this.equipmentRepository.countByCategoryId(categoryId); }
 
 }
