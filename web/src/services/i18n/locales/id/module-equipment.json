@@ -75,5 +75,16 @@
   "subgroups_subtitle": "Kelola subgrup dan kategori di dalamnya",
   "subgroups_empty": "Belum ada subgrup.",
   "subgroups_search": "Cari subgrup…",
-  "subgroups_search_label": "Cari subgrup berdasarkan nama atau deskripsi"
+  "subgroups_search_label": "Cari subgrup berdasarkan nama atau deskripsi",
+  "equipment": {
+    "title": "Tipe Peralatan",
+    "manage": "Kelola tipe",
+    "hide": "Tutup tipe",
+    "empty": "Belum ada tipe peralatan.",
+    "create": "Tambah tipe peralatan",
+    "edit": "Ubah tipe peralatan",
+    "load_error": "Gagal memuat tipe peralatan.",
+    "save_error": "Gagal menyimpan tipe peralatan.",
+    "delete_error": "Gagal menghapus tipe peralatan."
+  }
 }
