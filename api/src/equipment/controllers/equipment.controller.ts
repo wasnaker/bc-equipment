@@ -15,6 +15,10 @@ import { QuerySubgroupDto, FilterSubgroupDto } from '../dto/query-subgroup.dto';
 import { Group } from '../domain/group';
 import { Subgroup } from '../domain/subgroup';
 import { Category } from '../domain/category';
+import { Equipment } from '../domain/equipment';
+import { CreateEquipmentDto } from '../dto/create-equipment.dto';
+import { UpdateEquipmentDto } from '../dto/update-equipment.dto';
+import { QueryEquipmentDto, FilterEquipmentDto } from '../dto/query-equipment.dto';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { QueryCategoryDto, FilterCategoryDto } from '../dto/query-category.dto';
@@ -184,5 +188,44 @@ export class EquipmentController {
   removeCategory(@Param('id', ParseIntPipe) id: Category['id']): Promise<void> {
     return this.service.removeCategory(id);
   }
+
+
+  @Post('items')
+  @UseGuards(EquipmentAccessGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({ type: Equipment })
+  createEquipment(@Body() dto: CreateEquipmentDto): Promise<Equipment> { return this.service.createEquipment(dto); }
+
+  @Get('items')
+  @UseGuards(EquipmentAccessGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: InfinityPaginationResponse(Equipment) })
+  async findEquipment(@Query() query: QueryEquipmentDto): Promise<InfinityPaginationResponseDto<Equipment>> {
+    const page = query.page ?? 1;
+    const limit = Math.min(query.limit ?? 10, 50);
+    const filters: FilterEquipmentDto = { ...(query.filters ?? {}) };
+    if (query.categoryId !== undefined) filters.categoryId = query.categoryId;
+    const data = await this.service.findManyEquipmentWithPagination({ filterOptions: filters, sortOptions: query.sort ?? null, paginationOptions: { page, limit } });
+    const total = await this.service.countEquipment(filters);
+    return infinityPagination(data, { page, limit }, total);
+  }
+
+  @Get('items/:id')
+  @UseGuards(EquipmentAccessGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: Equipment })
+  findEquipmentById(@Param('id', ParseIntPipe) id: Equipment['id']): Promise<NullableType<Equipment>> { return this.service.findEquipmentById(id); }
+
+  @Patch('items/:id')
+  @UseGuards(EquipmentAccessGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: Equipment })
+  updateEquipment(@Param('id', ParseIntPipe) id: Equipment['id'], @Body() dto: UpdateEquipmentDto): Promise<Equipment> { return this.service.updateEquipment(id, dto); }
+
+  @Delete('items/:id')
+  @UseGuards(EquipmentAccessGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  removeEquipment(@Param('id', ParseIntPipe) id: Equipment['id']): Promise<void> { return this.service.removeEquipment(id); }
+
 
 }
