@@ -3,6 +3,7 @@ name: Validate Equipment package
 on:
   push:
     branches:
+      - main
       - chore/equipment-package-identity
       - feat/equipment-groups-subgroups
       - feat/equipment-categories
