@@ -1,0 +1,55 @@
+import { CreateGroupDto } from '../dto/create-group.dto';
+import { UpdateGroupDto } from '../dto/update-group.dto';
+import { FilterGroupDto, SortGroupDto } from '../dto/query-group.dto';
+import { CreateSubgroupDto } from '../dto/create-subgroup.dto';
+import { UpdateSubgroupDto } from '../dto/update-subgroup.dto';
+import { FilterSubgroupDto, SortSubgroupDto } from '../dto/query-subgroup.dto';
+import { Group } from '../domain/group';
+import { Subgroup } from '../domain/subgroup';
+import { Category } from '../domain/category';
+import { CreateCategoryDto } from '../dto/create-category.dto';
+import { UpdateCategoryDto } from '../dto/update-category.dto';
+import { FilterCategoryDto, SortCategoryDto } from '../dto/query-category.dto';
+import { GroupRepository } from '../infrastructure/persistence/group.repository';
+import { SubgroupRepository } from '../infrastructure/persistence/subgroup.repository';
+import { CategoryRepository } from '../infrastructure/persistence/category.repository';
+import { NullableType } from '../../utils/types/nullable.type';
+import { IPaginationOptions } from '../../utils/types/pagination-options';
+export declare class EquipmentService {
+    private readonly groupRepository;
+    private readonly subgroupRepository;
+    private readonly categoryRepository;
+    constructor(groupRepository: GroupRepository, subgroupRepository: SubgroupRepository, categoryRepository: CategoryRepository);
+    createGroup(dto: CreateGroupDto): Promise<Group>;
+    findManyGroupsWithPagination(args: {
+        filterOptions?: FilterGroupDto | null;
+        sortOptions?: SortGroupDto[] | null;
+        paginationOptions: IPaginationOptions;
+    }): Promise<Group[]>;
+    findGroupById(id: Group['id']): Promise<NullableType<Group>>;
+    updateGroup(id: Group['id'], dto: UpdateGroupDto): Promise<Group>;
+    removeGroup(id: Group['id']): Promise<void>;
+    countGroups(filters?: FilterGroupDto | null): Promise<number>;
+    createSubgroup(dto: CreateSubgroupDto): Promise<Subgroup>;
+    findManySubgroupsWithPagination(args: {
+        filterOptions?: FilterSubgroupDto | null;
+        sortOptions?: SortSubgroupDto[] | null;
+        paginationOptions: IPaginationOptions;
+    }): Promise<Subgroup[]>;
+    findSubgroupById(id: Subgroup['id']): Promise<NullableType<Subgroup>>;
+    updateSubgroup(id: Subgroup['id'], dto: UpdateSubgroupDto): Promise<Subgroup>;
+    removeSubgroup(id: Subgroup['id']): Promise<void>;
+    countSubgroups(filters?: FilterSubgroupDto | null): Promise<number>;
+    countSubgroupsByGroupId(groupId: Subgroup['groupId']): Promise<number>;
+    createCategory(dto: CreateCategoryDto): Promise<Category>;
+    findManyCategoriesWithPagination(args: {
+        filterOptions?: FilterCategoryDto | null;
+        sortOptions?: SortCategoryDto[] | null;
+        paginationOptions: IPaginationOptions;
+    }): Promise<Category[]>;
+    findCategoryById(id: Category['id']): Promise<NullableType<Category>>;
+    updateCategory(id: Category['id'], dto: UpdateCategoryDto): Promise<Category>;
+    removeCategory(id: Category['id']): Promise<void>;
+    countCategories(filters?: FilterCategoryDto | null): Promise<number>;
+    countCategoriesBySubgroupId(subgroupId: Category['subgroupId']): Promise<number>;
+}

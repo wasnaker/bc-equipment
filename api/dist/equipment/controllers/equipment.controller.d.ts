@@ -1,0 +1,34 @@
+import { CreateGroupDto } from '../dto/create-group.dto';
+import { UpdateGroupDto } from '../dto/update-group.dto';
+import { QueryGroupDto } from '../dto/query-group.dto';
+import { CreateSubgroupDto } from '../dto/create-subgroup.dto';
+import { UpdateSubgroupDto } from '../dto/update-subgroup.dto';
+import { QuerySubgroupDto } from '../dto/query-subgroup.dto';
+import { Group } from '../domain/group';
+import { Subgroup } from '../domain/subgroup';
+import { Category } from '../domain/category';
+import { CreateCategoryDto } from '../dto/create-category.dto';
+import { UpdateCategoryDto } from '../dto/update-category.dto';
+import { QueryCategoryDto } from '../dto/query-category.dto';
+import { EquipmentService } from '../services/equipment.service';
+import { NullableType } from '../../utils/types/nullable.type';
+import { InfinityPaginationResponseDto } from '../../utils/dto/infinity-pagination-response.dto';
+export declare class EquipmentController {
+    private readonly service;
+    constructor(service: EquipmentService);
+    createGroup(dto: CreateGroupDto): Promise<Group>;
+    findGroups(query: QueryGroupDto): Promise<InfinityPaginationResponseDto<Group>>;
+    findGroup(id: Group['id']): Promise<NullableType<Group>>;
+    updateGroup(id: Group['id'], dto: UpdateGroupDto): Promise<Group>;
+    removeGroup(id: Group['id']): Promise<void>;
+    createSubgroup(dto: CreateSubgroupDto): Promise<Subgroup>;
+    findSubgroups(query: QuerySubgroupDto): Promise<InfinityPaginationResponseDto<Subgroup>>;
+    findSubgroup(id: Subgroup['id']): Promise<NullableType<Subgroup>>;
+    updateSubgroup(id: Subgroup['id'], dto: UpdateSubgroupDto): Promise<Subgroup>;
+    removeSubgroup(id: Subgroup['id']): Promise<void>;
+    createCategory(dto: CreateCategoryDto): Promise<Category>;
+    findCategories(query: QueryCategoryDto): Promise<InfinityPaginationResponseDto<Category>>;
+    findCategory(id: Category['id']): Promise<NullableType<Category>>;
+    updateCategory(id: Category['id'], dto: UpdateCategoryDto): Promise<Category>;
+    removeCategory(id: Category['id']): Promise<void>;
+}
