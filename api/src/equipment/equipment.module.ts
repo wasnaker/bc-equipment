@@ -7,7 +7,7 @@ import { EquipmentController } from './controllers/equipment.controller';
 import { GroupRepository } from './infrastructure/persistence/group.repository';
 import { SubgroupRepository } from './infrastructure/persistence/subgroup.repository';
 import { GroupsRelationalRepository } from './infrastructure/persistence/relational/repositories/group.repository';
-import { RegenciesRelationalRepository } from './infrastructure/persistence/relational/repositories/subgroup.repository';
+import { SubgroupsRelationalRepository } from './infrastructure/persistence/relational/repositories/subgroup.repository';
 import { EquipmentAccessGuard } from './security/equipment-access.guard';
 import { EQUIPMENT_MODULE_OPTIONS, EquipmentModuleAsyncOptions } from './equipment.options';
 export { EQUIPMENT_MODULE_OPTIONS } from './equipment.options';
@@ -19,7 +19,7 @@ export type { EquipmentModuleOptions, EquipmentModuleAsyncOptions } from './equi
     EquipmentService,
     EquipmentAccessGuard,
     { provide: GroupRepository, useClass: GroupsRelationalRepository },
-    { provide: SubgroupRepository, useClass: RegenciesRelationalRepository },
+    { provide: SubgroupRepository, useClass: SubgroupsRelationalRepository },
   ],
   controllers: [EquipmentController],
   exports: [EquipmentService],
@@ -31,11 +31,6 @@ export class EquipmentModule {
       useFactory: options.useFactory,
       inject: options.inject ?? [],
     };
-
-    return {
-      module: EquipmentModule,
-      imports: options.imports ?? [],
-      providers: [optionsProvider],
-    };
+    return { module: EquipmentModule, imports: options.imports ?? [], providers: [optionsProvider] };
   }
 }

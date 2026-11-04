@@ -1,35 +1,25 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import {
-  IsEnum,
-  IsIn,
-  Max,
-  IsInt,
-  IsOptional,
-  IsString,
-  Min,
-} from 'class-validator';
-import { Subgroup, SubgroupTypeEnum } from '../domain/subgroup';
+import { IsIn, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import { Subgroup } from '../domain/subgroup';
 
 export class FilterSubgroupDto {
   @ApiPropertyOptional({ name: 'group_id', example: 1 })
   @IsOptional()
   @Transform(({ value, obj }) => {
-    const rawValue = value ?? obj?.group_id;
-    if (rawValue === undefined || rawValue === null || rawValue === '') {
-      return undefined;
-    }
-    const parsed = Number(rawValue);
-    return Number.isFinite(parsed) ? parsed : rawValue;
+    const raw = value ?? obj?.group_id;
+    if (raw === undefined || raw === null || raw === '') return undefined;
+    const parsed = Number(raw);
+    return Number.isFinite(parsed) ? parsed : raw;
   })
   @IsInt()
   @Min(1)
   groupId?: Subgroup['groupId'];
 
-  @ApiPropertyOptional({ enum: SubgroupTypeEnum })
+  @ApiPropertyOptional({ example: 'heavy' })
   @IsOptional()
-  @IsEnum(SubgroupTypeEnum)
-  type?: SubgroupTypeEnum;
+  @IsString()
+  search?: string;
 }
 
 export class SortSubgroupDto {
@@ -63,12 +53,10 @@ export class QuerySubgroupDto {
   @ApiPropertyOptional({ name: 'group_id', example: 1 })
   @IsOptional()
   @Transform(({ value, obj }) => {
-    const rawValue = value ?? obj?.group_id;
-    if (rawValue === undefined || rawValue === null || rawValue === '') {
-      return undefined;
-    }
-    const parsed = Number(rawValue);
-    return Number.isFinite(parsed) ? parsed : rawValue;
+    const raw = value ?? obj?.group_id;
+    if (raw === undefined || raw === null || raw === '') return undefined;
+    const parsed = Number(raw);
+    return Number.isFinite(parsed) ? parsed : raw;
   })
   @IsInt()
   @Min(1)
@@ -76,25 +64,13 @@ export class QuerySubgroupDto {
 
   @ApiPropertyOptional({ type: String })
   @IsOptional()
-  @Transform(({ value }) => {
-    try {
-      return value ? JSON.parse(value) : undefined;
-    } catch {
-      return undefined;
-    }
-  })
+  @Transform(({ value }) => { try { return value ? JSON.parse(value) : undefined; } catch { return undefined; } })
   @Type(() => FilterSubgroupDto)
   filters?: FilterSubgroupDto | null;
 
   @ApiPropertyOptional({ type: String })
   @IsOptional()
-  @Transform(({ value }) => {
-    try {
-      return value ? JSON.parse(value) : undefined;
-    } catch {
-      return undefined;
-    }
-  })
+  @Transform(({ value }) => { try { return value ? JSON.parse(value) : undefined; } catch { return undefined; } })
   @Type(() => SortSubgroupDto)
   sort?: SortSubgroupDto[] | null;
 }

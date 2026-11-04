@@ -1,8 +1,4 @@
-import {
-  HttpStatus,
-  Injectable,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateGroupDto } from '../dto/create-group.dto';
 import { UpdateGroupDto } from '../dto/update-group.dto';
 import { FilterGroupDto, SortGroupDto } from '../dto/query-group.dto';
@@ -23,298 +19,88 @@ export class EquipmentService {
     private readonly subgroupRepository: SubgroupRepository,
   ) {}
 
-  // ─── Groups ────────────────────────────────────────────────────────────
-
-  async createGroup(
-    createGroupDto: CreateGroupDto,
-  ): Promise<Group> {
-    const existing = await this.groupRepository.findByName(
-      createGroupDto.name,
-    );
-    if (existing) {
-      throw new UnprocessableEntityException({
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: {
-          name: 'groupNameAlreadyExists',
-        },
-      });
+  async createGroup(dto: CreateGroupDto): Promise<Group> {
+    if (await this.groupRepository.findByName(dto.name)) {
+      throw new UnprocessableEntityException({ status: HttpStatus.UNPROCESSABLE_ENTITY, errors: { name: 'groupNameAlreadyExists' } });
     }
-
-    if (createGroupDto.isoCode) {
-      const existingIsoCode = await this.groupRepository.findByIsoCode(
-        createGroupDto.isoCode,
-      );
-      if (existingIsoCode) {
-        throw new UnprocessableEntityException({
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: { isoCode: 'groupIsoCodeAlreadyExists' },
-        });
-      }
-    }
-
     return this.groupRepository.create({
-      name: createGroupDto.name,
-      isoCode: createGroupDto.isoCode ?? null,
-      latitude: createGroupDto.latitude ?? null,
-      longitude: createGroupDto.longitude ?? null,
+      name: dto.name.trim(),
+      description: dto.description?.trim() || null,
+      isActive: dto.isActive ?? true,
     });
   }
 
-  async findManyGroupsWithPagination({
-    filterOptions,
-    sortOptions,
-    paginationOptions,
-  }: {
-    filterOptions?: FilterGroupDto | null;
-    sortOptions?: SortGroupDto[] | null;
-    paginationOptions: IPaginationOptions;
-  }): Promise<Group[]> {
-    return this.groupRepository.findManyWithPagination({
-      filterOptions,
-      sortOptions,
-      paginationOptions,
-    });
+  async findManyGroupsWithPagination(args: { filterOptions?: FilterGroupDto | null; sortOptions?: SortGroupDto[] | null; paginationOptions: IPaginationOptions }): Promise<Group[]> {
+    return this.groupRepository.findManyWithPagination(args);
   }
 
-  async findGroupById(id: Group['id']): Promise<NullableType<Group>> {
+  findGroupById(id: Group['id']): Promise<NullableType<Group>> {
     return this.groupRepository.findById(id);
   }
 
-  async findGroupByIsoCode(
-    isoCode: Group['isoCode'],
-  ): Promise<NullableType<Group>> {
-    return this.groupRepository.findByIsoCode(isoCode);
-  }
-
-  async updateGroup(
-    id: Group['id'],
-    updateGroupDto: UpdateGroupDto,
-  ): Promise<Group> {
-    const group = await this.groupRepository.findById(id);
-    if (!group) {
-      throw new UnprocessableEntityException({
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: {
-          group: 'groupNotExists',
-        },
-      });
+  async updateGroup(id: Group['id'], dto: UpdateGroupDto): Promise<Group> {
+    const current = await this.groupRepository.findById(id);
+    if (!current) throw new UnprocessableEntityException({ status: 422, errors: { group: 'groupNotExists' } });
+    if (dto.name?.trim()) {
+      const duplicate = await this.groupRepository.findByName(dto.name.trim());
+      if (duplicate && Number(duplicate.id) !== Number(id)) throw new UnprocessableEntityException({ status: 422, errors: { name: 'groupNameAlreadyExists' } });
     }
-
-    if (updateGroupDto.name) {
-      const existing = await this.groupRepository.findByName(
-        updateGroupDto.name,
-      );
-      if (existing && existing.id !== id) {
-        throw new UnprocessableEntityException({
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: {
-            name: 'groupNameAlreadyExists',
-          },
-        });
-      }
-    }
-
-    if (updateGroupDto.isoCode) {
-      const existingIsoCode = await this.groupRepository.findByIsoCode(
-        updateGroupDto.isoCode,
-      );
-      if (existingIsoCode && existingIsoCode.id !== id) {
-        throw new UnprocessableEntityException({
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: { isoCode: 'groupIsoCodeAlreadyExists' },
-        });
-      }
-    }
-
-    const updated = await this.groupRepository.update(id, {
-      ...updateGroupDto,
-    });
-    if (!updated) {
-      throw new UnprocessableEntityException({
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: {
-          group: 'groupNotExists',
-        },
-      });
-    }
+    const updated = await this.groupRepository.update(id, { ...dto, name: dto.name?.trim() });
+    if (!updated) throw new UnprocessableEntityException({ status: 422, errors: { group: 'groupNotExists' } });
     return updated;
   }
 
   async removeGroup(id: Group['id']): Promise<void> {
-    const group = await this.groupRepository.findById(id);
-    if (!group) {
-      throw new UnprocessableEntityException({
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: {
-          group: 'groupNotExists',
-        },
-      });
-    }
-
-    // The PostgreSQL foreign key owns the cascade. Delete the parent once so
-    // the database guarantees atomic referential integrity.
+    if (!(await this.groupRepository.findById(id))) throw new UnprocessableEntityException({ status: 422, errors: { group: 'groupNotExists' } });
     await this.groupRepository.remove(id);
   }
 
-  async countAllGroups(): Promise<number> {
-    return this.groupRepository.countAll();
+  countGroups(filters?: FilterGroupDto | null): Promise<number> {
+    return this.groupRepository.countWithFilter(filters);
   }
 
-  async countGroups(filterOptions?: FilterGroupDto | null): Promise<number> {
-    if (this.groupRepository.countWithFilter) {
-      return this.groupRepository.countWithFilter(filterOptions);
-    }
-    return this.groupRepository.countAll();
-  }
-
-  // ─── Regencies ─────────────────────────────────────────────────────────────
-
-  async createSubgroup(createSubgroupDto: CreateSubgroupDto): Promise<Subgroup> {
-    const group = await this.groupRepository.findById(
-      createSubgroupDto.groupId,
-    );
-    if (!group) {
-      throw new UnprocessableEntityException({
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: {
-          group: 'groupNotExists',
-        },
-      });
-    }
-
-    const existing = await this.subgroupRepository.findByGroupIdAndName(
-      createSubgroupDto.groupId,
-      createSubgroupDto.name,
-    );
-    if (existing) {
-      throw new UnprocessableEntityException({
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: { name: 'subgroupNameAlreadyExists' },
-      });
-    }
-
+  async createSubgroup(dto: CreateSubgroupDto): Promise<Subgroup> {
+    if (!(await this.groupRepository.findById(dto.groupId))) throw new UnprocessableEntityException({ status: 422, errors: { group: 'groupNotExists' } });
+    if (await this.subgroupRepository.findByGroupIdAndName(dto.groupId, dto.name.trim())) throw new UnprocessableEntityException({ status: 422, errors: { name: 'subgroupNameAlreadyExists' } });
     return this.subgroupRepository.create({
-      groupId: createSubgroupDto.groupId,
-      name: createSubgroupDto.name,
-      type: createSubgroupDto.type,
-      isActive: createSubgroupDto.isActive ?? true,
+      groupId: dto.groupId,
+      name: dto.name.trim(),
+      description: dto.description?.trim() || null,
+      isActive: dto.isActive ?? true,
     });
   }
 
-  async findManyRegenciesWithPagination({
-    filterOptions,
-    sortOptions,
-    paginationOptions,
-  }: {
-    filterOptions?: FilterSubgroupDto | null;
-    sortOptions?: SortSubgroupDto[] | null;
-    paginationOptions: IPaginationOptions;
-  }): Promise<Subgroup[]> {
-    return this.subgroupRepository.findManyWithPagination({
-      filterOptions,
-      sortOptions,
-      paginationOptions,
-    });
+  findManySubgroupsWithPagination(args: { filterOptions?: FilterSubgroupDto | null; sortOptions?: SortSubgroupDto[] | null; paginationOptions: IPaginationOptions }): Promise<Subgroup[]> {
+    return this.subgroupRepository.findManyWithPagination(args);
   }
 
-  async findRegenciesByGroupId(
-    groupId: Subgroup['groupId'],
-  ): Promise<Subgroup[]> {
-    return this.subgroupRepository.findByGroupId(groupId);
-  }
-
-  async findSubgroupById(id: Subgroup['id']): Promise<NullableType<Subgroup>> {
+  findSubgroupById(id: Subgroup['id']): Promise<NullableType<Subgroup>> {
     return this.subgroupRepository.findById(id);
   }
 
-  async updateSubgroup(
-    id: Subgroup['id'],
-    updateSubgroupDto: UpdateSubgroupDto,
-  ): Promise<Subgroup> {
-    const subgroup = await this.subgroupRepository.findById(id);
-    if (!subgroup) {
-      throw new UnprocessableEntityException({
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: {
-          subgroup: 'subgroupNotExists',
-        },
-      });
-    }
-
-    if (updateSubgroupDto.groupId !== undefined) {
-      const group = await this.groupRepository.findById(
-        updateSubgroupDto.groupId,
-      );
-      if (!group) {
-        throw new UnprocessableEntityException({
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: {
-            group: 'groupNotExists',
-          },
-        });
-      }
-    }
-
-    const targetGroupId = updateSubgroupDto.groupId ?? subgroup.groupId;
-    const targetName = updateSubgroupDto.name ?? subgroup.name;
-    const existing = await this.subgroupRepository.findByGroupIdAndName(
-      targetGroupId,
-      targetName,
-    );
-    if (existing && existing.id !== id) {
-      throw new UnprocessableEntityException({
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: { name: 'subgroupNameAlreadyExists' },
-      });
-    }
-
-    const updated = await this.subgroupRepository.update(id, {
-      ...updateSubgroupDto,
-    });
-    if (!updated) {
-      throw new UnprocessableEntityException({
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: {
-          subgroup: 'subgroupNotExists',
-        },
-      });
-    }
+  async updateSubgroup(id: Subgroup['id'], dto: UpdateSubgroupDto): Promise<Subgroup> {
+    const current = await this.subgroupRepository.findById(id);
+    if (!current) throw new UnprocessableEntityException({ status: 422, errors: { subgroup: 'subgroupNotExists' } });
+    const targetGroupId = dto.groupId ?? current.groupId;
+    if (dto.groupId !== undefined && !(await this.groupRepository.findById(dto.groupId))) throw new UnprocessableEntityException({ status: 422, errors: { group: 'groupNotExists' } });
+    const targetName = dto.name?.trim() ?? current.name;
+    const duplicate = await this.subgroupRepository.findByGroupIdAndName(targetGroupId, targetName);
+    if (duplicate && Number(duplicate.id) !== Number(id)) throw new UnprocessableEntityException({ status: 422, errors: { name: 'subgroupNameAlreadyExists' } });
+    const updated = await this.subgroupRepository.update(id, { ...dto, name: dto.name?.trim() });
+    if (!updated) throw new UnprocessableEntityException({ status: 422, errors: { subgroup: 'subgroupNotExists' } });
     return updated;
   }
 
   async removeSubgroup(id: Subgroup['id']): Promise<void> {
-    const subgroup = await this.subgroupRepository.findById(id);
-    if (!subgroup) {
-      throw new UnprocessableEntityException({
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: {
-          subgroup: 'subgroupNotExists',
-        },
-      });
-    }
-
+    if (!(await this.subgroupRepository.findById(id))) throw new UnprocessableEntityException({ status: 422, errors: { subgroup: 'subgroupNotExists' } });
     await this.subgroupRepository.remove(id);
   }
 
-  async countAllRegencies(): Promise<number> {
-    return this.subgroupRepository.countAll();
+  countSubgroups(filters?: FilterSubgroupDto | null): Promise<number> {
+    return this.subgroupRepository.countWithFilter(filters);
   }
 
-  async countRegencies(
-    filterOptions?: FilterSubgroupDto | null,
-  ): Promise<number> {
-    if (this.subgroupRepository.countWithFilter) {
-      return this.subgroupRepository.countWithFilter(filterOptions);
-    }
-    if (filterOptions?.groupId !== undefined) {
-      return this.subgroupRepository.countByGroupId(filterOptions.groupId);
-    }
-    return this.subgroupRepository.countAll();
-  }
-
-  async countRegenciesByGroupId(
-    groupId: Subgroup['groupId'],
-  ): Promise<number> {
+  countSubgroupsByGroupId(groupId: Subgroup['groupId']): Promise<number> {
     return this.subgroupRepository.countByGroupId(groupId);
   }
 }
