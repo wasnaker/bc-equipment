@@ -87,5 +87,7 @@
     "load_error": "无法加载设备类型。",
     "save_error": "无法保存设备类型。",
     "delete_error": "无法删除设备类型。"
-  }
+  },
+  "menu_categories": "类别",
+  "menu_equipment": "设备"
 }
