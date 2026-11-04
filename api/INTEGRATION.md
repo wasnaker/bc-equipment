@@ -28,7 +28,9 @@ Every backend-capable module exposes:
 
 A module without entities, migrations or seed providers exports an empty array.
 The package owns controllers, DTOs, domain, services, entities, repositories,
-migrations, permissions and seed data. It never owns the host's database
+migrations and permission definitions. Seed providers are optional; this
+Equipment implementation exports an empty seed-provider array because groups
+and subgroups are user-managed records. It never owns the host's database
 connection, JWT strategy, roles table or permission persistence.
 
 ## Register in NestJS

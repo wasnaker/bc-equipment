@@ -6,7 +6,7 @@ backend and frontend capabilities.
 
 ## Capabilities
 
-- `@wasnaker/module-equipment/api` — NestJS module, services, entities and seed provider.
+- `@wasnaker/module-equipment/api` — NestJS module, group/subgroup CRUD, entities and PostgreSQL migrations.
 - `@wasnaker/module-equipment/api/manifest` — backend module metadata and permissions.
 - `@wasnaker/module-equipment/api/migrations` — PostgreSQL migration classes.
 - `@wasnaker/module-equipment/web` — React/Next.js page and UI exports.
@@ -27,8 +27,7 @@ sets the package scope to CommonJS without changing the ESM web package scope.
 Install with an immutable Git commit SHA. Git dependency installation runs the
 package `prepare` script to build the backend output. The host owns the
 PostgreSQL connection, authentication strategy, role IDs, migration runner and
-seed lifecycle. The module owns its API implementation, schema migration and
-seed data.
+seed lifecycle. The module owns its API implementation, schema migrations and optional seed providers.
 
 ## Frontend integration
 
