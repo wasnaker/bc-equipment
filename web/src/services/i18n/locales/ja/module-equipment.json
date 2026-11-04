@@ -1,5 +1,6 @@
 {
   "menu": "Equipment",
+  "menu_groups": "グループ",
   "title": "Equipment",
   "subtitle": "機器をグループとサブグループで管理",
   "actions": {
