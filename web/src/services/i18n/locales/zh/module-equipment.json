@@ -1,5 +1,6 @@
 {
   "menu": "Equipment",
+  "menu_groups": "组",
   "title": "Equipment",
   "subtitle": "按组和子组管理设备",
   "actions": {
