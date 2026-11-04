@@ -89,7 +89,7 @@
     "delete_error": "Unable to delete equipment type."
   },
   "menu_categories": "Categories",
-  "menu_equipment": "Equipment",
+  "menu_equipment": "Equipment Types",
   "categories_title": "Categories",
   "categories_subtitle": "Manage categories by subgroup",
   "equipment_page_title": "Equipment",
