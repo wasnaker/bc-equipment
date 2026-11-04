@@ -29,6 +29,15 @@ export class SubgroupEntity extends EntityRelationalHelper {
   @Column({ type: String, length: 190 })
   name: string;
 
+  @Column({ type: String, length: 20, nullable: true })
+  abbr: string | null;
+
+  @Column({ type: Number, default: 0 })
+  sortOrder: number;
+
+  @Column({ type: String, length: 20, nullable: true })
+  color: string | null;
+
   @Column({ type: String, length: 500, nullable: true })
   description: string | null;
 
