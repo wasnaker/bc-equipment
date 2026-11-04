@@ -75,5 +75,16 @@
   "subgroups_subtitle": "管理子组及其类别",
   "subgroups_empty": "暂无子组。",
   "subgroups_search": "搜索子组…",
-  "subgroups_search_label": "按名称或描述搜索子组"
+  "subgroups_search_label": "按名称或描述搜索子组",
+  "equipment": {
+    "title": "设备类型",
+    "manage": "管理类型",
+    "hide": "隐藏类型",
+    "empty": "暂无设备类型。",
+    "create": "添加设备类型",
+    "edit": "编辑设备类型",
+    "load_error": "无法加载设备类型。",
+    "save_error": "无法保存设备类型。",
+    "delete_error": "无法删除设备类型。"
+  }
 }
