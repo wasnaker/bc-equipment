@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import type { Category } from "../types/equipment";
 
 interface EquipmentItem {
-  id: number | string; ulid: string; code: string; categoryId: number | string;
+  id: number | string; ulid: string; code: string; subgroupId: number | string; categoryId: number | string | null;
   name: string; description: string | null; isActive: boolean;
 }
 interface ListResult { data: EquipmentItem[]; total: number }
@@ -50,7 +50,7 @@ export function CategoryEquipmentManager({ category }: { category: Category }) {
     if (!name.trim()) { setError(t("form.validation.required")); return; }
     setSaving(true); setError("");
     try {
-      const payload = { categoryId: Number(category.id), name: name.trim(), description: description.trim() || null, isActive };
+      const payload = { subgroupId: Number(category.subgroupId), categoryId: Number(category.id), name: name.trim(), description: description.trim() || null, isActive };
       const url = `${API_URL}/v1/equipment/items${editing ? `/${editing.id}` : ""}`;
       const result = await fetch(url, { method: editing ? "PATCH" : "POST", body: JSON.stringify(payload) }).then(wrapperFetchJsonResponse<EquipmentItem>);
       if (result.status < 200 || result.status >= 300) throw new Error(t("equipment.save_error"));
