@@ -7,7 +7,7 @@ import { useGroupsServerSide, useGroup, useDeleteGroup } from "../hooks/use-equi
 import { useMasterDetail } from "@/core/master-detail/use-master-detail";
 import { SmallTable, type SmallTableColumn, type DetailTab } from "@/components/small-table";
 import { GroupFormDialog } from "../components/group-form-dialog";
-import { GroupOverviewTab, GroupRegenciesTab } from "../components/group-detail-tab";
+import { GroupOverviewTab, GroupSubgroupsTab } from "../components/group-detail-tab";
 import { Button } from "@/components/ui/button";
 import PencilIcon from "lucide-react/dist/esm/icons/pencil";
 import TrashIcon from "lucide-react/dist/esm/icons/trash";
@@ -106,27 +106,8 @@ function PageInner() {
         ),
       },
       {
-        key: "isoCode",
-        label: t("table.isoCode"),
-        render: (item) => (
-          <span className="font-mono text-muted-foreground">
-            {item.isoCode ?? "—"}
-          </span>
-        ),
-      },
-      {
-        key: "coordinates",
-        label: t("table.coordinates"),
-        sortable: false,
-        render: (item) => {
-          if (item.latitude == null || item.longitude == null) return "—";
-          return (
-            <span className="font-mono text-xs text-muted-foreground">
-              {item.latitude.toFixed(4)}, {item.longitude.toFixed(4)}
-            </span>
-          );
-        },
-      },
+        key: "description", label: t("table.description"), render: item => <span className="text-muted-foreground">{item.description ?? "—"}</span>,
+      { key: "isActive", label: t("table.status"), render: item => <span>{item.isActive ? t("status.active") : t("status.inactive")}</span> },
     ],
     [t]
   );
@@ -140,8 +121,8 @@ function PageInner() {
         position: 0,
       },
       {
-        slug: "regencies",
-        label: t("detail.regencies"),
+        slug: "subgroups",
+        label: t("detail.subgroups"),
         position: 10,
       },
     ],
@@ -152,7 +133,7 @@ function PageInner() {
   const customTabBody = useMemo(
     () => ({
       overview: (item: Group) => <GroupOverviewTab item={item} />,
-      regencies: (item: Group) => <GroupRegenciesTab item={item} />,
+      subgroups: (item: Group) => <GroupSubgroupsTab item={item} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [refreshKey]
@@ -201,11 +182,7 @@ function PageInner() {
       <div className="flex items-center gap-2">
         <MapPinIcon className="size-4 text-primary" />
         <span>{item.name}</span>
-        {item.isoCode && (
-          <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
-            {item.isoCode}
-          </span>
-        )}
+        {item.description && <span className="rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">{item.description}</span>}
       </div>
     );
   }
