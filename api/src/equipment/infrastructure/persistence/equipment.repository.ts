@@ -9,7 +9,7 @@ export abstract class EquipmentRepository {
   abstract findManyWithPagination(args: { filterOptions?: FilterEquipmentDto | null; sortOptions?: SortEquipmentDto[] | null; paginationOptions: IPaginationOptions }): Promise<Equipment[]>;
   abstract findById(id: Equipment['id']): Promise<NullableType<Equipment>>;
   abstract findByCategoryId(categoryId: Equipment['categoryId']): Promise<Equipment[]>;
-  abstract findByCategoryIdAndName(categoryId: Equipment['categoryId'], name: Equipment['name']): Promise<NullableType<Equipment>>;
+  abstract findBySubgroupIdCategoryIdAndName(subgroupId: Equipment['subgroupId'], categoryId: Equipment['categoryId'], name: Equipment['name']): Promise<NullableType<Equipment>>;
   abstract countWithFilter(filters?: FilterEquipmentDto | null): Promise<number>;
   abstract countByCategoryId(categoryId: Equipment['categoryId']): Promise<number>;
   abstract update(id: Equipment['id'], payload: DeepPartial<Equipment>): Promise<Equipment | null>;
