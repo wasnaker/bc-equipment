@@ -15,7 +15,9 @@
     "collapse": "Tutup panel",
     "expand": "Buka panel",
     "prev_page": "Sebelumnya",
-    "next_page": "Berikutnya"
+    "next_page": "Berikutnya",
+    "create_category": "Tambah Kategori",
+    "edit_category": "Ubah Kategori"
   },
   "table": {
     "name": "Nama",
@@ -33,7 +35,9 @@
     "overview": "Ringkasan",
     "empty": "Tidak ada data.",
     "subgroups": "Subgrup",
-    "subgroups_empty": "Belum ada subgrup."
+    "subgroups_empty": "Belum ada subgrup.",
+    "categories": "Kategori",
+    "categories_empty": "Belum ada kategori."
   },
   "dashboard": {
     "groups": "Total Grup",
@@ -65,5 +69,11 @@
   "status": {
     "active": "Aktif",
     "inactive": "Nonaktif"
-  }
+  },
+  "menu_subgroups": "Subgrup",
+  "subgroups_title": "Subgrup",
+  "subgroups_subtitle": "Kelola subgrup dan kategori di dalamnya",
+  "subgroups_empty": "Belum ada subgrup.",
+  "subgroups_search": "Cari subgrup…",
+  "subgroups_search_label": "Cari subgrup berdasarkan nama atau deskripsi"
 }

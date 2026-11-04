@@ -15,7 +15,9 @@
     "collapse": "パネルを閉じる",
     "expand": "パネルを開く",
     "prev_page": "前へ",
-    "next_page": "次へ"
+    "next_page": "次へ",
+    "create_category": "カテゴリを作成",
+    "edit_category": "カテゴリを編集"
   },
   "table": {
     "name": "名前",
@@ -33,7 +35,9 @@
     "overview": "概要",
     "empty": "データがありません。",
     "subgroups": "サブグループ",
-    "subgroups_empty": "サブグループはまだありません。"
+    "subgroups_empty": "サブグループはまだありません。",
+    "categories": "カテゴリ",
+    "categories_empty": "カテゴリはまだありません。"
   },
   "confirm": {
     "delete": {
@@ -65,5 +69,11 @@
   "status": {
     "active": "有効",
     "inactive": "無効"
-  }
+  },
+  "menu_subgroups": "サブグループ",
+  "subgroups_title": "サブグループ",
+  "subgroups_subtitle": "サブグループとカテゴリを管理",
+  "subgroups_empty": "サブグループはまだありません。",
+  "subgroups_search": "サブグループを検索…",
+  "subgroups_search_label": "名前または説明でサブグループを検索"
 }

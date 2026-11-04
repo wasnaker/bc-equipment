@@ -1,5 +1,6 @@
 import { defineModuleManifest } from "@/core/modules/types";
 import MapPin from "lucide-react/dist/esm/icons/map-pin";
+import Layers from "lucide-react/dist/esm/icons/layers";
 import {
   GroupCountWidget,
   SubgroupCountWidget,
@@ -22,6 +23,14 @@ export default defineModuleManifest({
       position: 60,
       permission: "read:equipment",
       icon: MapPin,
+    },
+    {
+      slug: "equipment-subgroups",
+      label: { namespace: "module-equipment", key: "menu_subgroups" },
+      href: "/admin/equipment/subgroups",
+      position: 61,
+      permission: "read:equipment",
+      icon: Layers,
     },
   ],
   // Satu module dapat mendaftarkan beberapa widget sekaligus.

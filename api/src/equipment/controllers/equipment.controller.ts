@@ -14,6 +14,10 @@ import { UpdateSubgroupDto } from '../dto/update-subgroup.dto';
 import { QuerySubgroupDto, FilterSubgroupDto } from '../dto/query-subgroup.dto';
 import { Group } from '../domain/group';
 import { Subgroup } from '../domain/subgroup';
+import { Category } from '../domain/category';
+import { CreateCategoryDto } from '../dto/create-category.dto';
+import { UpdateCategoryDto } from '../dto/update-category.dto';
+import { QueryCategoryDto, FilterCategoryDto } from '../dto/query-category.dto';
 import { EquipmentService } from '../services/equipment.service';
 import { NullableType } from '../../utils/types/nullable.type';
 import { EquipmentAccessGuard } from '../security/equipment-access.guard';
@@ -128,4 +132,57 @@ export class EquipmentController {
   removeSubgroup(@Param('id', ParseIntPipe) id: Subgroup['id']): Promise<void> {
     return this.service.removeSubgroup(id);
   }
+
+  @Post('categories')
+  @UseGuards(EquipmentAccessGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({ type: Category })
+  createCategory(@Body() dto: CreateCategoryDto): Promise<Category> {
+    return this.service.createCategory(dto);
+  }
+
+  @Get('categories')
+  @UseGuards(EquipmentAccessGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: InfinityPaginationResponse(Category) })
+  async findCategories(@Query() query: QueryCategoryDto): Promise<InfinityPaginationResponseDto<Category>> {
+    const page = query.page ?? 1;
+    const limit = Math.min(query.limit ?? 10, 50);
+    const filters: FilterCategoryDto = { ...(query.filters ?? {}) };
+    if (query.subgroupId !== undefined) filters.subgroupId = query.subgroupId;
+    const data = await this.service.findManyCategoriesWithPagination({
+      filterOptions: filters,
+      sortOptions: query.sort ?? null,
+      paginationOptions: { page, limit },
+    });
+    const total = await this.service.countCategories(filters);
+    return infinityPagination(data, { page, limit }, total);
+  }
+
+  @Get('categories/:id')
+  @UseGuards(EquipmentAccessGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: Category })
+  @ApiParam({ name: 'id', type: String, required: true })
+  findCategory(@Param('id', ParseIntPipe) id: Category['id']): Promise<NullableType<Category>> {
+    return this.service.findCategoryById(id);
+  }
+
+  @Patch('categories/:id')
+  @UseGuards(EquipmentAccessGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: Category })
+  @ApiParam({ name: 'id', type: String, required: true })
+  updateCategory(@Param('id', ParseIntPipe) id: Category['id'], @Body() dto: UpdateCategoryDto): Promise<Category> {
+    return this.service.updateCategory(id, dto);
+  }
+
+  @Delete('categories/:id')
+  @UseGuards(EquipmentAccessGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiParam({ name: 'id', type: String, required: true })
+  removeCategory(@Param('id', ParseIntPipe) id: Category['id']): Promise<void> {
+    return this.service.removeCategory(id);
+  }
+
 }

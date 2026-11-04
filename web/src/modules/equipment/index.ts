@@ -1,2 +1,3 @@
 export { EquipmentPage } from "./pages/equipment-page";
-export type { Group, Subgroup } from "./types/equipment";
+export { SubgroupsPage } from "./pages/subgroups-page";
+export type { Group, Subgroup, Category } from "./types/equipment";

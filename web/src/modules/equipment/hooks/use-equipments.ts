@@ -3,9 +3,10 @@ import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import {
   useGetGroupsService, useGetGroupService, useCreateGroupService, useUpdateGroupService, useDeleteGroupService,
   useGetSubgroupsService, useGetSubgroupService, useCreateSubgroupService, useUpdateSubgroupService, useDeleteSubgroupService,
+  useGetCategoriesService, useGetCategoryService, useCreateCategoryService, useUpdateCategoryService, useDeleteCategoryService,
 } from "../services/equipment-api";
-import type { Group, Subgroup } from "../types/equipment";
-import type { GroupListResponse, SubgroupListResponse } from "../services/equipment-api";
+import type { Group, Subgroup, Category } from "../types/equipment";
+import type { GroupListResponse, SubgroupListResponse, CategoryListResponse } from "../services/equipment-api";
 import { useTable } from "@/core/table/use-table";
 import { SortEnum } from "@/services/api/types/sort-type";
 
@@ -125,5 +126,71 @@ export function useDeleteSubgroup() {
       if (response.status !== HTTP_CODES_ENUM.NO_CONTENT) unwrapResponse<undefined>(response);
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["equipment", "subgroups"] }),
+  });
+}
+
+export function useSubgroupsServerSide() {
+  const service = useGetSubgroupsService();
+  return useTable<Subgroup>({
+    queryKey: ["equipment", "subgroups"],
+    searchDebounce: 300,
+    defaultSort: { field: "name", order: "ASC" },
+    fetchFn: async ({ page, limit, search, sort, filters, signal }) => {
+      const activeFilters = Object.fromEntries(Object.entries(filters ?? {}).filter(([, value]) => value != null)) as Record<string, string | number | boolean>;
+      if (search) activeFilters.search = search;
+      const response = await service({
+        page, limit,
+        filters: Object.keys(activeFilters).length ? activeFilters : undefined,
+        sort: sort ? [{ orderBy: sort.field as keyof Subgroup, order: sort.order === "ASC" ? SortEnum.ASC : SortEnum.DESC }] : undefined,
+      }, { signal });
+      const payload = unwrapResponse<{ data?: Subgroup[]; total?: number }>(response);
+      if (typeof payload.total !== "number") throw new Error("Subgroups API response is missing total");
+      return { data: payload.data ?? [], total: payload.total };
+    },
+  });
+}
+
+export function useCategories(subgroupId: Subgroup["id"] | null, page = 1, limit = 50) {
+  const service = useGetCategoriesService();
+  return useQuery({
+    queryKey: ["equipment", "categories", subgroupId, page, limit],
+    queryFn: async () => unwrapResponse<CategoryListResponse>(await service({ page, limit, filters: subgroupId != null ? { subgroupId: String(subgroupId) } : undefined })),
+    enabled: subgroupId != null,
+  });
+}
+
+export function useCategory(id: Category["id"] | null) {
+  const service = useGetCategoryService();
+  return useQuery({
+    queryKey: ["equipment", "category", id],
+    queryFn: async () => unwrapResponse<Category>(await service({ id: id as Category["id"] })),
+    enabled: id != null,
+  });
+}
+
+export function useCreateCategory() {
+  const service = useCreateCategoryService(); const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: Parameters<typeof service>[0]) => unwrapResponse<Category>(await service(data)),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["equipment", "categories"] }),
+  });
+}
+
+export function useUpdateCategory() {
+  const service = useUpdateCategoryService(); const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: Parameters<typeof service>[0]) => unwrapResponse<Category>(await service(data)),
+    onSuccess: (_res, vars) => { qc.invalidateQueries({ queryKey: ["equipment", "categories"] }); qc.invalidateQueries({ queryKey: ["equipment", "category", vars.id] }); },
+  });
+}
+
+export function useDeleteCategory() {
+  const service = useDeleteCategoryService(); const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id }: { id: Category["id"] }) => {
+      const response = await service({ id });
+      if (response.status !== HTTP_CODES_ENUM.NO_CONTENT) unwrapResponse<undefined>(response);
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["equipment", "categories"] }),
   });
 }

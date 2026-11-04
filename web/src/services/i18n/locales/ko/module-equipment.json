@@ -15,7 +15,9 @@
     "collapse": "패널 닫기",
     "expand": "패널 열기",
     "prev_page": "이전",
-    "next_page": "다음"
+    "next_page": "다음",
+    "create_category": "카테고리 생성",
+    "edit_category": "카테고리 수정"
   },
   "table": {
     "name": "이름",
@@ -33,7 +35,9 @@
     "overview": "개요",
     "empty": "데이터가 없습니다.",
     "subgroups": "하위 그룹",
-    "subgroups_empty": "아직 하위 그룹이 없습니다."
+    "subgroups_empty": "아직 하위 그룹이 없습니다.",
+    "categories": "카테고리",
+    "categories_empty": "카테고리가 없습니다."
   },
   "confirm": {
     "delete": {
@@ -65,5 +69,11 @@
   "status": {
     "active": "활성",
     "inactive": "비활성"
-  }
+  },
+  "menu_subgroups": "하위 그룹",
+  "subgroups_title": "하위 그룹",
+  "subgroups_subtitle": "하위 그룹 및 카테고리 관리",
+  "subgroups_empty": "하위 그룹이 없습니다.",
+  "subgroups_search": "하위 그룹 검색…",
+  "subgroups_search_label": "이름 또는 설명으로 하위 그룹 검색"
 }

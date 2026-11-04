@@ -5,7 +5,7 @@ import wrapperFetchJsonResponse from "@/services/api/wrapper-fetch-json-response
 import type { InfinityPaginationType } from "@/services/api/types/infinity-pagination";
 import type { SortEnum } from "@/services/api/types/sort-type";
 import type { RequestConfigType } from "@/services/api/services/types/request-config";
-import type { Group, Subgroup } from "../types/equipment";
+import type { Group, Subgroup, Category } from "../types/equipment";
 
 type ListRequest<T> = {
   page: number;
@@ -86,4 +86,39 @@ export function useDeleteSubgroupService() {
   const fetch = useFetch();
   return useCallback((data: { id: Subgroup["id"] }, config?: RequestConfigType) =>
     fetch(`${API_URL}/v1/equipment/subgroups/${data.id}`, { method: "DELETE", ...config }).then(wrapperFetchJsonResponse<undefined>), [fetch]);
+}
+
+export type CategoryListRequest = ListRequest<Category>;
+export type CategoryListResponse = InfinityPaginationType<Category>;
+export function useGetCategoriesService() {
+  const fetch = useFetch();
+  return useCallback((data: CategoryListRequest, config?: RequestConfigType) => {
+    const url = new URL(`${API_URL}/v1/equipment/categories`);
+    url.searchParams.set("page", String(data.page));
+    url.searchParams.set("limit", String(data.limit));
+    if (data.filters) url.searchParams.set("filters", JSON.stringify(data.filters));
+    if (data.sort) url.searchParams.set("sort", JSON.stringify(data.sort));
+    return fetch(url, { method: "GET", ...config }).then(wrapperFetchJsonResponse<CategoryListResponse>);
+  }, [fetch]);
+}
+export function useGetCategoryService() {
+  const fetch = useFetch();
+  return useCallback((data: { id: Category["id"] }, config?: RequestConfigType) =>
+    fetch(`${API_URL}/v1/equipment/categories/${data.id}`, { method: "GET", ...config }).then(wrapperFetchJsonResponse<Category>), [fetch]);
+}
+export type CategoryWriteRequest = Pick<Category, "subgroupId" | "name" | "description" | "isActive">;
+export function useCreateCategoryService() {
+  const fetch = useFetch();
+  return useCallback((data: CategoryWriteRequest, config?: RequestConfigType) =>
+    fetch(`${API_URL}/v1/equipment/categories`, { method: "POST", body: JSON.stringify(data), ...config }).then(wrapperFetchJsonResponse<Category>), [fetch]);
+}
+export function useUpdateCategoryService() {
+  const fetch = useFetch();
+  return useCallback((data: { id: Category["id"]; data: Partial<CategoryWriteRequest> }, config?: RequestConfigType) =>
+    fetch(`${API_URL}/v1/equipment/categories/${data.id}`, { method: "PATCH", body: JSON.stringify(data.data), ...config }).then(wrapperFetchJsonResponse<Category>), [fetch]);
+}
+export function useDeleteCategoryService() {
+  const fetch = useFetch();
+  return useCallback((data: { id: Category["id"] }, config?: RequestConfigType) =>
+    fetch(`${API_URL}/v1/equipment/categories/${data.id}`, { method: "DELETE", ...config }).then(wrapperFetchJsonResponse<undefined>), [fetch]);
 }

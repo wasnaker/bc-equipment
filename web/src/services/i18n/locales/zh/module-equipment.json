@@ -15,7 +15,9 @@
     "collapse": "收起面板",
     "expand": "展开面板",
     "prev_page": "上一页",
-    "next_page": "下一页"
+    "next_page": "下一页",
+    "create_category": "创建类别",
+    "edit_category": "编辑类别"
   },
   "table": {
     "name": "名称",
@@ -33,7 +35,9 @@
     "overview": "概览",
     "empty": "暂无数据。",
     "subgroups": "子组",
-    "subgroups_empty": "暂无子组。"
+    "subgroups_empty": "暂无子组。",
+    "categories": "类别",
+    "categories_empty": "暂无类别。"
   },
   "confirm": {
     "delete": {
@@ -65,5 +69,11 @@
   "status": {
     "active": "启用",
     "inactive": "停用"
-  }
+  },
+  "menu_subgroups": "子组",
+  "subgroups_title": "子组",
+  "subgroups_subtitle": "管理子组及其类别",
+  "subgroups_empty": "暂无子组。",
+  "subgroups_search": "搜索子组…",
+  "subgroups_search_label": "按名称或描述搜索子组"
 }

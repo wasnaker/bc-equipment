@@ -15,7 +15,9 @@
     "collapse": "Collapse panel",
     "expand": "Expand panel",
     "prev_page": "Previous",
-    "next_page": "Next"
+    "next_page": "Next",
+    "create_category": "Create category",
+    "edit_category": "Edit category"
   },
   "table": {
     "name": "Name",
@@ -33,7 +35,9 @@
     "overview": "Overview",
     "empty": "No data.",
     "subgroups": "Subgroups",
-    "subgroups_empty": "No subgroups yet."
+    "subgroups_empty": "No subgroups yet.",
+    "categories": "Categories",
+    "categories_empty": "No categories yet."
   },
   "dashboard": {
     "groups": "Total Groups",
@@ -65,5 +69,11 @@
   "status": {
     "active": "Active",
     "inactive": "Inactive"
-  }
+  },
+  "menu_subgroups": "Subgroups",
+  "subgroups_title": "Subgroups",
+  "subgroups_subtitle": "Manage subgroups and their categories",
+  "subgroups_empty": "No subgroups yet.",
+  "subgroups_search": "Search subgroups…",
+  "subgroups_search_label": "Search subgroups by name or description"
 }

@@ -7,8 +7,13 @@ import { UpdateSubgroupDto } from '../dto/update-subgroup.dto';
 import { FilterSubgroupDto, SortSubgroupDto } from '../dto/query-subgroup.dto';
 import { Group } from '../domain/group';
 import { Subgroup } from '../domain/subgroup';
+import { Category } from '../domain/category';
+import { CreateCategoryDto } from '../dto/create-category.dto';
+import { UpdateCategoryDto } from '../dto/update-category.dto';
+import { FilterCategoryDto, SortCategoryDto } from '../dto/query-category.dto';
 import { GroupRepository } from '../infrastructure/persistence/group.repository';
 import { SubgroupRepository } from '../infrastructure/persistence/subgroup.repository';
+import { CategoryRepository } from '../infrastructure/persistence/category.repository';
 import { NullableType } from '../../utils/types/nullable.type';
 import { IPaginationOptions } from '../../utils/types/pagination-options';
 
@@ -17,6 +22,7 @@ export class EquipmentService {
   constructor(
     private readonly groupRepository: GroupRepository,
     private readonly subgroupRepository: SubgroupRepository,
+    private readonly categoryRepository: CategoryRepository,
   ) {}
 
   async createGroup(dto: CreateGroupDto): Promise<Group> {
@@ -103,4 +109,50 @@ export class EquipmentService {
   countSubgroupsByGroupId(groupId: Subgroup['groupId']): Promise<number> {
     return this.subgroupRepository.countByGroupId(groupId);
   }
+
+  async createCategory(dto: CreateCategoryDto): Promise<Category> {
+    if (!(await this.subgroupRepository.findById(dto.subgroupId))) throw new UnprocessableEntityException({ status: 422, errors: { subgroup: 'subgroupNotExists' } });
+    if (await this.categoryRepository.findBySubgroupIdAndName(dto.subgroupId, dto.name.trim())) throw new UnprocessableEntityException({ status: 422, errors: { name: 'categoryNameAlreadyExists' } });
+    return this.categoryRepository.create({
+      subgroupId: dto.subgroupId,
+      name: dto.name.trim(),
+      description: dto.description?.trim() || null,
+      isActive: dto.isActive ?? true,
+    });
+  }
+
+  findManyCategoriesWithPagination(args: { filterOptions?: FilterCategoryDto | null; sortOptions?: SortCategoryDto[] | null; paginationOptions: IPaginationOptions }): Promise<Category[]> {
+    return this.categoryRepository.findManyWithPagination(args);
+  }
+
+  findCategoryById(id: Category['id']): Promise<NullableType<Category>> {
+    return this.categoryRepository.findById(id);
+  }
+
+  async updateCategory(id: Category['id'], dto: UpdateCategoryDto): Promise<Category> {
+    const current = await this.categoryRepository.findById(id);
+    if (!current) throw new UnprocessableEntityException({ status: 422, errors: { category: 'categoryNotExists' } });
+    const targetSubgroupId = dto.subgroupId ?? current.subgroupId;
+    if (dto.subgroupId !== undefined && !(await this.subgroupRepository.findById(dto.subgroupId))) throw new UnprocessableEntityException({ status: 422, errors: { subgroup: 'subgroupNotExists' } });
+    const targetName = dto.name?.trim() ?? current.name;
+    const duplicate = await this.categoryRepository.findBySubgroupIdAndName(targetSubgroupId, targetName);
+    if (duplicate && Number(duplicate.id) !== Number(id)) throw new UnprocessableEntityException({ status: 422, errors: { name: 'categoryNameAlreadyExists' } });
+    const updated = await this.categoryRepository.update(id, { ...dto, name: dto.name?.trim() });
+    if (!updated) throw new UnprocessableEntityException({ status: 422, errors: { category: 'categoryNotExists' } });
+    return updated;
+  }
+
+  async removeCategory(id: Category['id']): Promise<void> {
+    if (!(await this.categoryRepository.findById(id))) throw new UnprocessableEntityException({ status: 422, errors: { category: 'categoryNotExists' } });
+    await this.categoryRepository.remove(id);
+  }
+
+  countCategories(filters?: FilterCategoryDto | null): Promise<number> {
+    return this.categoryRepository.countWithFilter(filters);
+  }
+
+  countCategoriesBySubgroupId(subgroupId: Category['subgroupId']): Promise<number> {
+    return this.categoryRepository.countBySubgroupId(subgroupId);
+  }
+
 }

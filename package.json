@@ -1,6 +1,6 @@
 {
   "name": "@wasnaker/module-equipment",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Wasnaker equipment management module (NestJS API and Next.js web)",
   "license": "GPL-2.0-only",
   "type": "module",
