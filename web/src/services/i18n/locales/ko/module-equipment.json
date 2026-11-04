@@ -87,5 +87,7 @@
     "load_error": "장비 유형을 불러오지 못했습니다.",
     "save_error": "장비 유형을 저장하지 못했습니다.",
     "delete_error": "장비 유형을 삭제하지 못했습니다."
-  }
+  },
+  "menu_categories": "카테고리",
+  "menu_equipment": "장비"
 }
