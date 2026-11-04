@@ -120,6 +120,8 @@ let EquipmentController = class EquipmentController {
         const page = query.page ?? 1;
         const limit = Math.min(query.limit ?? 10, 50);
         const filters = { ...(query.filters ?? {}) };
+        if (query.subgroupId !== undefined)
+            filters.subgroupId = query.subgroupId;
         if (query.categoryId !== undefined)
             filters.categoryId = query.categoryId;
         const data = await this.service.findManyEquipmentWithPagination({ filterOptions: filters, sortOptions: query.sort ?? null, paginationOptions: { page, limit } });

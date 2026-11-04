@@ -151,12 +151,29 @@ let EquipmentService = class EquipmentService {
         return this.categoryRepository.countBySubgroupId(subgroupId);
     }
     async createEquipment(dto) {
-        if (!(await this.categoryRepository.findById(dto.categoryId)))
-            throw new common_1.UnprocessableEntityException({ status: 422, errors: { category: 'categoryNotExists' } });
+        if (!(await this.subgroupRepository.findById(dto.subgroupId))) {
+            throw new common_1.UnprocessableEntityException({ status: 422, errors: { subgroup: 'subgroupNotExists' } });
+        }
+        const categoryId = dto.categoryId ?? null;
+        if (categoryId !== null) {
+            const category = await this.categoryRepository.findById(categoryId);
+            if (!category)
+                throw new common_1.UnprocessableEntityException({ status: 422, errors: { category: 'categoryNotExists' } });
+            if (Number(category.subgroupId) !== Number(dto.subgroupId)) {
+                throw new common_1.UnprocessableEntityException({ status: 422, errors: { category: 'categorySubgroupMismatch' } });
+            }
+        }
         const name = dto.name.trim();
-        if (await this.equipmentRepository.findByCategoryIdAndName(dto.categoryId, name))
+        if (await this.equipmentRepository.findBySubgroupIdCategoryIdAndName(dto.subgroupId, categoryId, name)) {
             throw new common_1.UnprocessableEntityException({ status: 422, errors: { name: 'equipmentNameAlreadyExists' } });
-        return this.equipmentRepository.create({ categoryId: dto.categoryId, name, description: dto.description?.trim() || null, isActive: dto.isActive ?? true });
+        }
+        return this.equipmentRepository.create({
+            subgroupId: dto.subgroupId,
+            categoryId,
+            name,
+            description: dto.description?.trim() || null,
+            isActive: dto.isActive ?? true,
+        });
     }
     findManyEquipmentWithPagination(args) {
         return this.equipmentRepository.findManyWithPagination(args);
@@ -166,14 +183,25 @@ let EquipmentService = class EquipmentService {
         const current = await this.equipmentRepository.findById(id);
         if (!current)
             throw new common_1.UnprocessableEntityException({ status: 422, errors: { equipment: 'equipmentNotExists' } });
-        const categoryId = dto.categoryId ?? Number(current.categoryId);
-        if (dto.categoryId !== undefined && !(await this.categoryRepository.findById(dto.categoryId)))
-            throw new common_1.UnprocessableEntityException({ status: 422, errors: { category: 'categoryNotExists' } });
+        const subgroupId = dto.subgroupId ?? Number(current.subgroupId);
+        if (dto.subgroupId !== undefined && !(await this.subgroupRepository.findById(subgroupId))) {
+            throw new common_1.UnprocessableEntityException({ status: 422, errors: { subgroup: 'subgroupNotExists' } });
+        }
+        const categoryId = dto.categoryId !== undefined ? dto.categoryId : current.categoryId;
+        if (categoryId !== null) {
+            const category = await this.categoryRepository.findById(categoryId);
+            if (!category)
+                throw new common_1.UnprocessableEntityException({ status: 422, errors: { category: 'categoryNotExists' } });
+            if (Number(category.subgroupId) !== Number(subgroupId)) {
+                throw new common_1.UnprocessableEntityException({ status: 422, errors: { category: 'categorySubgroupMismatch' } });
+            }
+        }
         const name = dto.name?.trim() ?? current.name;
-        const duplicate = await this.equipmentRepository.findByCategoryIdAndName(categoryId, name);
-        if (duplicate && String(duplicate.id) !== String(id))
+        const duplicate = await this.equipmentRepository.findBySubgroupIdCategoryIdAndName(subgroupId, categoryId, name);
+        if (duplicate && String(duplicate.id) !== String(id)) {
             throw new common_1.UnprocessableEntityException({ status: 422, errors: { name: 'equipmentNameAlreadyExists' } });
-        const updated = await this.equipmentRepository.update(id, { ...dto, categoryId, name });
+        }
+        const updated = await this.equipmentRepository.update(id, { ...dto, subgroupId, categoryId, name });
         if (!updated)
             throw new common_1.UnprocessableEntityException({ status: 422, errors: { equipment: 'equipmentNotExists' } });
         return updated;

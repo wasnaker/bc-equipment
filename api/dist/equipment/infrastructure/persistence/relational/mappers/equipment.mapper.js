@@ -9,6 +9,7 @@ class EquipmentMapper {
         value.id = raw.id.toString();
         value.ulid = raw.ulid;
         value.code = raw.code ?? '';
+        value.subgroupId = raw.subgroupId;
         value.categoryId = raw.categoryId;
         value.name = raw.name;
         value.description = raw.description;
@@ -23,8 +24,10 @@ class EquipmentMapper {
             entity.id = BigInt(value.id);
         if (value.ulid !== undefined)
             entity.ulid = value.ulid;
+        if (value.subgroupId !== undefined)
+            entity.subgroupId = Number(value.subgroupId);
         if (value.categoryId !== undefined)
-            entity.categoryId = Number(value.categoryId);
+            entity.categoryId = value.categoryId == null ? null : Number(value.categoryId);
         if (value.name !== undefined)
             entity.name = value.name;
         if (value.description !== undefined)

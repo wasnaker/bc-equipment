@@ -10,13 +10,13 @@
  * kolom `description` di sini diisi paragraf pertama yang dipadatkan dan
  * dipotong maksimal 500 karakter (batas kolom). Peralatan tanpa deskripsi
  * panjang dibiarkan NULL. Field `description` menjadi nama peralatan dan
- * `categoryName` dipetakan ke `equipment_category` pada subkelompok yang sama.
+ * `categoryName` nullable: null berarti sumber PRFX tidak menetapkan kategori.
  */
 export interface EquipmentSeedRow {
     id: number;
     ulid: string;
     subgroupName: string;
-    categoryName: string;
+    categoryName: string | null;
     name: string;
     description: string | null;
 }

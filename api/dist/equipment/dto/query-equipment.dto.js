@@ -17,6 +17,14 @@ class FilterEquipmentDto {
 }
 exports.FilterEquipmentDto = FilterEquipmentDto;
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ name: 'subgroup_id' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Transform)(({ value, obj }) => Number(value ?? obj?.subgroup_id)),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(1),
+    __metadata("design:type", Number)
+], FilterEquipmentDto.prototype, "subgroupId", void 0);
+__decorate([
     (0, swagger_1.ApiPropertyOptional)({ name: 'category_id' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_transformer_1.Transform)(({ value, obj }) => Number(value ?? obj?.category_id)),
@@ -57,6 +65,14 @@ class QueryEquipmentDto {
     }
 }
 exports.QueryEquipmentDto = QueryEquipmentDto;
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ name: 'subgroup_id' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Transform)(({ value, obj }) => Number(value ?? obj?.subgroup_id)),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(1),
+    __metadata("design:type", Number)
+], QueryEquipmentDto.prototype, "subgroupId", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ default: 1 }),
     (0, class_validator_1.IsOptional)(),

@@ -29,6 +29,10 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 1 }),
     __metadata("design:type", Object)
+], Equipment.prototype, "subgroupId", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 1, nullable: true }),
+    __metadata("design:type", Object)
 ], Equipment.prototype, "categoryId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 'Excavator' }),

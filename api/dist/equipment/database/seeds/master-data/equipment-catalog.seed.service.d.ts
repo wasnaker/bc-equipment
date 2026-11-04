@@ -10,11 +10,11 @@ import { SubgroupEntity } from '../../../infrastructure/persistence/relational/e
  * tidak ada kode PHP yang diporting.
  *
  * IDEMPOTENT & DETERMINISTIK:
- * - Setiap baris seed membawa `id` eksplisit (kategori 1..31, equipment 1..91)
+ * - Setiap baris seed membawa `id` eksplisit (kategori 1..15, equipment 1..91)
  *   dan ULID turunan nomor urut, sehingga id/kode peralatan sama di semua
  *   environment. `equipment.code` tetap dibuat trigger setelah insert.
- * - Kategori cocok by `(subgroupId, name)`; peralatan cocok by
- *   `(categoryId, lower(btrim(name)))` — sesuai unique index yang ada.
+ * - Kategori cocok by `(subgroupId, name)`; peralatan cocok by subgroup,
+ *   optional category, dan nama.
  *   Baris yang sudah ada tidak ditimpa (data buatan pengguna dipertahankan).
  * - Bila `id` seed ternyata sudah dipakai baris lain (mis. DB lama), baris
  *   baru dimasukkan tanpa id eksplisit dan urutan sequence tetap disinkronkan

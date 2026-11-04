@@ -17,7 +17,7 @@ export declare class EquipmentRelationalRepository implements EquipmentRepositor
     }): Promise<Equipment[]>;
     findById(id: Equipment['id']): Promise<NullableType<Equipment>>;
     findByCategoryId(categoryId: Equipment['categoryId']): Promise<Equipment[]>;
-    findByCategoryIdAndName(categoryId: Equipment['categoryId'], name: Equipment['name']): Promise<NullableType<Equipment>>;
+    findBySubgroupIdCategoryIdAndName(subgroupId: Equipment['subgroupId'], categoryId: Equipment['categoryId'], name: Equipment['name']): Promise<NullableType<Equipment>>;
     countWithFilter(filters?: FilterEquipmentDto | null): Promise<number>;
     countByCategoryId(categoryId: Equipment['categoryId']): Promise<number>;
     update(id: Equipment['id'], payload: Partial<Equipment>): Promise<Equipment | null>;

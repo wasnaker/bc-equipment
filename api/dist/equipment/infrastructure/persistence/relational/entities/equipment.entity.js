@@ -13,6 +13,7 @@ exports.EquipmentEntity = void 0;
 const typeorm_1 = require("typeorm");
 const relational_entity_helper_1 = require("../../../../../utils/relational-entity-helper");
 const category_entity_1 = require("./category.entity");
+const subgroup_entity_1 = require("./subgroup.entity");
 const equipment_ulid_generator_1 = require("../../../../utils/equipment-ulid.generator");
 let EquipmentEntity = class EquipmentEntity extends relational_entity_helper_1.EntityRelationalHelper {
     assignUlid() {
@@ -36,11 +37,20 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ type: 'int' }),
     __metadata("design:type", Number)
+], EquipmentEntity.prototype, "subgroupId", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => subgroup_entity_1.SubgroupEntity, { onDelete: 'RESTRICT', nullable: false }),
+    (0, typeorm_1.JoinColumn)({ name: 'subgroupId' }),
+    __metadata("design:type", subgroup_entity_1.SubgroupEntity)
+], EquipmentEntity.prototype, "subgroup", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'int', nullable: true }),
+    __metadata("design:type", Object)
 ], EquipmentEntity.prototype, "categoryId", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => category_entity_1.CategoryEntity, { onDelete: 'RESTRICT', nullable: false }),
+    (0, typeorm_1.ManyToOne)(() => category_entity_1.CategoryEntity, { onDelete: 'SET NULL', nullable: true }),
     (0, typeorm_1.JoinColumn)({ name: 'categoryId' }),
-    __metadata("design:type", category_entity_1.CategoryEntity)
+    __metadata("design:type", Object)
 ], EquipmentEntity.prototype, "category", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 190 }),
@@ -71,6 +81,7 @@ __decorate([
 exports.EquipmentEntity = EquipmentEntity = __decorate([
     (0, typeorm_1.Index)('UQ_equipment_ulid', ['ulid'], { unique: true }),
     (0, typeorm_1.Index)('UQ_equipment_code', ['code'], { unique: true }),
+    (0, typeorm_1.Index)('IDX_equipment_subgroupId', ['subgroupId']),
     (0, typeorm_1.Index)('IDX_equipment_categoryId', ['categoryId']),
     (0, typeorm_1.Entity)({ name: 'equipment' })
 ], EquipmentEntity);

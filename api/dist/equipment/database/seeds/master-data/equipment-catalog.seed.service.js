@@ -30,11 +30,11 @@ const equipments_data_1 = require("../seed-data/equipments.data");
  * tidak ada kode PHP yang diporting.
  *
  * IDEMPOTENT & DETERMINISTIK:
- * - Setiap baris seed membawa `id` eksplisit (kategori 1..31, equipment 1..91)
+ * - Setiap baris seed membawa `id` eksplisit (kategori 1..15, equipment 1..91)
  *   dan ULID turunan nomor urut, sehingga id/kode peralatan sama di semua
  *   environment. `equipment.code` tetap dibuat trigger setelah insert.
- * - Kategori cocok by `(subgroupId, name)`; peralatan cocok by
- *   `(categoryId, lower(btrim(name)))` — sesuai unique index yang ada.
+ * - Kategori cocok by `(subgroupId, name)`; peralatan cocok by subgroup,
+ *   optional category, dan nama.
  *   Baris yang sudah ada tidak ditimpa (data buatan pengguna dipertahankan).
  * - Bila `id` seed ternyata sudah dipakai baris lain (mis. DB lama), baris
  *   baru dimasukkan tanpa id eksplisit dan urutan sequence tetap disinkronkan
@@ -117,22 +117,26 @@ let EquipmentCatalogSeedService = EquipmentCatalogSeedService_1 = class Equipmen
             Number(row.id),
         ]));
         const existing = await this.equipmentRepository.find({
-            select: ['id', 'categoryId', 'name'],
+            select: ['id', 'subgroupId', 'categoryId', 'name'],
         });
-        const existingByKey = new Set(existing.map((row) => `${row.categoryId}:${row.name.trim().toLowerCase()}`));
+        const existingByKey = new Set(existing.map((row) => `${row.subgroupId}:${row.categoryId ?? 'null'}:${row.name.trim().toLowerCase()}`));
         const usedIds = new Set(existing.map((row) => Number(row.id)));
         const toInsert = [];
         const skipped = [];
         for (const row of equipments_data_1.EQUIPMENT_SEED) {
             const subgroupId = subgroupIdByName.get(row.subgroupName);
-            const categoryId = subgroupId
-                ? categoryIdByKey.get(`${subgroupId}:${row.categoryName}`)
-                : undefined;
-            if (!categoryId) {
+            if (!subgroupId) {
+                skipped.push(`${row.subgroupName}/${row.name}`);
+                continue;
+            }
+            const categoryId = row.categoryName
+                ? categoryIdByKey.get(`${subgroupId}:${row.categoryName}`) ?? null
+                : null;
+            if (row.categoryName && categoryId == null) {
                 skipped.push(`${row.subgroupName}/${row.categoryName}/${row.name}`);
                 continue;
             }
-            const key = `${categoryId}:${row.name.trim().toLowerCase()}`;
+            const key = `${subgroupId}:${categoryId ?? 'null'}:${row.name.trim().toLowerCase()}`;
             if (existingByKey.has(key))
                 continue;
             const explicitId = usedIds.has(row.id) ? undefined : row.id;
@@ -145,6 +149,7 @@ let EquipmentCatalogSeedService = EquipmentCatalogSeedService_1 = class Equipmen
             toInsert.push({
                 ...(explicitId == null ? {} : { id: BigInt(explicitId) }),
                 ulid: row.ulid,
+                subgroupId,
                 categoryId,
                 name: row.name,
                 description: row.description,
@@ -155,7 +160,7 @@ let EquipmentCatalogSeedService = EquipmentCatalogSeedService_1 = class Equipmen
             await this.equipmentRepository.insert(toInsert.slice(i, i + 200));
         }
         if (skipped.length > 0) {
-            this.logger.warn(`Peralatan dilewati karena kategori tidak ditemukan: ${skipped.join(', ')}`);
+            this.logger.warn(`Peralatan dilewati karena subgroup atau kategori tidak ditemukan: ${skipped.join(', ')}`);
         }
         this.logger.log(`Peralatan seed: ${toInsert.length} dibuat, ${existing.length} sudah ada`);
     }
