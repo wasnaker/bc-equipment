@@ -1,17 +1,11 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  Query,
-  HttpStatus,
-  HttpCode,
-  ParseIntPipe,
+  Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query,
+  HttpStatus, HttpCode, ParseIntPipe,
 } from '@nestjs/common';
+import {
+  ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiTags,
+} from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 import { CreateGroupDto } from '../dto/create-group.dto';
 import { UpdateGroupDto } from '../dto/update-group.dto';
 import { QueryGroupDto } from '../dto/query-group.dto';
@@ -22,168 +16,116 @@ import { Group } from '../domain/group';
 import { Subgroup } from '../domain/subgroup';
 import { EquipmentService } from '../services/equipment.service';
 import { NullableType } from '../../utils/types/nullable.type';
-import {
-  ApiBearerAuth,
-  ApiCreatedResponse,
-  ApiOkResponse,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import { EquipmentAccessGuard } from '../security/equipment-access.guard';
 import { InfinityPaginationResponseDto, InfinityPaginationResponse } from '../../utils/dto/infinity-pagination-response.dto';
 import { infinityPagination } from '../../utils/infinity-pagination';
-
-// The host supplies JWT authentication and resolves module-declared action
-// permissions through EquipmentAccessGuard; no host-specific role IDs are assumed.
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 @ApiTags('Equipment')
 @Controller({ path: 'equipment', version: '1' })
 export class EquipmentController {
-  constructor(private readonly equipmentService: EquipmentService) {}
+  constructor(private readonly service: EquipmentService) {}
 
-  // ─── Groups ─────────────────────────────────────────────────────────────
-
-  @ApiCreatedResponse({ type: Group })
-  @UseGuards(EquipmentAccessGuard)
   @Post('groups')
+  @UseGuards(EquipmentAccessGuard)
   @HttpCode(HttpStatus.CREATED)
-  createGroup(
-    @Body() createGroupDto: CreateGroupDto,
-  ): Promise<Group> {
-    return this.equipmentService.createGroup(createGroupDto);
+  @ApiCreatedResponse({ type: Group })
+  createGroup(@Body() dto: CreateGroupDto): Promise<Group> {
+    return this.service.createGroup(dto);
   }
 
-  @ApiOkResponse({ type: InfinityPaginationResponse(Group) })
   @Get('groups')
+  @UseGuards(EquipmentAccessGuard)
   @HttpCode(HttpStatus.OK)
-  async findAllGroups(
-    @Query() query: QueryGroupDto,
-  ): Promise<InfinityPaginationResponseDto<Group>> {
-    const page = query?.page ?? 1;
-    let limit = query?.limit ?? 10;
-    if (limit > 50) {
-      limit = 50;
-    }
-
-    const data = await this.equipmentService.findManyGroupsWithPagination({
+  @ApiOkResponse({ type: InfinityPaginationResponse(Group) })
+  async findGroups(@Query() query: QueryGroupDto): Promise<InfinityPaginationResponseDto<Group>> {
+    const page = query.page ?? 1;
+    const limit = Math.min(query.limit ?? 10, 50);
+    const data = await this.service.findManyGroupsWithPagination({
       filterOptions: query.filters ?? null,
       sortOptions: query.sort ?? null,
       paginationOptions: { page, limit },
     });
-
-    const total = await this.equipmentService.countGroups(
-      query.filters ?? null,
-    );
-
+    const total = await this.service.countGroups(query.filters ?? null);
     return infinityPagination(data, { page, limit }, total);
   }
 
-  @ApiOkResponse({ type: Group })
   @Get('groups/:id')
+  @UseGuards(EquipmentAccessGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiParam({ name: 'id', type: String, required: true })
-  findOneGroup(
-    @Param('id', ParseIntPipe) id: Group['id'],
-  ): Promise<NullableType<Group>> {
-    return this.equipmentService.findGroupById(id);
-  }
-
   @ApiOkResponse({ type: Group })
-  @UseGuards(EquipmentAccessGuard)
-  @Patch('groups/:id')
-  @HttpCode(HttpStatus.OK)
   @ApiParam({ name: 'id', type: String, required: true })
-  updateGroup(
-    @Param('id', ParseIntPipe) id: Group['id'],
-    @Body() updateGroupDto: UpdateGroupDto,
-  ): Promise<Group> {
-    return this.equipmentService.updateGroup(id, updateGroupDto);
+  findGroup(@Param('id', ParseIntPipe) id: Group['id']): Promise<NullableType<Group>> {
+    return this.service.findGroupById(id);
   }
 
+  @Patch('groups/:id')
   @UseGuards(EquipmentAccessGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: Group })
+  @ApiParam({ name: 'id', type: String, required: true })
+  updateGroup(@Param('id', ParseIntPipe) id: Group['id'], @Body() dto: UpdateGroupDto): Promise<Group> {
+    return this.service.updateGroup(id, dto);
+  }
+
   @Delete('groups/:id')
+  @UseGuards(EquipmentAccessGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiParam({ name: 'id', type: String, required: true })
-  removeGroup(
-    @Param('id', ParseIntPipe) id: Group['id'],
-  ): Promise<void> {
-    return this.equipmentService.removeGroup(id);
+  removeGroup(@Param('id', ParseIntPipe) id: Group['id']): Promise<void> {
+    return this.service.removeGroup(id);
   }
 
-  // ─── Regencies ─────────────────────────────────────────────────────────────
-
-  @ApiCreatedResponse({ type: Subgroup })
+  @Post('subgroups')
   @UseGuards(EquipmentAccessGuard)
-  @Post('regencies')
   @HttpCode(HttpStatus.CREATED)
-  createSubgroup(
-    @Body() createSubgroupDto: CreateSubgroupDto,
-  ): Promise<Subgroup> {
-    return this.equipmentService.createSubgroup(createSubgroupDto);
+  @ApiCreatedResponse({ type: Subgroup })
+  createSubgroup(@Body() dto: CreateSubgroupDto): Promise<Subgroup> {
+    return this.service.createSubgroup(dto);
   }
 
-  @ApiOkResponse({ type: InfinityPaginationResponse(Subgroup) })
-  @Get('regencies')
+  @Get('subgroups')
+  @UseGuards(EquipmentAccessGuard)
   @HttpCode(HttpStatus.OK)
-  async findAllRegencies(
-    @Query() query: QuerySubgroupDto,
-  ): Promise<InfinityPaginationResponseDto<Subgroup>> {
-    const page = query?.page ?? 1;
-    let limit = query?.limit ?? 10;
-    if (limit > 50) {
-      limit = 50;
-    }
-
-    const filterOptions: FilterSubgroupDto | null = query.filters ?? {};
-    if (filterOptions) {
-      if (query.groupId !== undefined) {
-        filterOptions.groupId = query.groupId;
-      }
-    }
-
-    const data = await this.equipmentService.findManyRegenciesWithPagination({
-      filterOptions,
+  @ApiOkResponse({ type: InfinityPaginationResponse(Subgroup) })
+  async findSubgroups(@Query() query: QuerySubgroupDto): Promise<InfinityPaginationResponseDto<Subgroup>> {
+    const page = query.page ?? 1;
+    const limit = Math.min(query.limit ?? 10, 50);
+    const filters: FilterSubgroupDto = { ...(query.filters ?? {}) };
+    if (query.groupId !== undefined) filters.groupId = query.groupId;
+    const data = await this.service.findManySubgroupsWithPagination({
+      filterOptions: filters,
       sortOptions: query.sort ?? null,
       paginationOptions: { page, limit },
     });
-
-    const total = await this.equipmentService.countRegencies(filterOptions);
-
+    const total = await this.service.countSubgroups(filters);
     return infinityPagination(data, { page, limit }, total);
   }
 
-  @ApiOkResponse({ type: Subgroup })
-  @Get('regencies/:id')
+  @Get('subgroups/:id')
+  @UseGuards(EquipmentAccessGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: Subgroup })
   @ApiParam({ name: 'id', type: String, required: true })
-  findOneSubgroup(
-    @Param('id', ParseIntPipe) id: Subgroup['id'],
-  ): Promise<NullableType<Subgroup>> {
-    return this.equipmentService.findSubgroupById(id);
+  findSubgroup(@Param('id', ParseIntPipe) id: Subgroup['id']): Promise<NullableType<Subgroup>> {
+    return this.service.findSubgroupById(id);
   }
 
-  @ApiOkResponse({ type: Subgroup })
+  @Patch('subgroups/:id')
   @UseGuards(EquipmentAccessGuard)
-  @Patch('regencies/:id')
   @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: Subgroup })
   @ApiParam({ name: 'id', type: String, required: true })
-  updateSubgroup(
-    @Param('id', ParseIntPipe) id: Subgroup['id'],
-    @Body() updateSubgroupDto: UpdateSubgroupDto,
-  ): Promise<Subgroup> {
-    return this.equipmentService.updateSubgroup(id, updateSubgroupDto);
+  updateSubgroup(@Param('id', ParseIntPipe) id: Subgroup['id'], @Body() dto: UpdateSubgroupDto): Promise<Subgroup> {
+    return this.service.updateSubgroup(id, dto);
   }
 
+  @Delete('subgroups/:id')
   @UseGuards(EquipmentAccessGuard)
-  @Delete('regencies/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiParam({ name: 'id', type: String, required: true })
-  removeSubgroup(
-    @Param('id', ParseIntPipe) id: Subgroup['id'],
-  ): Promise<void> {
-    return this.equipmentService.removeSubgroup(id);
+  removeSubgroup(@Param('id', ParseIntPipe) id: Subgroup['id']): Promise<void> {
+    return this.service.removeSubgroup(id);
   }
 }
