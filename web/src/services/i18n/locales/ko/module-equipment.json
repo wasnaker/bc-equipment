@@ -75,5 +75,16 @@
   "subgroups_subtitle": "하위 그룹 및 카테고리 관리",
   "subgroups_empty": "하위 그룹이 없습니다.",
   "subgroups_search": "하위 그룹 검색…",
-  "subgroups_search_label": "이름 또는 설명으로 하위 그룹 검색"
+  "subgroups_search_label": "이름 또는 설명으로 하위 그룹 검색",
+  "equipment": {
+    "title": "장비 유형",
+    "manage": "유형 관리",
+    "hide": "유형 숨기기",
+    "empty": "장비 유형이 없습니다.",
+    "create": "장비 유형 추가",
+    "edit": "장비 유형 수정",
+    "load_error": "장비 유형을 불러오지 못했습니다.",
+    "save_error": "장비 유형을 저장하지 못했습니다.",
+    "delete_error": "장비 유형을 삭제하지 못했습니다."
+  }
 }
