@@ -75,5 +75,16 @@
   "subgroups_subtitle": "サブグループとカテゴリを管理",
   "subgroups_empty": "サブグループはまだありません。",
   "subgroups_search": "サブグループを検索…",
-  "subgroups_search_label": "名前または説明でサブグループを検索"
+  "subgroups_search_label": "名前または説明でサブグループを検索",
+  "equipment": {
+    "title": "機器タイプ",
+    "manage": "タイプを管理",
+    "hide": "タイプを閉じる",
+    "empty": "機器タイプはまだありません。",
+    "create": "機器タイプを追加",
+    "edit": "機器タイプを編集",
+    "load_error": "機器タイプを読み込めません。",
+    "save_error": "機器タイプを保存できません。",
+    "delete_error": "機器タイプを削除できません。"
+  }
 }
