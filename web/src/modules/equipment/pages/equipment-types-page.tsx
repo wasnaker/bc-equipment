@@ -31,9 +31,10 @@ function SubgroupEquipment({ subgroup }: { subgroup: Subgroup }) {
 
 export function EquipmentTypesPage() {
   const { t } = useTranslation("module-equipment");
-  const { data, isLoading, error } = useSubgroupsServerSide();
+  const { data, isLoading, error, page, setPage, totalPages } = useSubgroupsServerSide();
   return <div className="page-content--wide"><div className="page-content--body space-y-4">
     <header><h1 className="page-title">{t("equipment_page_title")}</h1><p className="page-subtitle">{t("equipment_page_subtitle")}</p></header>
     {isLoading ? <p className="text-sm text-muted-foreground">{t("table.loading")}</p> : error ? <p className="text-sm text-destructive">{t("table.error")}</p> : (data ?? []).map(subgroup => <SubgroupEquipment key={String(subgroup.id)} subgroup={subgroup} />)}
+    <div className="flex items-center justify-end gap-2"><button type="button" className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50" disabled={page <= 1} onClick={() => setPage(page - 1)}>{t("actions.prev_page")}</button><span className="text-xs text-muted-foreground">{t("table.page", { page, total: totalPages })}</span><button type="button" className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50" disabled={page >= totalPages} onClick={() => setPage(page + 1)}>{t("actions.next_page")}</button></div>
   </div></div>;
 }
