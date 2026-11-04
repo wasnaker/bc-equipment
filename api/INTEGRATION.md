@@ -28,10 +28,15 @@ Every backend-capable module exposes:
 
 A module without entities, migrations or seed providers exports an empty array.
 The package owns controllers, DTOs, domain, services, entities, repositories,
-migrations and permission definitions. Equipment exports an idempotent
-`EquipmentMasterDataSeedService` for the canonical K3 classification data
-(6 groups and 20 subgroups). It never owns the host's database connection,
-JWT strategy, roles table or permission persistence.
+migrations and permission definitions. Equipment exports two idempotent seed services:
+
+- `EquipmentMasterDataSeedService` — 6 groups and 20 subgroups.
+- `EquipmentCatalogSeedService` — 31 categories and 91 equipment items
+  (data imported from `wasnaker/prfx-equipments` `CategoriesSeeder.php` and
+  `EquipmentsSeeder.php`; explicit ids and deterministic ULIDs).
+
+The package never owns the host's database connection, JWT strategy, roles
+table or permission persistence.
 
 ## Register in NestJS
 
@@ -63,6 +68,12 @@ The Equipment master-data seed matches groups and subgroups by their natural
 keys. Existing names, descriptions, active flags and custom non-default ordering
 are retained; missing legacy metadata (codes, abbreviations, sort order and
 subgroup color) is filled on repeated runs without replacing user values.
+
+The catalog seed matches categories by `(subgroupId, name)` and equipment by
+`(categoryId, lower(btrim(name)))`, then synchronizes `equipment_category_id_seq`
+and `equipment_id_seq` to `MAX(id)`. Equipment `code` is still assigned by the
+`bc_equipment_assign_code` trigger after insert, so explicit ids yield stable
+codes across environments.
 
 ## Build locally
 

@@ -22,47 +22,23 @@ Untuk menghapus:
 npm run module:rm -- equipment
 ```
 
-## 2. Daftarkan route host
+## 2. Halaman dideklarasikan di manifest
 
-Next.js membutuhkan route entry fisik di host. Route ini hanya adapter tipis;
-implementasi halaman tetap berada di package:
+Host tidak membutuhkan file route per modul. Semua halaman admin didaftarkan di
+`web/src/modules/equipment/module.manifest.ts` melalui `pages`:
 
-`src/app/admin/equipment/page.tsx` (route Group) dan `src/app/admin/equipment/subgroups/page.tsx` (route Subgroup):
+| Path | Komponen | Permission |
+|------|----------|------------|
+| `/admin/equipment` | `EquipmentPage` (Group) | `read:equipment` |
+| `/admin/equipment/subgroups` | `SubgroupsPage` | `read:equipment` |
+| `/admin/equipment/categories` | `CategoriesPage` | `read:equipment` |
+| `/admin/equipment/items` | `EquipmentTypesPage` | `read:equipment` |
 
-```tsx
-import type { Metadata } from "next";
-import { getServerTranslation } from "@/services/i18n";
-import { getRequestLanguage } from "@/services/i18n/get-request-language";
-import Equipment from "@/app/[language]/admin/equipment/page-content";
-
-export async function generateMetadata(): Promise<Metadata> {
-  const language = await getRequestLanguage();
-  const { t } = await getServerTranslation(language, "module-equipment");
-  return { title: t("module-equipment:title") };
-}
-
-export default function Page() {
-  return <Equipment />;
-}
-```
-
-`src/app/[language]/admin/equipment/page-content.tsx`:
-
-```tsx
-"use client";
-
-import { RoleEnum } from "@/services/api/types/role";
-import withPageRequiredAuth from "@/services/auth/with-page-required-auth";
-import { EquipmentPage } from "@wasnaker/module-equipment";
-
-function Equipment() {
-  return <EquipmentPage />;
-}
-
-export default withPageRequiredAuth(Equipment, { roles: [RoleEnum.ADMIN] });
-```
-
-Untuk route Subgroup, buat adapter `src/app/[language]/admin/equipment/subgroups/page-content.tsx` yang mengimpor `SubgroupsPage` dari `@wasnaker/module-equipment`, lalu bungkus dengan guard autentikasi host yang sama. Route ini menampilkan daftar Subgroup dengan panel detail dan tab Category.
+Host menyediakan satu route generik
+(`src/app/[language]/admin/[...modulePath]/page.tsx` dan varian tanpa locale)
+yang mencocokkan URL kanonik ke `pages[].path`, merender komponen package,
+memakai `pages[].title` untuk metadata, dan menerapkan `withPageRequiredAuth`
+(role ADMIN). Jangan membuat route adapter `src/app/**/admin/equipment/*` di host.
 
 ## 3. Kontrak package
 
