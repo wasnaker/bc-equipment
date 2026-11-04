@@ -23,7 +23,7 @@ export function SubgroupFormDialog({ open, onOpenChange, editItem, defaultGroupI
   const { t } = useTranslation("module-equipment");
   const createMutation = useCreateSubgroup();
   const updateMutation = useUpdateSubgroup();
-  const { data: groupsData } = useGroups(1, 200);
+  const { data: groupsData } = useGroups(1, 50);
   const isEditing = Boolean(editItem);
   const isPending = createMutation.isPending || updateMutation.isPending;
   const [groupId, setGroupId] = useState("");

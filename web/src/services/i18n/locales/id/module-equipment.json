@@ -1,12 +1,12 @@
 {
-  "menu": "Wilayah",
-  "title": "Wilayah",
+  "menu": "Equipment",
+  "title": "Equipment",
   "subtitle": "Kelola peralatan berdasarkan grup dan subgrup",
   "actions": {
-    "create_group": "Tambah Provinsi",
-    "create_subgroup": "Tambah Kabupaten/Kota",
-    "edit_group": "Edit Provinsi",
-    "edit_subgroup": "Edit Kabupaten/Kota",
+    "create_group": "Tambah Grup",
+    "create_subgroup": "Tambah Subgrup",
+    "edit_group": "Ubah Grup",
+    "edit_subgroup": "Ubah Subgrup",
     "edit": "Edit",
     "delete": "Hapus",
     "save": "Simpan",
@@ -37,7 +37,7 @@
   },
   "dashboard": {
     "groups": "Total Grup",
-    "open_module": "Buka module Wilayah",
+    "open_module": "Buka modul Equipment",
     "load_error": "Data gagal dimuat",
     "subgroups": "Total Subgrup"
   },
@@ -54,7 +54,7 @@
       "description": "Deskripsi"
     },
     "placeholder": {
-      "name": "mis. Jawa Barat",
+      "name": "Masukkan nama grup",
       "group": "Pilih grup"
     },
     "validation": {

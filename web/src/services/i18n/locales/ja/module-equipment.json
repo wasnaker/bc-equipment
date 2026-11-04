@@ -1,12 +1,12 @@
 {
-  "menu": "地域",
-  "title": "地域",
+  "menu": "Equipment",
+  "title": "Equipment",
   "subtitle": "機器をグループとサブグループで管理",
   "actions": {
-    "create_group": "州を追加",
-    "create_subgroup": "郡/市を追加",
-    "edit_group": "州を編集",
-    "edit_subgroup": "郡/市を編集",
+    "create_group": "グループを作成",
+    "create_subgroup": "サブグループを作成",
+    "edit_group": "グループを編集",
+    "edit_subgroup": "サブグループを編集",
     "edit": "編集",
     "delete": "削除",
     "save": "保存",
@@ -48,7 +48,7 @@
       "description": "説明"
     },
     "placeholder": {
-      "name": "例: 西ジャワ",
+      "name": "グループ名を入力",
       "group": "グループを選択"
     },
     "validation": {
@@ -59,7 +59,7 @@
   "dashboard": {
     "groups": "グループ数",
     "subgroups": "サブグループ数",
-    "open_module": "Open Equipment module",
+    "open_module": "Equipment モジュールを開く",
     "load_error": "Unable to load data"
   },
   "status": {

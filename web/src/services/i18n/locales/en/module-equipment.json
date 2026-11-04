@@ -3,10 +3,10 @@
   "title": "Equipment",
   "subtitle": "Organize equipment into groups and subgroups",
   "actions": {
-    "create_group": "Add Group",
-    "create_subgroup": "Add Subgroup",
-    "edit_group": "Edit Group",
-    "edit_subgroup": "Edit Subgroup",
+    "create_group": "Create group",
+    "create_subgroup": "Create subgroup",
+    "edit_group": "Edit group",
+    "edit_subgroup": "Edit subgroup",
     "edit": "Edit",
     "delete": "Delete",
     "save": "Save",
@@ -54,7 +54,7 @@
       "description": "Description"
     },
     "placeholder": {
-      "name": "e.g. West Java",
+      "name": "Enter a group name",
       "group": "Select group"
     },
     "validation": {

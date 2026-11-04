@@ -1,12 +1,12 @@
 {
-  "menu": "地区",
-  "title": "地区",
+  "menu": "Equipment",
+  "title": "Equipment",
   "subtitle": "按组和子组管理设备",
   "actions": {
-    "create_group": "添加省份",
-    "create_subgroup": "添加县/市",
-    "edit_group": "编辑省份",
-    "edit_subgroup": "编辑县/市",
+    "create_group": "创建组",
+    "create_subgroup": "创建子组",
+    "edit_group": "编辑组",
+    "edit_subgroup": "编辑子组",
     "edit": "编辑",
     "delete": "删除",
     "save": "保存",
@@ -48,7 +48,7 @@
       "description": "描述"
     },
     "placeholder": {
-      "name": "例如：西爪哇",
+      "name": "输入组名称",
       "group": "选择组"
     },
     "validation": {
@@ -59,7 +59,7 @@
   "dashboard": {
     "groups": "组总数",
     "subgroups": "子组总数",
-    "open_module": "Open Equipment module",
+    "open_module": "打开 Equipment 模块",
     "load_error": "Unable to load data"
   },
   "status": {
