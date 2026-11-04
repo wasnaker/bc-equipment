@@ -79,12 +79,12 @@ Semua request menggunakan API_URL host (`/api/v1`):
 
 | Aksi | Endpoint |
 |------|----------|
-| List provinsi | `GET /v1/equipment/provinces?page&limit&filters&sort` |
-| Detail provinsi | `GET /v1/equipment/provinces/:id` |
-| CRUD provinsi | `POST/PATCH/DELETE /v1/equipment/provinces` |
-| List kab/kota | `GET /v1/equipment/regencies?filters=...` |
-| Detail kab/kota | `GET /v1/equipment/regencies/:id` |
-| CRUD kab/kota | `POST/PATCH/DELETE /v1/equipment/regencies` |
+| List grup | `GET /v1/equipment/groups?page&limit&filters&sort` |
+| Detail grup | `GET /v1/equipment/groups/:id` |
+| CRUD grup | `POST/PATCH/DELETE /v1/equipment/groups` |
+| List subgroup | `GET /v1/equipment/subgroups?filters=...` |
+| Detail subgroup | `GET /v1/equipment/subgroups/:id` |
+| CRUD subgroup | `POST/PATCH/DELETE /v1/equipment/subgroups` |
 
 ## 5. Pengembangan lokal
 

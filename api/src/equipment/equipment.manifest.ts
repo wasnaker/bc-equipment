@@ -12,7 +12,7 @@ export interface BackendModuleManifest {
 
 export const moduleManifest: BackendModuleManifest = {
   id: 'equipment',
-  version: '0.4.1',
+  version: '0.5.0',
   capabilities: ['api', 'web'],
   permissions: [
     { name: 'read:equipment', description: 'Allows viewing Equipment module navigation and data' },
