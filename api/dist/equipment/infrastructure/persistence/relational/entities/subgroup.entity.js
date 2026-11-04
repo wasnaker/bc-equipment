@@ -36,6 +36,18 @@ __decorate([
     __metadata("design:type", String)
 ], SubgroupEntity.prototype, "name", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: String, length: 20, nullable: true }),
+    __metadata("design:type", Object)
+], SubgroupEntity.prototype, "abbr", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: Number, default: 0 }),
+    __metadata("design:type", Number)
+], SubgroupEntity.prototype, "sortOrder", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: String, length: 20, nullable: true }),
+    __metadata("design:type", Object)
+], SubgroupEntity.prototype, "color", void 0);
+__decorate([
     (0, typeorm_1.Column)({ type: String, length: 500, nullable: true }),
     __metadata("design:type", Object)
 ], SubgroupEntity.prototype, "description", void 0);

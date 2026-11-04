@@ -25,6 +25,10 @@ const query_subgroup_dto_1 = require("../dto/query-subgroup.dto");
 const group_1 = require("../domain/group");
 const subgroup_1 = require("../domain/subgroup");
 const category_1 = require("../domain/category");
+const equipment_1 = require("../domain/equipment");
+const create_equipment_dto_1 = require("../dto/create-equipment.dto");
+const update_equipment_dto_1 = require("../dto/update-equipment.dto");
+const query_equipment_dto_1 = require("../dto/query-equipment.dto");
 const create_category_dto_1 = require("../dto/create-category.dto");
 const update_category_dto_1 = require("../dto/update-category.dto");
 const query_category_dto_1 = require("../dto/query-category.dto");
@@ -111,6 +115,20 @@ let EquipmentController = class EquipmentController {
     removeCategory(id) {
         return this.service.removeCategory(id);
     }
+    createEquipment(dto) { return this.service.createEquipment(dto); }
+    async findEquipment(query) {
+        const page = query.page ?? 1;
+        const limit = Math.min(query.limit ?? 10, 50);
+        const filters = { ...(query.filters ?? {}) };
+        if (query.categoryId !== undefined)
+            filters.categoryId = query.categoryId;
+        const data = await this.service.findManyEquipmentWithPagination({ filterOptions: filters, sortOptions: query.sort ?? null, paginationOptions: { page, limit } });
+        const total = await this.service.countEquipment(filters);
+        return (0, infinity_pagination_1.infinityPagination)(data, { page, limit }, total);
+    }
+    findEquipmentById(id) { return this.service.findEquipmentById(id); }
+    updateEquipment(id, dto) { return this.service.updateEquipment(id, dto); }
+    removeEquipment(id) { return this.service.removeEquipment(id); }
 };
 exports.EquipmentController = EquipmentController;
 __decorate([
@@ -272,6 +290,56 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], EquipmentController.prototype, "removeCategory", null);
+__decorate([
+    (0, common_1.Post)('items'),
+    (0, common_1.UseGuards)(equipment_access_guard_1.EquipmentAccessGuard),
+    (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
+    (0, swagger_1.ApiCreatedResponse)({ type: equipment_1.Equipment }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_equipment_dto_1.CreateEquipmentDto]),
+    __metadata("design:returntype", Promise)
+], EquipmentController.prototype, "createEquipment", null);
+__decorate([
+    (0, common_1.Get)('items'),
+    (0, common_1.UseGuards)(equipment_access_guard_1.EquipmentAccessGuard),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOkResponse)({ type: (0, infinity_pagination_response_dto_1.InfinityPaginationResponse)(equipment_1.Equipment) }),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [query_equipment_dto_1.QueryEquipmentDto]),
+    __metadata("design:returntype", Promise)
+], EquipmentController.prototype, "findEquipment", null);
+__decorate([
+    (0, common_1.Get)('items/:id'),
+    (0, common_1.UseGuards)(equipment_access_guard_1.EquipmentAccessGuard),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOkResponse)({ type: equipment_1.Equipment }),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], EquipmentController.prototype, "findEquipmentById", null);
+__decorate([
+    (0, common_1.Patch)('items/:id'),
+    (0, common_1.UseGuards)(equipment_access_guard_1.EquipmentAccessGuard),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOkResponse)({ type: equipment_1.Equipment }),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, update_equipment_dto_1.UpdateEquipmentDto]),
+    __metadata("design:returntype", Promise)
+], EquipmentController.prototype, "updateEquipment", null);
+__decorate([
+    (0, common_1.Delete)('items/:id'),
+    (0, common_1.UseGuards)(equipment_access_guard_1.EquipmentAccessGuard),
+    (0, common_1.HttpCode)(common_1.HttpStatus.NO_CONTENT),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], EquipmentController.prototype, "removeEquipment", null);
 exports.EquipmentController = EquipmentController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),

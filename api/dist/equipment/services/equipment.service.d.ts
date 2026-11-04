@@ -7,6 +7,11 @@ import { FilterSubgroupDto, SortSubgroupDto } from '../dto/query-subgroup.dto';
 import { Group } from '../domain/group';
 import { Subgroup } from '../domain/subgroup';
 import { Category } from '../domain/category';
+import { Equipment } from '../domain/equipment';
+import { CreateEquipmentDto } from '../dto/create-equipment.dto';
+import { UpdateEquipmentDto } from '../dto/update-equipment.dto';
+import { FilterEquipmentDto, SortEquipmentDto } from '../dto/query-equipment.dto';
+import { EquipmentRepository } from '../infrastructure/persistence/equipment.repository';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { FilterCategoryDto, SortCategoryDto } from '../dto/query-category.dto';
@@ -19,7 +24,8 @@ export declare class EquipmentService {
     private readonly groupRepository;
     private readonly subgroupRepository;
     private readonly categoryRepository;
-    constructor(groupRepository: GroupRepository, subgroupRepository: SubgroupRepository, categoryRepository: CategoryRepository);
+    private readonly equipmentRepository;
+    constructor(groupRepository: GroupRepository, subgroupRepository: SubgroupRepository, categoryRepository: CategoryRepository, equipmentRepository: EquipmentRepository);
     createGroup(dto: CreateGroupDto): Promise<Group>;
     findManyGroupsWithPagination(args: {
         filterOptions?: FilterGroupDto | null;
@@ -52,4 +58,15 @@ export declare class EquipmentService {
     removeCategory(id: Category['id']): Promise<void>;
     countCategories(filters?: FilterCategoryDto | null): Promise<number>;
     countCategoriesBySubgroupId(subgroupId: Category['subgroupId']): Promise<number>;
+    createEquipment(dto: CreateEquipmentDto): Promise<Equipment>;
+    findManyEquipmentWithPagination(args: {
+        filterOptions?: FilterEquipmentDto | null;
+        sortOptions?: SortEquipmentDto[] | null;
+        paginationOptions: IPaginationOptions;
+    }): Promise<Equipment[]>;
+    findEquipmentById(id: Equipment['id']): Promise<NullableType<Equipment>>;
+    updateEquipment(id: Equipment['id'], dto: UpdateEquipmentDto): Promise<Equipment>;
+    removeEquipment(id: Equipment['id']): Promise<void>;
+    countEquipment(filters?: FilterEquipmentDto | null): Promise<number>;
+    countEquipmentByCategoryId(categoryId: Equipment['categoryId']): Promise<number>;
 }

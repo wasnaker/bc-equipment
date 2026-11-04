@@ -7,6 +7,10 @@ import { QuerySubgroupDto } from '../dto/query-subgroup.dto';
 import { Group } from '../domain/group';
 import { Subgroup } from '../domain/subgroup';
 import { Category } from '../domain/category';
+import { Equipment } from '../domain/equipment';
+import { CreateEquipmentDto } from '../dto/create-equipment.dto';
+import { UpdateEquipmentDto } from '../dto/update-equipment.dto';
+import { QueryEquipmentDto } from '../dto/query-equipment.dto';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { QueryCategoryDto } from '../dto/query-category.dto';
@@ -31,4 +35,9 @@ export declare class EquipmentController {
     findCategory(id: Category['id']): Promise<NullableType<Category>>;
     updateCategory(id: Category['id'], dto: UpdateCategoryDto): Promise<Category>;
     removeCategory(id: Category['id']): Promise<void>;
+    createEquipment(dto: CreateEquipmentDto): Promise<Equipment>;
+    findEquipment(query: QueryEquipmentDto): Promise<InfinityPaginationResponseDto<Equipment>>;
+    findEquipmentById(id: Equipment['id']): Promise<NullableType<Equipment>>;
+    updateEquipment(id: Equipment['id'], dto: UpdateEquipmentDto): Promise<Equipment>;
+    removeEquipment(id: Equipment['id']): Promise<void>;
 }

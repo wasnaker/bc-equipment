@@ -24,6 +24,14 @@ __decorate([
     __metadata("design:type", String)
 ], GroupEntity.prototype, "name", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: String, length: 30, nullable: true }),
+    __metadata("design:type", Object)
+], GroupEntity.prototype, "code", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: String, length: 20, nullable: true }),
+    __metadata("design:type", Object)
+], GroupEntity.prototype, "abbr", void 0);
+__decorate([
     (0, typeorm_1.Column)({ type: String, length: 500, nullable: true }),
     __metadata("design:type", Object)
 ], GroupEntity.prototype, "description", void 0);
@@ -41,5 +49,6 @@ __decorate([
 ], GroupEntity.prototype, "updatedAt", void 0);
 exports.GroupEntity = GroupEntity = __decorate([
     (0, typeorm_1.Index)('UQ_equipment_group_name', ['name'], { unique: true }),
+    (0, typeorm_1.Index)('UQ_equipment_group_code', ['code'], { unique: true, where: '"code" IS NOT NULL' }),
     (0, typeorm_1.Entity)({ name: 'equipment_group' })
 ], GroupEntity);

@@ -11,14 +11,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EquipmentService = void 0;
 const common_1 = require("@nestjs/common");
+const equipment_repository_1 = require("../infrastructure/persistence/equipment.repository");
 const group_repository_1 = require("../infrastructure/persistence/group.repository");
 const subgroup_repository_1 = require("../infrastructure/persistence/subgroup.repository");
 const category_repository_1 = require("../infrastructure/persistence/category.repository");
 let EquipmentService = class EquipmentService {
-    constructor(groupRepository, subgroupRepository, categoryRepository) {
+    constructor(groupRepository, subgroupRepository, categoryRepository, equipmentRepository) {
         this.groupRepository = groupRepository;
         this.subgroupRepository = subgroupRepository;
         this.categoryRepository = categoryRepository;
+        this.equipmentRepository = equipmentRepository;
     }
     async createGroup(dto) {
         if (await this.groupRepository.findByName(dto.name)) {
@@ -148,11 +150,47 @@ let EquipmentService = class EquipmentService {
     countCategoriesBySubgroupId(subgroupId) {
         return this.categoryRepository.countBySubgroupId(subgroupId);
     }
+    async createEquipment(dto) {
+        if (!(await this.categoryRepository.findById(dto.categoryId)))
+            throw new common_1.UnprocessableEntityException({ status: 422, errors: { category: 'categoryNotExists' } });
+        const name = dto.name.trim();
+        if (await this.equipmentRepository.findByCategoryIdAndName(dto.categoryId, name))
+            throw new common_1.UnprocessableEntityException({ status: 422, errors: { name: 'equipmentNameAlreadyExists' } });
+        return this.equipmentRepository.create({ categoryId: dto.categoryId, name, description: dto.description?.trim() || null, isActive: dto.isActive ?? true });
+    }
+    findManyEquipmentWithPagination(args) {
+        return this.equipmentRepository.findManyWithPagination(args);
+    }
+    findEquipmentById(id) { return this.equipmentRepository.findById(id); }
+    async updateEquipment(id, dto) {
+        const current = await this.equipmentRepository.findById(id);
+        if (!current)
+            throw new common_1.UnprocessableEntityException({ status: 422, errors: { equipment: 'equipmentNotExists' } });
+        const categoryId = dto.categoryId ?? Number(current.categoryId);
+        if (dto.categoryId !== undefined && !(await this.categoryRepository.findById(dto.categoryId)))
+            throw new common_1.UnprocessableEntityException({ status: 422, errors: { category: 'categoryNotExists' } });
+        const name = dto.name?.trim() ?? current.name;
+        const duplicate = await this.equipmentRepository.findByCategoryIdAndName(categoryId, name);
+        if (duplicate && String(duplicate.id) !== String(id))
+            throw new common_1.UnprocessableEntityException({ status: 422, errors: { name: 'equipmentNameAlreadyExists' } });
+        const updated = await this.equipmentRepository.update(id, { ...dto, categoryId, name });
+        if (!updated)
+            throw new common_1.UnprocessableEntityException({ status: 422, errors: { equipment: 'equipmentNotExists' } });
+        return updated;
+    }
+    async removeEquipment(id) {
+        if (!(await this.equipmentRepository.findById(id)))
+            throw new common_1.UnprocessableEntityException({ status: 422, errors: { equipment: 'equipmentNotExists' } });
+        await this.equipmentRepository.remove(id);
+    }
+    countEquipment(filters) { return this.equipmentRepository.countWithFilter(filters); }
+    countEquipmentByCategoryId(categoryId) { return this.equipmentRepository.countByCategoryId(categoryId); }
 };
 exports.EquipmentService = EquipmentService;
 exports.EquipmentService = EquipmentService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [group_repository_1.GroupRepository,
         subgroup_repository_1.SubgroupRepository,
-        category_repository_1.CategoryRepository])
+        category_repository_1.CategoryRepository,
+        equipment_repository_1.EquipmentRepository])
 ], EquipmentService);

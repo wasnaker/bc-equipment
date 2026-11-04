@@ -5,6 +5,9 @@ export declare class SubgroupEntity extends EntityRelationalHelper {
     groupId: number;
     group?: GroupEntity;
     name: string;
+    abbr: string | null;
+    sortOrder: number;
+    color: string | null;
     description: string | null;
     isActive: boolean;
     createdAt: Date;
