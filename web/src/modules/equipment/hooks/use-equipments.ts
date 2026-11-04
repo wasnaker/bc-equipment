@@ -5,6 +5,7 @@ import {
   useGetSubgroupsService, useGetSubgroupService, useCreateSubgroupService, useUpdateSubgroupService, useDeleteSubgroupService,
 } from "../services/equipment-api";
 import type { Group, Subgroup } from "../types/equipment";
+import type { GroupListResponse, SubgroupListResponse } from "../services/equipment-api";
 import { useTable } from "@/core/table/use-table";
 import { SortEnum } from "@/services/api/types/sort-type";
 
@@ -21,7 +22,7 @@ export function useGroups(page = 1, limit = 10, filters?: Record<string, string 
   const service = useGetGroupsService();
   return useQuery({
     queryKey: ["equipment", "groups", page, limit, filters],
-    queryFn: async () => unwrapResponse<Awaited<ReturnType<typeof service>>["data"]>(await service({ page, limit, filters })),
+    queryFn: async () => unwrapResponse<GroupListResponse>(await service({ page, limit, filters })),
   });
 }
 
@@ -86,7 +87,7 @@ export function useSubgroups(groupId: Group["id"] | null, page = 1, limit = 10) 
   const service = useGetSubgroupsService();
   return useQuery({
     queryKey: ["equipment", "subgroups", groupId, page, limit],
-    queryFn: async () => unwrapResponse<Awaited<ReturnType<typeof service>>["data"]>(await service({ page, limit, filters: groupId != null ? { groupId: String(groupId) } : undefined })),
+    queryFn: async () => unwrapResponse<SubgroupListResponse>(await service({ page, limit, filters: groupId != null ? { groupId: String(groupId) } : undefined })),
     enabled: groupId != null,
   });
 }
