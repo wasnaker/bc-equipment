@@ -89,5 +89,9 @@
     "delete_error": "无法删除设备类型。"
   },
   "menu_categories": "类别",
-  "menu_equipment": "设备"
+  "menu_equipment": "设备",
+  "categories_title": "类别",
+  "categories_subtitle": "按子组管理类别",
+  "equipment_page_title": "设备",
+  "equipment_page_subtitle": "管理各类别下的设备类型"
 }
