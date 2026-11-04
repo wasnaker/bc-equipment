@@ -49,9 +49,10 @@ function SubgroupCategories({ subgroup }: { subgroup: Subgroup }) {
 
 export function CategoriesPage() {
   const { t } = useTranslation("module-equipment");
-  const { data, isLoading, error } = useSubgroupsServerSide();
+  const { data, isLoading, error, page, setPage, totalPages } = useSubgroupsServerSide();
   return <div className="page-content--wide"><div className="page-content--body space-y-4">
     <header><h1 className="page-title">{t("categories_title")}</h1><p className="page-subtitle">{t("categories_subtitle")}</p></header>
     {isLoading ? <p className="text-sm text-muted-foreground">{t("table.loading")}</p> : error ? <p className="text-sm text-destructive">{t("table.error")}</p> : (data ?? []).map(subgroup => <SubgroupCategories key={String(subgroup.id)} subgroup={subgroup} />)}
+    <div className="flex items-center justify-end gap-2"><Button size="sm" variant="outline" disabled={page <= 1} onClick={() => setPage(page - 1)}>{t("actions.prev_page")}</Button><span className="text-xs text-muted-foreground">{t("table.page", { page, total: totalPages })}</span><Button size="sm" variant="outline" disabled={page >= totalPages} onClick={() => setPage(page + 1)}>{t("actions.next_page")}</Button></div>
   </div></div>;
 }
