@@ -38,7 +38,9 @@ Host menyediakan satu route generik
 (`src/app/[language]/admin/[...modulePath]/page.tsx` dan varian tanpa locale)
 yang mencocokkan URL kanonik ke `pages[].path`, merender komponen package,
 memakai `pages[].title` untuk metadata, dan menerapkan `withPageRequiredAuth`
-(role ADMIN). Jangan membuat route adapter `src/app/**/admin/equipment/*` di host.
+(role ADMIN) **plus** `pages[].permission` (fail-closed, sama konsistensi
+dengan `resolveMenu()` di sidebar). Jangan membuat route adapter
+`src/app/**/admin/equipment/*` di host.
 
 ## 3. Kontrak package
 
