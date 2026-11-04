@@ -89,7 +89,7 @@
     "delete_error": "機器タイプを削除できません。"
   },
   "menu_categories": "カテゴリ",
-  "menu_equipment": "設備",
+  "menu_equipment": "設備の種類",
   "categories_title": "カテゴリ",
   "categories_subtitle": "サブグループごとにカテゴリを管理",
   "equipment_page_title": "設備",
