@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - chore/equipment-package-identity
+      - feat/equipment-groups-subgroups
   pull_request:
   workflow_dispatch:
 

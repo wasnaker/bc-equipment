@@ -50,6 +50,7 @@ for (const path of [
   'api/dist/equipment/equipment.definition.js',
   'api/dist/equipment/equipment.seeds.js',
   'api/dist/equipment/database/migrations/index.js',
+  'api/dist/equipment/database/migrations/1793710214000000000-ConvertProvinceRegencyToEquipmentGroups.js',
 ]) {
   await access(new URL(`../${path}`, import.meta.url), constants.R_OK);
 }
