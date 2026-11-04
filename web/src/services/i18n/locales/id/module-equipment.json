@@ -87,5 +87,7 @@
     "load_error": "Gagal memuat tipe peralatan.",
     "save_error": "Gagal menyimpan tipe peralatan.",
     "delete_error": "Gagal menghapus tipe peralatan."
-  }
+  },
+  "menu_categories": "Kategori",
+  "menu_equipment": "Equipment"
 }
