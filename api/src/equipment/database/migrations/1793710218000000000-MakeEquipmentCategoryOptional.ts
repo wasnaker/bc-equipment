@@ -35,6 +35,14 @@ export class MakeEquipmentCategoryOptional1793710218000000000
         ALTER COLUMN "categoryId" DROP NOT NULL
     `);
     await queryRunner.query(`
+      ALTER TABLE "equipment" DROP CONSTRAINT IF EXISTS "FK_equipment_category"
+    `);
+    await queryRunner.query(`
+      ALTER TABLE "equipment" ADD CONSTRAINT "FK_equipment_category"
+      FOREIGN KEY ("categoryId") REFERENCES "equipment_category"("id")
+      ON DELETE SET NULL ON UPDATE NO ACTION
+    `);
+    await queryRunner.query(`
       ALTER TABLE "equipment"
       ADD CONSTRAINT "FK_equipment_subgroup"
       FOREIGN KEY ("subgroupId") REFERENCES "equipment_subgroup"("id")
@@ -80,6 +88,14 @@ export class MakeEquipmentCategoryOptional1793710218000000000
     `);
     await queryRunner.query(`
       DROP INDEX IF EXISTS "IDX_equipment_subgroupId"
+    `);
+    await queryRunner.query(`
+      ALTER TABLE "equipment" DROP CONSTRAINT IF EXISTS "FK_equipment_category"
+    `);
+    await queryRunner.query(`
+      ALTER TABLE "equipment" ADD CONSTRAINT "FK_equipment_category"
+      FOREIGN KEY ("categoryId") REFERENCES "equipment_category"("id")
+      ON DELETE RESTRICT ON UPDATE NO ACTION
     `);
     await queryRunner.query(`
       ALTER TABLE "equipment"
