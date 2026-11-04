@@ -19,21 +19,25 @@ export default defineModuleManifest({
     {
       path: "/admin/equipment",
       component: EquipmentPage,
+      title: { namespace: "module-equipment", key: "title" },
       permission: "read:equipment",
     },
     {
       path: "/admin/equipment/subgroups",
       component: SubgroupsPage,
+      title: { namespace: "module-equipment", key: "subgroups_title" },
       permission: "read:equipment",
     },
     {
       path: "/admin/equipment/categories",
       component: CategoriesPage,
+      title: { namespace: "module-equipment", key: "categories_title" },
       permission: "read:equipment",
     },
     {
       path: "/admin/equipment/items",
       component: EquipmentTypesPage,
+      title: { namespace: "module-equipment", key: "equipment_page_title" },
       permission: "read:equipment",
     },
   ],
