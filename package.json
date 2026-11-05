@@ -6,13 +6,14 @@
   "type": "module",
   "sideEffects": false,
   "files": [
+    "index.ts",
     "api/package.json",
     "api/dist",
     "web/src/modules/equipment",
     "web/src/services/i18n/locales"
   ],
   "exports": {
-    ".": "./web/src/modules/equipment/index.ts",
+    ".": "./index.ts",
     "./web": "./web/src/modules/equipment/index.ts",
     "./manifest": "./web/src/modules/equipment/module.manifest.ts",
     "./api": {
@@ -165,6 +166,9 @@
   },
   "typesVersions": {
     "*": {
+      ".": [
+        "index.ts"
+      ],
       "api": [
         "api/dist/index.d.ts"
       ],
@@ -173,9 +177,6 @@
       ],
       "api/migrations": [
         "api/dist/equipment/database/migrations/index.d.ts"
-      ],
-      "web": [
-        "web/src/modules/equipment/index.ts"
       ],
       "manifest": [
         "web/src/modules/equipment/module.manifest.ts"
@@ -188,7 +189,9 @@
       ],
       "api/seeds": [
         "api/dist/equipment/equipment.seeds.d.ts"
+      ],
+      "web": [
+        "web/src/modules/equipment/index.ts"
       ]
-    }
   }
 }
