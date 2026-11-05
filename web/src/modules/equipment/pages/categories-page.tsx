@@ -58,7 +58,7 @@ function PageInner() {
 
   const customTabBody = useMemo(() => ({
     overview: (item: Category) => <CategoryOverviewTab item={item} />,
-    equipment: (item: Category) => <CategoryEquipmentTab item={item} />,
+    equipment: (item: Category) => <CategoryEquipmentTab category={item} />,
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [refreshKey]);
 
