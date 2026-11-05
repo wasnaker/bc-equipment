@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "@/services/i18n/client";
 import {
-  useEquipmentItemsServerSide,
+  useEquipmentItems,
   useCreateEquipmentItem,
   useUpdateEquipmentItem,
   useDeleteEquipmentItem,
@@ -19,27 +19,17 @@ interface Props {
   category: Category;
 }
 
-/**
- * Tab "Equipment type" di CategoriesPage.
- *
- * POLA A — ringkas: daftar kecil (name + code saja, tanpa deskripsi panjang,
- * tanpa status, tanpa tombol per-baris). Create/edit/delete dilakukan lewat
- * `EquipmentItemFormDialog` (sama dialog yang dipakai di halaman Equipment
- * Types), bukan form inline di tengah daftar. Tab ini tidak menangani CRUD
- * langsung — tombol Add/Edit/Delete di toolbar tab membuka dialog.
- */
 export function CategoryEquipmentTab({ category }: Props) {
   const { t } = useTranslation("module-equipment");
-  const [refreshKey, setRefreshKey] = useState(0);
   const [formOpen, setFormOpen] = useState(false);
   const [editItem, setEditItem] = useState<EquipmentItem | null>(null);
 
-  const { data: items, isLoading } = useEquipmentItemsServerSide(category.id);
+  const { data: itemsResult, isLoading } = useEquipmentItems(category.id, 1, 100);
   const createMutation = useCreateEquipmentItem();
   const updateMutation = useUpdateEquipmentItem();
   const deleteMutation = useDeleteEquipmentItem();
 
-  const list = useMemo(() => items ?? [], [items]);
+  const list = useMemo(() => itemsResult?.data ?? [], [itemsResult?.data]);
 
   function openCreateDialog() {
     setEditItem(null);
@@ -52,7 +42,6 @@ export function CategoryEquipmentTab({ category }: Props) {
   async function handleDelete(item: EquipmentItem) {
     if (!window.confirm(t("confirm.delete.message"))) return;
     await deleteMutation.mutateAsync({ id: item.id });
-    setRefreshKey((k) => k + 1);
   }
 
   return (
@@ -130,9 +119,7 @@ export function CategoryEquipmentTab({ category }: Props) {
           if (!open) setEditItem(null);
         }}
         editItem={editItem}
-        onSuccess={() => {
-          setRefreshKey((k) => k + 1);
-        }}
+        onSuccess={() => {}}
       />
     </div>
   );
