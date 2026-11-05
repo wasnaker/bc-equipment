@@ -239,7 +239,11 @@ export function useEquipmentItems(categoryId: Category["id"] | null, page = 1, l
   const service = useGetEquipmentItemsService();
   return useQuery({
     queryKey: ["equipment", "items", categoryId, page, limit],
-    queryFn: async () => unwrapResponse<EquipmentItemListResponse>(await service({ page, limit, filters: categoryId != null ? { categoryId: String(categoryId) } : undefined })),
+    queryFn: async () => {
+      const res = await service({ page, limit, filters: categoryId != null ? { categoryId: Number(categoryId) } : undefined });
+      const parsed = unwrapResponse<EquipmentItemListResponse>(res);
+      return parsed;
+    },
     enabled: categoryId != null,
   });
 }
