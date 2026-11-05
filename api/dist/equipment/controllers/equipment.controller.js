@@ -45,7 +45,7 @@ let EquipmentController = class EquipmentController {
     }
     async findGroups(query) {
         const page = query.page ?? 1;
-        const limit = Math.min(query.limit ?? 10, 50);
+        const limit = Math.min(query.limit ?? 10, 100);
         const data = await this.service.findManyGroupsWithPagination({
             filterOptions: query.filters ?? null,
             sortOptions: query.sort ?? null,
@@ -68,7 +68,7 @@ let EquipmentController = class EquipmentController {
     }
     async findSubgroups(query) {
         const page = query.page ?? 1;
-        const limit = Math.min(query.limit ?? 10, 50);
+        const limit = Math.min(query.limit ?? 10, 100);
         const filters = { ...(query.filters ?? {}) };
         if (query.groupId !== undefined)
             filters.groupId = query.groupId;
@@ -94,7 +94,7 @@ let EquipmentController = class EquipmentController {
     }
     async findCategories(query) {
         const page = query.page ?? 1;
-        const limit = Math.min(query.limit ?? 10, 50);
+        const limit = Math.min(query.limit ?? 10, 100);
         const filters = { ...(query.filters ?? {}) };
         if (query.subgroupId !== undefined)
             filters.subgroupId = query.subgroupId;
@@ -118,7 +118,7 @@ let EquipmentController = class EquipmentController {
     createEquipment(dto) { return this.service.createEquipment(dto); }
     async findEquipment(query) {
         const page = query.page ?? 1;
-        const limit = Math.min(query.limit ?? 10, 50);
+        const limit = Math.min(query.limit ?? 10, 100);
         const filters = { ...(query.filters ?? {}) };
         if (query.subgroupId !== undefined)
             filters.subgroupId = query.subgroupId;

@@ -46,7 +46,7 @@ export class QueryCategoryDto {
   @Transform(({ value }) => (value === undefined || value === '' ? 10 : Number(value)))
   @IsInt()
   @Min(1)
-  @Max(50)
+  @Max(100)
   @IsOptional()
   limit?: number;
 

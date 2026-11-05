@@ -41,9 +41,9 @@ export class QueryEquipmentDto {
   @IsOptional() @Transform(({ value }) => value === undefined ? 1 : Number(value))
   @IsInt() @Min(1) page = 1;
 
-  @ApiPropertyOptional({ default: 10, maximum: 50 })
+  @ApiPropertyOptional({ default: 10, maximum: 100 })
   @IsOptional() @Transform(({ value }) => value === undefined ? 10 : Number(value))
-  @IsInt() @Min(1) @Max(50) limit = 10;
+  @IsInt() @Min(1) @Max(100) limit = 10;
 
   @ApiPropertyOptional({ name: 'category_id' })
   @IsOptional() @Transform(({ value, obj }) => Number(value ?? obj?.category_id))

@@ -67,7 +67,7 @@ __decorate([
     (0, class_transformer_1.Transform)(({ value }) => (value === undefined || value === '' ? 10 : Number(value))),
     (0, class_validator_1.IsInt)(),
     (0, class_validator_1.Min)(1),
-    (0, class_validator_1.Max)(50),
+    (0, class_validator_1.Max)(100),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], QueryCategoryDto.prototype, "limit", void 0);

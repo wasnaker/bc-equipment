@@ -49,7 +49,7 @@ export class EquipmentController {
   @ApiOkResponse({ type: InfinityPaginationResponse(Group) })
   async findGroups(@Query() query: QueryGroupDto): Promise<InfinityPaginationResponseDto<Group>> {
     const page = query.page ?? 1;
-    const limit = Math.min(query.limit ?? 10, 50);
+    const limit = Math.min(query.limit ?? 10, 100);
     const data = await this.service.findManyGroupsWithPagination({
       filterOptions: query.filters ?? null,
       sortOptions: query.sort ?? null,
@@ -99,7 +99,7 @@ export class EquipmentController {
   @ApiOkResponse({ type: InfinityPaginationResponse(Subgroup) })
   async findSubgroups(@Query() query: QuerySubgroupDto): Promise<InfinityPaginationResponseDto<Subgroup>> {
     const page = query.page ?? 1;
-    const limit = Math.min(query.limit ?? 10, 50);
+    const limit = Math.min(query.limit ?? 10, 100);
     const filters: FilterSubgroupDto = { ...(query.filters ?? {}) };
     if (query.groupId !== undefined) filters.groupId = query.groupId;
     const data = await this.service.findManySubgroupsWithPagination({
@@ -151,7 +151,7 @@ export class EquipmentController {
   @ApiOkResponse({ type: InfinityPaginationResponse(Category) })
   async findCategories(@Query() query: QueryCategoryDto): Promise<InfinityPaginationResponseDto<Category>> {
     const page = query.page ?? 1;
-    const limit = Math.min(query.limit ?? 10, 50);
+    const limit = Math.min(query.limit ?? 10, 100);
     const filters: FilterCategoryDto = { ...(query.filters ?? {}) };
     if (query.subgroupId !== undefined) filters.subgroupId = query.subgroupId;
     const data = await this.service.findManyCategoriesWithPagination({
@@ -202,7 +202,7 @@ export class EquipmentController {
   @ApiOkResponse({ type: InfinityPaginationResponse(Equipment) })
   async findEquipment(@Query() query: QueryEquipmentDto): Promise<InfinityPaginationResponseDto<Equipment>> {
     const page = query.page ?? 1;
-    const limit = Math.min(query.limit ?? 10, 50);
+    const limit = Math.min(query.limit ?? 10, 100);
     const filters: FilterEquipmentDto = { ...(query.filters ?? {}) };
     if (query.subgroupId !== undefined) filters.subgroupId = query.subgroupId;
     if (query.categoryId !== undefined) filters.categoryId = query.categoryId;

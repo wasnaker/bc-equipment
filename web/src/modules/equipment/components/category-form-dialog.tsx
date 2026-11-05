@@ -64,7 +64,7 @@ export function CategoryFormDialog({ open, onOpenChange, editItem, subgroupId, o
         <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>{t("actions.cancel")}</Button>
         <Button type="submit" disabled={isPending}>{isPending ? t("actions.saving") : t("actions.save")}</Button>
       </>}>
-      {!editItem && subgroupId == null && (
+      {subgroupId == null && (
         <div className="space-y-1.5">
           <Label htmlFor="category-subgroup">{t("form.field.subgroup")} <span className="text-destructive">*</span></Label>
           <Select value={selectedSubgroupId} onValueChange={setSelectedSubgroupId}>

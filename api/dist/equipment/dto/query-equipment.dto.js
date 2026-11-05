@@ -82,12 +82,12 @@ __decorate([
     __metadata("design:type", Object)
 ], QueryEquipmentDto.prototype, "page", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ default: 10, maximum: 50 }),
+    (0, swagger_1.ApiPropertyOptional)({ default: 10, maximum: 100 }),
     (0, class_validator_1.IsOptional)(),
     (0, class_transformer_1.Transform)(({ value }) => value === undefined ? 10 : Number(value)),
     (0, class_validator_1.IsInt)(),
     (0, class_validator_1.Min)(1),
-    (0, class_validator_1.Max)(50),
+    (0, class_validator_1.Max)(100),
     __metadata("design:type", Object)
 ], QueryEquipmentDto.prototype, "limit", void 0);
 __decorate([
