@@ -240,7 +240,7 @@ export function useEquipmentItems(categoryId: Category["id"] | null, page = 1, l
   return useQuery({
     queryKey: ["equipment", "items", categoryId, page, limit],
     queryFn: async () => {
-      const res = await service({ page, limit, filters: categoryId != null ? { categoryId: Number(categoryId) } : undefined });
+      const res = await service({ page, limit, filters: categoryId != null ? { categoryId: String(categoryId) } : undefined });
       return unwrapResponse<EquipmentItemListResponse>(res);
     },
     enabled: categoryId != null,
