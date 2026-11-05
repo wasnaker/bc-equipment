@@ -81,16 +81,16 @@ export function useDeleteGroup() {
       const response = await service({ id });
       if (response.status !== HTTP_CODES_ENUM.NO_CONTENT) unwrapResponse<undefined>(response);
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["equipment", "groups"] }); qc.invalidateQueries({ queryKey: ["equipment", "subgroups"] }); },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["equipment", "groups"] }),
   });
 }
 
-export function useSubgroups(groupId: Group["id"] | null, page = 1, limit = 10) {
+export function useSubgroups(groupId: Group["id"] | null, page = 1, limit = 50, filters?: Record<string, string | number | boolean>) {
   const service = useGetSubgroupsService();
   return useQuery({
-    queryKey: ["equipment", "subgroups", groupId, page, limit],
-    queryFn: async () => unwrapResponse<SubgroupListResponse>(await service({ page, limit, filters: groupId != null ? { groupId: String(groupId) } : undefined })),
-    enabled: groupId != null,
+    queryKey: ["equipment", "subgroups", groupId, page, limit, filters],
+    queryFn: async () => unwrapResponse<SubgroupListResponse>(await service({ page, limit, filters: { ...(groupId != null ? { groupId: String(groupId) } : {}), ...(filters ?? {}) } })),
+    enabled: groupId !== null,
   });
 }
 
@@ -103,12 +103,11 @@ export function useSubgroup(id: Subgroup["id"] | null) {
   });
 }
 
-/** Flat list of all subgroups (untuk dropdown, page 1 limit 50). */
 export function useSubgroupsQuery() {
   const service = useGetSubgroupsService();
   return useQuery({
-    queryKey: ["equipment", "subgroups", "all"],
-    queryFn: async () => unwrapResponse<SubgroupListResponse>(await service({ page: 1, limit: 50 })),
+    queryKey: ["equipment", "subgroups-query"],
+    queryFn: async () => unwrapResponse<SubgroupListResponse>(await service({ page: 1, limit: 100 })),
   });
 }
 
@@ -199,12 +198,11 @@ export function useCategory(id: Category["id"] | null) {
   });
 }
 
-/** Flat list of all categories (untuk dropdown). */
 export function useCategoriesQuery() {
   const service = useGetCategoriesService();
   return useQuery({
-    queryKey: ["equipment", "categories", "all"],
-    queryFn: async () => unwrapResponse<CategoryListResponse>(await service({ page: 1, limit: 50 })),
+    queryKey: ["equipment", "categories-query"],
+    queryFn: async () => unwrapResponse<CategoryListResponse>(await service({ page: 1, limit: 100 })),
   });
 }
 
@@ -236,6 +234,15 @@ export function useDeleteCategory() {
 }
 
 // ── Equipment items (types) ──────────────────────────────────────────────
+
+export function useEquipmentItems(categoryId: Category["id"] | null, page = 1, limit = 50) {
+  const service = useGetEquipmentItemsService();
+  return useQuery({
+    queryKey: ["equipment", "items", categoryId, page, limit],
+    queryFn: async () => unwrapResponse<EquipmentItemListResponse>(await service({ page, limit, filters: categoryId != null ? { categoryId: String(categoryId) } : undefined })),
+    enabled: categoryId != null,
+  });
+}
 
 export function useEquipmentItemsServerSide(categoryId: Category["id"] | null) {
   const service = useGetEquipmentItemsService();
