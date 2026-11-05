@@ -2,8 +2,15 @@
 
 import { useTranslation } from "@/services/i18n/client";
 import { Category } from "../types/equipment";
-import { CategoryEquipmentManager } from "./category-equipment-manager";
 
+/**
+ * Tab Overview di CategoriesPage — field dasar kategori.
+ *
+ * Tab "Equipment type" (CRUD peralatan) kini di-render oleh
+ * `CategoryEquipmentTab` (component terpisah) yang mengelola state-nya
+ * sendiri dan memakai `EquipmentItemFormDialog` — pola yang sama dengan
+ * halaman Equipment Types. Komponen ini hanya Overview.
+ */
 export function CategoryOverviewTab({ item }: { item: Category }) {
   const { t } = useTranslation("module-equipment");
   return (
@@ -13,8 +20,4 @@ export function CategoryOverviewTab({ item }: { item: Category }) {
       <div><dt className="text-muted-foreground">{t("table.status")}</dt><dd className="text-foreground">{item.isActive ? t("status.active") : t("status.inactive")}</dd></div>
     </dl>
   );
-}
-
-export function CategoryEquipmentTab({ item }: { item: Category }) {
-  return <CategoryEquipmentManager category={item} />;
 }

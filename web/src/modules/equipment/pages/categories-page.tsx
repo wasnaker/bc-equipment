@@ -11,7 +11,8 @@ import {
 import { useMasterDetail } from "@/core/master-detail/use-master-detail";
 import { SmallTable, type SmallTableColumn, type DetailTab } from "@/components/small-table";
 import { CategoryFormDialog } from "../components/category-form-dialog";
-import { CategoryOverviewTab, CategoryEquipmentTab } from "../components/category-detail-tab";
+import { CategoryOverviewTab } from "../components/category-detail-tab";
+import { CategoryEquipmentTab } from "../components/category-equipment-tab";
 import { Button } from "@/components/ui/button";
 import PencilIcon from "lucide-react/dist/esm/icons/pencil";
 import TrashIcon from "lucide-react/dist/esm/icons/trash";

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import type { Category, Subgroup } from "../types/equipment";
 import type { DetailTab } from "@/components/small-table";
 import { CategoryFormDialog } from "./category-form-dialog";
-import { CategoryEquipmentManager } from "./category-equipment-manager";
+import { CategoryEquipmentTab } from "./category-equipment-tab";
 
 export function SubgroupOverviewTab({ item }: { item: Subgroup }) {
   const { t } = useTranslation("module-equipment");
@@ -54,7 +54,7 @@ export function SubgroupCategoriesTab({ item }: { item: Subgroup }) {
               {category.description && <p className="text-xs text-muted-foreground">{category.description}</p>}
               <p className="text-xs text-muted-foreground">{category.isActive ? t("status.active") : t("status.inactive")}</p>
               <Button size="sm" variant="ghost" className="mt-1 h-7 px-2 text-xs" onClick={() => setExpandedCategoryId(current => current === String(category.id) ? null : String(category.id))}>{expandedCategoryId === String(category.id) ? t("equipment.hide") : t("equipment.manage")}</Button>
-              {expandedCategoryId === String(category.id) && <CategoryEquipmentManager category={category} />}
+              {expandedCategoryId === String(category.id) && <CategoryEquipmentTab category={category} />}
             </div>
             <div className="flex shrink-0 items-center gap-1">
               <Button size="sm" variant="outline" onClick={() => editCategory(category)}>{t("actions.edit")}</Button>
