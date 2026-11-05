@@ -24,7 +24,7 @@ export function CategoryEquipmentTab({ category }: Props) {
   const [formOpen, setFormOpen] = useState(false);
   const [editItem, setEditItem] = useState<EquipmentItem | null>(null);
 
-  const { data: itemsResult, isLoading } = useEquipmentItems(category.id, 1, 100);
+  const { data: itemsResult, isLoading } = useEquipmentItems(category.id, 1, 50);
   const createMutation = useCreateEquipmentItem();
   const updateMutation = useUpdateEquipmentItem();
   const deleteMutation = useDeleteEquipmentItem();
