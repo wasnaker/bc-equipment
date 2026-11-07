@@ -30,11 +30,21 @@ let EquipmentAccessGuard = class EquipmentAccessGuard {
     async canActivate(context) {
         const request = context.switchToHttp().getRequest();
         const permission = PERMISSION_BY_METHOD[request.method.toUpperCase()];
-        const roleId = request.user?.role?.id;
-        if (!permission || roleId === undefined || !this.options?.authorize) {
+        const roleIds = [
+            ...new Set((request.user?.roles ?? [])
+                .map((role) => role.id)
+                .filter((id) => id !== undefined && id !== null)),
+        ];
+        if (!permission || roleIds.length === 0 || !this.options?.authorize) {
             throw new common_1.ForbiddenException();
         }
-        const allowed = await this.options.authorize(roleId, permission);
+        let allowed = false;
+        for (const roleId of roleIds) {
+            if (await this.options.authorize(roleId, permission)) {
+                allowed = true;
+                break;
+            }
+        }
         if (!allowed)
             throw new common_1.ForbiddenException();
         return true;

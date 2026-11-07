@@ -10,7 +10,11 @@ import { EQUIPMENT_MODULE_OPTIONS, EquipmentModuleOptions } from '../equipment.o
 
 interface AuthenticatedRequest {
   method: string;
-  user?: { role?: { id?: number | string } };
+  user?: {
+    id?: number | string;
+    role?: { id?: number | string } | null;
+    roles?: Array<{ id?: number | string }>;
+  };
 }
 
 const PERMISSION_BY_METHOD: Record<string, string> = {
@@ -33,7 +37,13 @@ export class EquipmentAccessGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const permission = PERMISSION_BY_METHOD[request.method.toUpperCase()];
-    const roleIds = (request.user?.roles ?? []).map((role) => role.id);
+    const roleIds = [
+      ...new Set(
+        (request.user?.roles ?? [])
+          .map((role) => role.id)
+          .filter((id): id is number | string => id !== undefined && id !== null),
+      ),
+    ];
 
     if (!permission || roleIds.length === 0 || !this.options?.authorize) {
       throw new ForbiddenException();
