@@ -33,13 +33,20 @@ export class EquipmentAccessGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const permission = PERMISSION_BY_METHOD[request.method.toUpperCase()];
-    const roleId = request.user?.role?.id;
+    const roleIds = (request.user?.roles ?? []).map((role) => role.id);
 
-    if (!permission || roleId === undefined || !this.options?.authorize) {
+    if (!permission || roleIds.length === 0 || !this.options?.authorize) {
       throw new ForbiddenException();
     }
 
-    const allowed = await this.options.authorize(roleId, permission);
+    let allowed = false;
+    for (const roleId of roleIds) {
+      if (await this.options.authorize(roleId, permission)) {
+        allowed = true;
+        break;
+      }
+    }
+
     if (!allowed) throw new ForbiddenException();
     return true;
   }
