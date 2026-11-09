@@ -40,27 +40,18 @@ export class EquipmentAccessGuard implements CanActivate {
       throw new ForbiddenException('Equipment module is inactive');
     }
     const permission = PERMISSION_BY_METHOD[request.method.toUpperCase()];
-    const roleIds = [
-      ...new Set(
-        (request.user?.roles ?? [])
-          .map((role) => role.id)
-          .filter((id): id is number | string => id !== undefined && id !== null),
-      ),
-    ];
-
-    if (!permission || roleIds.length === 0 || !this.options?.authorize) {
+    const userId = request.user?.id;
+    if (userId === undefined || userId === null || !permission || !this.options?.resolveScopes) {
       throw new ForbiddenException();
     }
 
-    let allowed = false;
-    for (const roleId of roleIds) {
-      if (await this.options.authorize(roleId, permission)) {
-        allowed = true;
-        break;
-      }
+    // Equipment master data is global, but module Roles are still required to
+    // have a current Core-managed permission grant and at least one active
+    // assigned scope. A bare Role ID is never sufficient authorization.
+    const resolved = await this.options.resolveScopes(userId, permission);
+    if (!resolved.global && resolved.scopes.length === 0) {
+      throw new ForbiddenException();
     }
-
-    if (!allowed) throw new ForbiddenException();
     return true;
   }
 }
