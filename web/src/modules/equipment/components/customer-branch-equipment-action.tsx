@@ -15,6 +15,7 @@ export function CustomerBranchEquipmentAction(_props: ModuleExtensionProps) {
   return (
     <Link
       href="/admin/equipment/items"
+      data-module-extension="equipment.customer-branch.catalog-action"
       className="inline-flex h-8 items-center rounded-md border border-border bg-background px-3 text-xs font-medium text-foreground transition-colors hover:bg-muted"
     >
       {t("equipment_page_title")}
