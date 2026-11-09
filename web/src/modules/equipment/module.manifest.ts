@@ -16,6 +16,7 @@ import { CustomerBranchEquipmentAction } from "./components/customer-branch-equi
  */
 export default defineModuleManifest({
   alias: "equipment",
+  runtimeManaged: true,
   requiresModules: ["customer"],
   pages: [
     {
