@@ -8,6 +8,7 @@ import { EquipmentPage } from "./pages/equipment-page";
 import { SubgroupsPage } from "./pages/subgroups-page";
 import { CategoriesPage } from "./pages/categories-page";
 import { EquipmentTypesPage } from "./pages/equipment-types-page";
+import { CustomerBranchEquipmentAction } from "./components/customer-branch-equipment-action";
 
 /**
  * Equipment owns its admin pages and navigation. The host resolves these
@@ -78,6 +79,16 @@ export default defineModuleManifest({
           permission: "read:equipment",
         },
       ],
+    },
+  ],
+  extensions: [
+    {
+      id: "equipment.customer-branch.catalog-action",
+      slot: "detail.actions",
+      target: "customer.branch.list",
+      component: CustomerBranchEquipmentAction,
+      position: 50,
+      permission: "read:equipment",
     },
   ],
   dashboardWidgets: [
