@@ -15,12 +15,31 @@ const equipment_repository_1 = require("../infrastructure/persistence/equipment.
 const group_repository_1 = require("../infrastructure/persistence/group.repository");
 const subgroup_repository_1 = require("../infrastructure/persistence/subgroup.repository");
 const category_repository_1 = require("../infrastructure/persistence/category.repository");
+const customer_branch_directory_client_1 = require("../customer-branch-directory.client");
 let EquipmentService = class EquipmentService {
-    constructor(groupRepository, subgroupRepository, categoryRepository, equipmentRepository) {
+    constructor(groupRepository, subgroupRepository, categoryRepository, equipmentRepository, customerBranches) {
         this.groupRepository = groupRepository;
         this.subgroupRepository = subgroupRepository;
         this.categoryRepository = categoryRepository;
         this.equipmentRepository = equipmentRepository;
+        this.customerBranches = customerBranches;
+    }
+    /** Read Customer-owned branch context through its public service contract. */
+    async findCustomerBranchContext(branchId) {
+        if (!/^\d+$/.test(branchId)) {
+            throw new common_1.UnprocessableEntityException({
+                status: common_1.HttpStatus.UNPROCESSABLE_ENTITY,
+                errors: { branch: 'branchNotExists' },
+            });
+        }
+        const branch = await this.customerBranches.findBranchById(branchId);
+        if (!branch) {
+            throw new common_1.UnprocessableEntityException({
+                status: common_1.HttpStatus.UNPROCESSABLE_ENTITY,
+                errors: { branch: 'branchNotExists' },
+            });
+        }
+        return branch;
     }
     async createGroup(dto) {
         if (await this.groupRepository.findByName(dto.name)) {
@@ -220,5 +239,6 @@ exports.EquipmentService = EquipmentService = __decorate([
     __metadata("design:paramtypes", [group_repository_1.GroupRepository,
         subgroup_repository_1.SubgroupRepository,
         category_repository_1.CategoryRepository,
-        equipment_repository_1.EquipmentRepository])
+        equipment_repository_1.EquipmentRepository,
+        customer_branch_directory_client_1.CustomerBranchDirectoryClient])
 ], EquipmentService);

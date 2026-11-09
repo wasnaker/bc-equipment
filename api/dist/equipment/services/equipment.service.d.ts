@@ -20,12 +20,16 @@ import { SubgroupRepository } from '../infrastructure/persistence/subgroup.repos
 import { CategoryRepository } from '../infrastructure/persistence/category.repository';
 import { NullableType } from '../../utils/types/nullable.type';
 import { IPaginationOptions } from '../../utils/types/pagination-options';
+import { CustomerBranchDirectoryClient } from '../customer-branch-directory.client';
 export declare class EquipmentService {
     private readonly groupRepository;
     private readonly subgroupRepository;
     private readonly categoryRepository;
     private readonly equipmentRepository;
-    constructor(groupRepository: GroupRepository, subgroupRepository: SubgroupRepository, categoryRepository: CategoryRepository, equipmentRepository: EquipmentRepository);
+    private readonly customerBranches;
+    constructor(groupRepository: GroupRepository, subgroupRepository: SubgroupRepository, categoryRepository: CategoryRepository, equipmentRepository: EquipmentRepository, customerBranches: CustomerBranchDirectoryClient);
+    /** Read Customer-owned branch context through its public service contract. */
+    findCustomerBranchContext(branchId: string): Promise<import("../customer-branch-directory.client").CustomerBranchSummary>;
     createGroup(dto: CreateGroupDto): Promise<Group>;
     findManyGroupsWithPagination(args: {
         filterOptions?: FilterGroupDto | null;

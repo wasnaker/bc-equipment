@@ -15,6 +15,12 @@ export interface BackendModuleManifest {
     capabilities: readonly ('api' | 'web')[];
     permissions: readonly ModulePermissionDefinition[];
     roles?: readonly ModuleRoleDefinition[];
+    requires?: readonly string[];
+    requiresServices?: readonly {
+        providerModuleId: string;
+        contractId: string;
+        version: string;
+    }[];
 }
 export declare const moduleManifest: BackendModuleManifest;
 export declare const equipmentModuleManifest: BackendModuleManifest;

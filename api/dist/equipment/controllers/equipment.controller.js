@@ -40,6 +40,10 @@ let EquipmentController = class EquipmentController {
     constructor(service) {
         this.service = service;
     }
+    /** Cross-module read facade backed by Customer's public branch contract. */
+    findCustomerBranchContext(branchId) {
+        return this.service.findCustomerBranchContext(branchId);
+    }
     createGroup(dto) {
         return this.service.createGroup(dto);
     }
@@ -133,6 +137,15 @@ let EquipmentController = class EquipmentController {
     removeEquipment(id) { return this.service.removeEquipment(id); }
 };
 exports.EquipmentController = EquipmentController;
+__decorate([
+    (0, common_1.Get)('customer-branches/:branchId'),
+    (0, common_1.UseGuards)(equipment_access_guard_1.EquipmentAccessGuard),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    __param(0, (0, common_1.Param)('branchId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], EquipmentController.prototype, "findCustomerBranchContext", null);
 __decorate([
     (0, common_1.Post)('groups'),
     (0, common_1.UseGuards)(equipment_access_guard_1.EquipmentAccessGuard),

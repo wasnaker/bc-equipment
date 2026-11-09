@@ -20,6 +20,8 @@ import { InfinityPaginationResponseDto } from '../../utils/dto/infinity-paginati
 export declare class EquipmentController {
     private readonly service;
     constructor(service: EquipmentService);
+    /** Cross-module read facade backed by Customer's public branch contract. */
+    findCustomerBranchContext(branchId: string): Promise<import("../customer-branch-directory.client").CustomerBranchSummary>;
     createGroup(dto: CreateGroupDto): Promise<Group>;
     findGroups(query: QueryGroupDto): Promise<InfinityPaginationResponseDto<Group>>;
     findGroup(id: Group['id']): Promise<NullableType<Group>>;

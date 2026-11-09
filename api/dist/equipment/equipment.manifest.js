@@ -3,6 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.equipmentModuleManifest = exports.moduleManifest = void 0;
 exports.moduleManifest = {
     id: 'equipment', version: '0.6.1', capabilities: ['api', 'web'],
+    requires: ['customer'],
+    requiresServices: [
+        {
+            providerModuleId: 'customer',
+            contractId: 'customer.branch-directory',
+            version: '^1.0.0',
+        },
+    ],
     permissions: [
         { name: 'read:equipment', description: 'Allows viewing Equipment module navigation and data' },
         { name: 'create:equipment', description: 'Allows creating equipment records' },

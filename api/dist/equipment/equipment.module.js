@@ -27,6 +27,7 @@ const equipment_repository_2 = require("./infrastructure/persistence/relational/
 const equipment_access_guard_1 = require("./security/equipment-access.guard");
 const equipment_master_data_seed_service_1 = require("./database/seeds/master-data/equipment-master-data.seed.service");
 const equipment_catalog_seed_service_1 = require("./database/seeds/master-data/equipment-catalog.seed.service");
+const customer_branch_directory_client_1 = require("./customer-branch-directory.client");
 const equipment_options_1 = require("./equipment.options");
 var equipment_options_2 = require("./equipment.options");
 Object.defineProperty(exports, "EQUIPMENT_MODULE_OPTIONS", { enumerable: true, get: function () { return equipment_options_2.EQUIPMENT_MODULE_OPTIONS; } });
@@ -42,6 +43,7 @@ exports.EquipmentModule = EquipmentModule = EquipmentModule_1 = __decorate([
         imports: [typeorm_1.TypeOrmModule.forFeature([group_entity_1.GroupEntity, subgroup_entity_1.SubgroupEntity, category_entity_1.CategoryEntity, equipment_entity_1.EquipmentEntity])],
         providers: [
             equipment_service_1.EquipmentService, equipment_access_guard_1.EquipmentAccessGuard,
+            customer_branch_directory_client_1.CustomerBranchDirectoryClient,
             equipment_master_data_seed_service_1.EquipmentMasterDataSeedService,
             equipment_catalog_seed_service_1.EquipmentCatalogSeedService,
             { provide: group_repository_1.GroupRepository, useClass: group_repository_2.GroupsRelationalRepository },
@@ -50,6 +52,6 @@ exports.EquipmentModule = EquipmentModule = EquipmentModule_1 = __decorate([
             { provide: equipment_repository_1.EquipmentRepository, useClass: equipment_repository_2.EquipmentRelationalRepository },
         ],
         controllers: [equipment_controller_1.EquipmentController],
-        exports: [equipment_service_1.EquipmentService],
+        exports: [equipment_service_1.EquipmentService, customer_branch_directory_client_1.CustomerBranchDirectoryClient],
     })
 ], EquipmentModule);
