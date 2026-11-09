@@ -7,6 +7,7 @@ import {
   Optional,
 } from '@nestjs/common';
 import { EQUIPMENT_MODULE_OPTIONS, EquipmentModuleOptions } from '../equipment.options';
+import { CustomerBranchDirectoryClient } from '../customer-branch-directory.client';
 
 interface AuthenticatedRequest {
   method: string;
@@ -33,6 +34,7 @@ export class EquipmentAccessGuard implements CanActivate {
     @Optional()
     @Inject(EQUIPMENT_MODULE_OPTIONS)
     private readonly options?: EquipmentModuleOptions,
+    private readonly customerBranches?: CustomerBranchDirectoryClient,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -51,13 +53,23 @@ export class EquipmentAccessGuard implements CanActivate {
     // data is global but still requires at least one active Core-resolved scope.
     const branchId = request.params?.branchId;
     if (branchId) {
-      if (!this.options.authorizeScoped || !(await this.options.authorizeScoped(
-        userId,
-        permission,
-        { scopes: [{ type: 'branch', id: String(branchId) }] },
-      ))) {
+      if (!this.options.authorizeScoped || !this.customerBranches) {
         throw new ForbiddenException();
       }
+      let branch;
+      try {
+        branch = await this.customerBranches.findBranchById(String(branchId));
+      } catch {
+        throw new ForbiddenException();
+      }
+      if (!branch || !branch.isActive) throw new ForbiddenException();
+      const allowed = await this.options.authorizeScoped(userId, permission, {
+        scopes: [
+          { type: 'branch', id: branch.id },
+          { type: 'customer', id: branch.customerId },
+        ],
+      });
+      if (!allowed) throw new ForbiddenException();
       return true;
     }
 
