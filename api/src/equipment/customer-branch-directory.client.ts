@@ -1,7 +1,6 @@
 import {
   Inject,
   Injectable,
-  OnModuleInit,
 } from "@nestjs/common";
 
 export interface CustomerBranchSummary {
@@ -33,7 +32,7 @@ const MODULE_SERVICE_REGISTRY = Symbol.for(
  * import Customer's service, repository, or entity implementation.
  */
 @Injectable()
-export class CustomerBranchDirectoryClient implements OnModuleInit {
+export class CustomerBranchDirectoryClient {
   private directory?: CustomerBranchDirectory;
 
   constructor(
@@ -41,18 +40,12 @@ export class CustomerBranchDirectoryClient implements OnModuleInit {
     private readonly registry: ModuleServiceRegistry,
   ) {}
 
-  onModuleInit(): void {
-    this.directory = this.registry.resolve<CustomerBranchDirectory>(
+  findBranchById(id: string): Promise<CustomerBranchSummary | null> {
+    this.directory ??= this.registry.resolve<CustomerBranchDirectory>(
       "equipment",
       "customer.branch-directory",
       "^1.0.0",
     );
-  }
-
-  findBranchById(id: string): Promise<CustomerBranchSummary | null> {
-    if (!this.directory) {
-      throw new Error("Customer branch directory service is not initialized");
-    }
     return this.directory.findBranchById(id);
   }
 }
