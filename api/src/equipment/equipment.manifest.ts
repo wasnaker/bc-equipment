@@ -21,6 +21,10 @@ export const moduleManifest: BackendModuleManifest = {
     providerModuleId: 'customer',
     contractId: 'customer.branch-directory',
     version: '^1.0.0',
+  }, {
+    providerModuleId: 'core',
+    contractId: 'core.authorization.registry',
+    version: '^1.0.0',
   }],
   permissions: [
     { name: 'read:equipment', description: 'Allows viewing Equipment module navigation and data' },
