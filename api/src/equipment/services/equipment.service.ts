@@ -35,7 +35,7 @@ export class EquipmentService {
 
   /** Read Customer-owned branch context through its public service contract. */
   async findCustomerBranchContext(branchId: string) {
-    if (!/^\\d+$/.test(branchId)) {
+    if (!/^\d+$/.test(branchId)) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: { branch: 'branchNotExists' },
