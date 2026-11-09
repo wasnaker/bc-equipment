@@ -18,7 +18,7 @@ export interface EquipmentModuleOptions {
   /** Host lifecycle gate; protected routes are unavailable while Equipment is inactive. */
   isModuleActive?: () => boolean | Promise<boolean>;
 
-  /** Delegate permission decisions to the host's authorization service. */
+  /** Legacy Core-Role-only check; module Roles must use the scope-aware callbacks. */
   authorize: (
     roleId: number | string,
     permission: string,
