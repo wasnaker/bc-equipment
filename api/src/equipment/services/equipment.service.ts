@@ -21,6 +21,7 @@ import { SubgroupRepository } from '../infrastructure/persistence/subgroup.repos
 import { CategoryRepository } from '../infrastructure/persistence/category.repository';
 import { NullableType } from '../../utils/types/nullable.type';
 import { IPaginationOptions } from '../../utils/types/pagination-options';
+import { CustomerBranchDirectoryClient } from '../customer-branch-directory.client';
 
 @Injectable()
 export class EquipmentService {
@@ -29,7 +30,26 @@ export class EquipmentService {
     private readonly subgroupRepository: SubgroupRepository,
     private readonly categoryRepository: CategoryRepository,
     private readonly equipmentRepository: EquipmentRepository,
+    private readonly customerBranches: CustomerBranchDirectoryClient,
   ) {}
+
+  /** Read Customer-owned branch context through its public service contract. */
+  async findCustomerBranchContext(branchId: string) {
+    if (!/^\\d+$/.test(branchId)) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: { branch: 'branchNotExists' },
+      });
+    }
+    const branch = await this.customerBranches.findBranchById(branchId);
+    if (!branch) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: { branch: 'branchNotExists' },
+      });
+    }
+    return branch;
+  }
 
   async createGroup(dto: CreateGroupDto): Promise<Group> {
     if (await this.groupRepository.findByName(dto.name)) {
