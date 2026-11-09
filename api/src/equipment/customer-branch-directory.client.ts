@@ -33,7 +33,6 @@ const MODULE_SERVICE_REGISTRY = Symbol.for(
  */
 @Injectable()
 export class CustomerBranchDirectoryClient {
-  private directory?: CustomerBranchDirectory;
 
   constructor(
     @Inject(MODULE_SERVICE_REGISTRY)
@@ -41,11 +40,11 @@ export class CustomerBranchDirectoryClient {
   ) {}
 
   findBranchById(id: string): Promise<CustomerBranchSummary | null> {
-    this.directory ??= this.registry.resolve<CustomerBranchDirectory>(
+    const directory = this.registry.resolve<CustomerBranchDirectory>(
       "equipment",
       "customer.branch-directory",
       "^1.0.0",
     );
-    return this.directory.findBranchById(id);
+    return directory.findBranchById(id);
   }
 }
