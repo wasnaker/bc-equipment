@@ -35,6 +35,14 @@ import { infinityPagination } from '../../utils/infinity-pagination';
 export class EquipmentController {
   constructor(private readonly service: EquipmentService) {}
 
+  /** Cross-module read facade backed by Customer's public branch contract. */
+  @Get('customer-branches/:branchId')
+  @UseGuards(EquipmentAccessGuard)
+  @HttpCode(HttpStatus.OK)
+  findCustomerBranchContext(@Param('branchId') branchId: string) {
+    return this.service.findCustomerBranchContext(branchId);
+  }
+
   @Post('groups')
   @UseGuards(EquipmentAccessGuard)
   @HttpCode(HttpStatus.CREATED)
