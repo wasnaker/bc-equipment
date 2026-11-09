@@ -5,7 +5,11 @@ describe('EquipmentAccessGuard Core scope authorization', () => {
   const resolveScopes = jest.fn();
   const authorizeScoped = jest.fn();
   const isModuleActive = jest.fn();
-  const guard = new EquipmentAccessGuard({ resolveScopes, authorizeScoped, isModuleActive } as never);
+  const customerBranches = { findBranchById: jest.fn() };
+  const guard = new EquipmentAccessGuard(
+    { resolveScopes, authorizeScoped, isModuleActive } as never,
+    customerBranches as never,
+  );
   const execute = (method: string, user: Record<string, unknown>, params: Record<string, string> = {}) => {
     const context = {
       switchToHttp: () => ({ getRequest: () => ({ method, user, params }) }),
@@ -18,6 +22,9 @@ describe('EquipmentAccessGuard Core scope authorization', () => {
     isModuleActive.mockResolvedValue(true);
     resolveScopes.mockResolvedValue({ global: false, scopes: [{ type: 'branch', id: '42' }] });
     authorizeScoped.mockResolvedValue(true);
+    customerBranches.findBranchById.mockResolvedValue({
+      id: '42', customerId: '8', isActive: true,
+    });
   });
 
   it('allows a module permission only when Core resolves an active assignment scope', async () => {
@@ -30,9 +37,15 @@ describe('EquipmentAccessGuard Core scope authorization', () => {
     expect(authorizeScoped).toHaveBeenCalledWith(
       7,
       'read:equipment',
-      { scopes: [{ type: 'branch', id: '42' }] },
+      { scopes: [{ type: 'branch', id: '42' }, { type: 'customer', id: '8' }] },
     );
     expect(resolveScopes).not.toHaveBeenCalled();
+  });
+
+  it('fails closed when the requested branch is missing or inactive', async () => {
+    customerBranches.findBranchById.mockResolvedValue(null);
+    await expect(execute('GET', { id: 7 }, { branchId: '999' })).rejects.toBeInstanceOf(ForbiddenException);
+    expect(authorizeScoped).not.toHaveBeenCalled();
   });
 
   it('fails closed when no active scope is resolved', async () => {
