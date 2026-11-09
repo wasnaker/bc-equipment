@@ -17,6 +17,7 @@ import { EquipmentRelationalRepository } from './infrastructure/persistence/rela
 import { EquipmentAccessGuard } from './security/equipment-access.guard';
 import { EquipmentMasterDataSeedService } from './database/seeds/master-data/equipment-master-data.seed.service';
 import { EquipmentCatalogSeedService } from './database/seeds/master-data/equipment-catalog.seed.service';
+import { CustomerBranchDirectoryClient } from './customer-branch-directory.client';
 import { EQUIPMENT_MODULE_OPTIONS, EquipmentModuleAsyncOptions } from './equipment.options';
 export { EQUIPMENT_MODULE_OPTIONS } from './equipment.options';
 export type { EquipmentModuleOptions, EquipmentModuleAsyncOptions } from './equipment.options';
@@ -25,6 +26,7 @@ export type { EquipmentModuleOptions, EquipmentModuleAsyncOptions } from './equi
   imports: [TypeOrmModule.forFeature([GroupEntity, SubgroupEntity, CategoryEntity, EquipmentEntity])],
   providers: [
     EquipmentService, EquipmentAccessGuard,
+    CustomerBranchDirectoryClient,
     EquipmentMasterDataSeedService,
     EquipmentCatalogSeedService,
     { provide: GroupRepository, useClass: GroupsRelationalRepository },
@@ -33,7 +35,7 @@ export type { EquipmentModuleOptions, EquipmentModuleAsyncOptions } from './equi
     { provide: EquipmentRepository, useClass: EquipmentRelationalRepository },
   ],
   controllers: [EquipmentController],
-  exports: [EquipmentService],
+  exports: [EquipmentService, CustomerBranchDirectoryClient],
 })
 export class EquipmentModule {
   static registerAsync(options: EquipmentModuleAsyncOptions): DynamicModule {
