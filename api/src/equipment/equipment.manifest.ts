@@ -14,7 +14,7 @@ export interface BackendModuleManifest {
   requiresServices?: readonly { providerModuleId: string; contractId: string; version: string; }[];
 }
 export const moduleManifest: BackendModuleManifest = {
-  id: 'equipment', version: '0.6.1', capabilities: ['api', 'web'],
+  id: 'equipment', version: '0.6.2', capabilities: ['api', 'web'],
   requires: ['customer'],
   authorizationRequires: ['customer'],
   requiresServices: [{
