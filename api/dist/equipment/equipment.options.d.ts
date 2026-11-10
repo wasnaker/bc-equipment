@@ -13,7 +13,7 @@ export interface ModuleResolvedScopes {
 export interface EquipmentModuleOptions {
     /** Host lifecycle gate; protected routes are unavailable while Equipment is inactive. */
     isModuleActive?: () => boolean | Promise<boolean>;
-    /** Delegate permission decisions to the host's authorization service. */
+    /** Legacy Core-Role-only check; module Roles must use the scope-aware callbacks. */
     authorize: (roleId: number | string, permission: string) => boolean | Promise<boolean>;
     /** Optional universal scope evaluator supplied by Brocoders Authorization Core. */
     authorizeScoped?: (userId: number | string, permission: string, target: ModuleAuthorizationTarget) => boolean | Promise<boolean>;

@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EquipmentAccessGuard = void 0;
 const common_1 = require("@nestjs/common");
 const equipment_options_1 = require("../equipment.options");
+const customer_branch_directory_client_1 = require("../customer-branch-directory.client");
 const PERMISSION_BY_METHOD = {
     GET: 'read:equipment',
     HEAD: 'read:equipment',
@@ -24,8 +25,9 @@ const PERMISSION_BY_METHOD = {
     DELETE: 'delete:equipment',
 };
 let EquipmentAccessGuard = class EquipmentAccessGuard {
-    constructor(options) {
+    constructor(options, customerBranches) {
         this.options = options;
+        this.customerBranches = customerBranches;
     }
     async canActivate(context) {
         const request = context.switchToHttp().getRequest();
@@ -33,23 +35,41 @@ let EquipmentAccessGuard = class EquipmentAccessGuard {
             throw new common_1.ForbiddenException('Equipment module is inactive');
         }
         const permission = PERMISSION_BY_METHOD[request.method.toUpperCase()];
-        const roleIds = [
-            ...new Set((request.user?.roles ?? [])
-                .map((role) => role.id)
-                .filter((id) => id !== undefined && id !== null)),
-        ];
-        if (!permission || roleIds.length === 0 || !this.options?.authorize) {
+        const userId = request.user?.id;
+        if (userId === undefined || userId === null || !permission || !this.options?.resolveScopes) {
             throw new common_1.ForbiddenException();
         }
-        let allowed = false;
-        for (const roleId of roleIds) {
-            if (await this.options.authorize(roleId, permission)) {
-                allowed = true;
-                break;
+        // The branch-context endpoint is resource-scoped; verify the exact branch
+        // rather than accepting any branch assignment. Other Equipment master
+        // data is global but still requires at least one active Core-resolved scope.
+        const branchId = request.params?.branchId;
+        if (branchId) {
+            if (!this.options.authorizeScoped || !this.customerBranches) {
+                throw new common_1.ForbiddenException();
             }
+            let branch;
+            try {
+                branch = await this.customerBranches.findBranchById(String(branchId));
+            }
+            catch {
+                throw new common_1.ForbiddenException();
+            }
+            if (!branch || !branch.isActive)
+                throw new common_1.ForbiddenException();
+            const allowed = await this.options.authorizeScoped(userId, permission, {
+                scopes: [
+                    { type: 'branch', id: branch.id },
+                    { type: 'customer', id: branch.customerId },
+                ],
+            });
+            if (!allowed)
+                throw new common_1.ForbiddenException();
+            return true;
         }
-        if (!allowed)
+        const resolved = await this.options.resolveScopes(userId, permission);
+        if (!resolved.global && resolved.scopes.length === 0) {
             throw new common_1.ForbiddenException();
+        }
         return true;
     }
 };
@@ -58,5 +78,5 @@ exports.EquipmentAccessGuard = EquipmentAccessGuard = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Optional)()),
     __param(0, (0, common_1.Inject)(equipment_options_1.EQUIPMENT_MODULE_OPTIONS)),
-    __metadata("design:paramtypes", [Object])
+    __metadata("design:paramtypes", [Object, customer_branch_directory_client_1.CustomerBranchDirectoryClient])
 ], EquipmentAccessGuard);

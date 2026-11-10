@@ -9,13 +9,22 @@ export interface ModuleRoleDefinition {
     scope: 'global' | 'customer' | 'branch';
     permissions: readonly string[];
 }
+export interface ModuleRoleGrantDefinition {
+    targetRole: {
+        moduleId: string;
+        key: string;
+    };
+    permissions: readonly string[];
+}
 export interface BackendModuleManifest {
     id: string;
     version: string;
     capabilities: readonly ('api' | 'web')[];
     permissions: readonly ModulePermissionDefinition[];
     roles?: readonly ModuleRoleDefinition[];
+    roleGrants?: readonly ModuleRoleGrantDefinition[];
     requires?: readonly string[];
+    authorizationRequires?: readonly string[];
     requiresServices?: readonly {
         providerModuleId: string;
         contractId: string;

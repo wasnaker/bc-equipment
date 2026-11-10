@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EquipmentEntity = exports.CategoryEntity = exports.SubgroupEntity = exports.GroupEntity = exports.EQUIPMENT_ENTITIES = exports.EquipmentService = exports.EQUIPMENT_MODULE_OPTIONS = exports.EquipmentModule = void 0;
+exports.moduleDefinition = exports.equipmentModuleManifest = exports.moduleManifest = exports.EquipmentEntity = exports.CategoryEntity = exports.SubgroupEntity = exports.GroupEntity = exports.EQUIPMENT_ENTITIES = exports.EquipmentService = exports.EQUIPMENT_MODULE_OPTIONS = exports.EquipmentModule = void 0;
 var equipment_module_1 = require("./equipment/equipment.module");
 Object.defineProperty(exports, "EquipmentModule", { enumerable: true, get: function () { return equipment_module_1.EquipmentModule; } });
 Object.defineProperty(exports, "EQUIPMENT_MODULE_OPTIONS", { enumerable: true, get: function () { return equipment_module_1.EQUIPMENT_MODULE_OPTIONS; } });
@@ -12,3 +12,8 @@ Object.defineProperty(exports, "GroupEntity", { enumerable: true, get: function 
 Object.defineProperty(exports, "SubgroupEntity", { enumerable: true, get: function () { return equipment_entities_1.SubgroupEntity; } });
 Object.defineProperty(exports, "CategoryEntity", { enumerable: true, get: function () { return equipment_entities_1.CategoryEntity; } });
 Object.defineProperty(exports, "EquipmentEntity", { enumerable: true, get: function () { return equipment_entities_1.EquipmentEntity; } });
+var equipment_manifest_1 = require("./equipment/equipment.manifest");
+Object.defineProperty(exports, "moduleManifest", { enumerable: true, get: function () { return equipment_manifest_1.moduleManifest; } });
+Object.defineProperty(exports, "equipmentModuleManifest", { enumerable: true, get: function () { return equipment_manifest_1.equipmentModuleManifest; } });
+var equipment_definition_1 = require("./equipment/equipment.definition");
+Object.defineProperty(exports, "moduleDefinition", { enumerable: true, get: function () { return equipment_definition_1.moduleDefinition; } });
