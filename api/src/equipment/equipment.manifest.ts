@@ -14,7 +14,7 @@ export interface BackendModuleManifest {
   requiresServices?: readonly { providerModuleId: string; contractId: string; version: string; }[];
 }
 export const moduleManifest: BackendModuleManifest = {
-  id: 'equipment', version: '0.6.2', capabilities: ['api', 'web'],
+  id: 'equipment', version: '0.6.3', capabilities: ['api', 'web'],
   requires: ['customer'],
   authorizationRequires: ['customer'],
   requiresServices: [{
@@ -28,12 +28,14 @@ export const moduleManifest: BackendModuleManifest = {
   }],
   permissions: [
     { name: 'read:equipment', description: 'Allows viewing Equipment module navigation and data' },
-    { name: 'create:equipment', description: 'Allows creating equipment records' },
-    { name: 'update:equipment', description: 'Allows updating equipment records' },
-    { name: 'delete:equipment', description: 'Allows deleting equipment records' },
+    { name: 'create:equipment', description: 'Allows creating equipment records (Admin only)' },
+    { name: 'update:equipment', description: 'Allows updating equipment records (Admin only)' },
+    { name: 'delete:equipment', description: 'Allows deleting equipment records (Admin only)' },
   ],
   // Customer owns the shared Customer and Customer Branch Admin Roles.
   // Equipment owns its permissions and the grants it contributes to those Roles.
+  // Customer and Customer Branch Admin roles only receive read:equipment.
+  // create/update/delete:equipment are reserved for Core Admin role.
   roleGrants: [
     { targetRole: { moduleId: 'customer', key: 'customer' }, permissions: ['read:equipment'] },
     { targetRole: { moduleId: 'customer', key: 'customer-branch-admin' }, permissions: ['read:equipment'] },
